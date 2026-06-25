@@ -4525,6 +4525,201 @@ body {
 .theme-toggle .sun-icon {
   display: none;
 }
+.comment-edit-input:focus {
+  border-color: #1d4ed8;
+}
+
+.comment-edit-btn {
+  border: none;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: opacity 0.15s ease;
+}
+
+.comment-edit-btn:hover {
+  opacity: 0.9;
+}
+
+.comment-edit-btn.cancel-btn {
+  background: #e2e8f0;
+  color: #475569;
+}
+
+.comment-edit-btn.comment-save-btn {
+  background: var(--blue);
+  color: #ffffff;
+}
+
+/* ==========================================================================
+   MOBILE BOTTOM SHEET & DROPDOWN DISPLAY FIXES
+   ========================================================================== */
+
+/* Mobile Bottom Sheet Overlay */
+.mobile-sheet-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 2000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.28s ease;
+}
+
+.mobile-sheet-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Bottom Sheet Content Drawer */
+.mobile-sheet-content {
+  width: 100%;
+  max-width: 500px;
+  background: #ffffff;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  box-shadow: 0 -10px 30px rgba(15, 23, 42, 0.15);
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 16px 20px calc(20px + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.mobile-sheet-overlay.active .mobile-sheet-content {
+  transform: translateY(0);
+}
+
+.sheet-drag-handle {
+  width: 36px;
+  height: 4px;
+  background: #e2e8f0;
+  border-radius: 2px;
+  margin: 0 auto 4px;
+}
+
+.mobile-sheet-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 10px;
+}
+
+.mobile-sheet-header h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+}
+
+.sheet-close-btn {
+  background: #f1f5f9;
+  border: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: #64748b;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.mobile-sheet-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 380px;
+  overflow-y: auto;
+}
+
+/* Bottom Sheet Option Button */
+.sheet-option-btn {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  text-align: left;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: inherit;
+}
+
+.sheet-option-btn:hover,
+.sheet-option-btn.active {
+  background: #f1f5f9;
+  border-color: var(--blue);
+  color: var(--blue);
+}
+
+.sheet-option-btn .option-icon {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* Mobile Profile Dropdown Width and Display Alignment */
+@media (max-width: 480px) {
+  .profile-dropdown {
+    width: 240px !important;
+    right: -6px !important;
+  }
+}
+
+/* ==========================================================================
+   TEMA DEĞİŞTİRİCİ BUTON STİLLERİ
+   ========================================================================== */
+.theme-toggle {
+  background: transparent;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-right: 8px;
+  flex: 0 0 auto;
+}
+
+.theme-toggle:hover {
+  background: var(--soft-border);
+  color: var(--text);
+  transform: scale(1.05);
+}
+
+.theme-toggle:active {
+  transform: scale(0.95);
+}
+
+.theme-toggle .sun-icon {
+  display: none;
+}
 
 .theme-toggle .moon-icon {
   display: block;
@@ -4662,6 +4857,79 @@ body {
 [data-theme="dark"] .composer-textarea::placeholder,
 [data-theme="dark"] input::placeholder {
   color: var(--muted) !important;
+}
+
+/* ==========================================================================
+   YENİ BİLDİRİLEN BEYAZ ALANLARIN OVERRIDE EDİLMESİ (SOL/SAĞ SİDEBAR & POST KARTLARI)
+   ========================================================================== */
+
+/* Sol Sidebar Aktif Menü Öğesi */
+[data-theme="dark"] .side-nav a.side-active {
+  background: var(--blue-soft) !important;
+  color: var(--blue) !important;
+}
+[data-theme="dark"] .side-nav a.side-active span {
+  background: var(--blue) !important;
+}
+
+/* Üst Bar Aktif Linkleri */
+[data-theme="dark"] .nav a.active {
+  background: var(--blue-soft) !important;
+  color: var(--blue) !important;
+}
+
+/* Gönderi Kartı Görsel fallback ve Detay Kutuları */
+[data-theme="dark"] .car-visual {
+  background: linear-gradient(135deg, rgba(21, 27, 45, 0.95), rgba(11, 15, 25, 0.85)),
+              linear-gradient(180deg, var(--bg), var(--card)) !important;
+  border-color: var(--border) !important;
+}
+
+[data-theme="dark"] .question-box,
+[data-theme="dark"] .risk-panel {
+  background-color: var(--bg) !important;
+  border-color: var(--border) !important;
+  color: var(--text) !important;
+}
+
+/* Topluluk Eğilimi Şeridi */
+[data-theme="dark"] .community-trend {
+  background-color: var(--bg) !important;
+  border-color: var(--border) !important;
+  color: var(--muted) !important;
+}
+[data-theme="dark"] .community-trend strong {
+  color: var(--text) !important;
+}
+
+/* Hızlı Filtrele Butonu */
+[data-theme="dark"] .filter-card button {
+  background: var(--blue) !important;
+  color: #ffffff !important;
+}
+[data-theme="dark"] .filter-card button:hover {
+  background: #1d4ed8 !important;
+}
+
+/* Popüler Konular Link ve Noktaları */
+[data-theme="dark"] .topic-card a {
+  color: var(--text) !important;
+  border-bottom-color: var(--border) !important;
+}
+[data-theme="dark"] .topic-card a span {
+  background: var(--blue) !important;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15) !important;
+}
+
+/* Yeni Paylaşılan Konular Başlık ve Noktaları */
+[data-theme="dark"] .recent-topic-card a {
+  border-bottom-color: var(--border) !important;
+}
+[data-theme="dark"] .recent-topic-card strong {
+  color: var(--text) !important;
+}
+[data-theme="dark"] .recent-topic-card a::before {
+  background: var(--blue) !important;
 }
 
 /* Premium Koyu Mod Kaydırma Çubuğu (Scrollbar) Tasarımı */
