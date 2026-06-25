@@ -126,8 +126,9 @@ select {
 .profile {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   font-size: 14px;
+  padding-right: 12px;
 }
 
 .profile-avatar {
@@ -1889,28 +1890,34 @@ body {
 .notification-bell {
   position: relative;
   cursor: pointer;
-  font-size: 16px;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background: #ffffff;
+  border: 1px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--muted);
-  transition: color 0.15s ease;
-  margin-right: 12px;
+  transition: all 0.15s ease;
+  margin-right: 2px;
+  flex: 0 0 auto;
 }
 
 .notification-bell:hover {
+  background: #f1f5f9;
   color: var(--text);
 }
 
 .bell-dot {
   position: absolute;
-  top: -1px;
-  right: -2px;
-  width: 6px;
-  height: 6px;
-  background-color: var(--blue, #2563eb);
-  border-radius: 50%;
-  border: 1px solid var(--card);
+  top: 7px;
+  right: 7px;
+  width: 7px;
+  height: 7px;
+  background: #ef4444;
+  border: 2px solid #ffffff;
+  border-radius: 999px;
 }
 
 /* Sidebar Grouping Overrides */
