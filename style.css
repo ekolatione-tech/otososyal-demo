@@ -4133,22 +4133,148 @@ body {
 
 /* Kaydedilen / Favoriye eklenen post butonu aktiflik stili */
 .action-btn.saved-btn {
-  color: var(--blue) !important;
+  color: #334155 !important;
   font-weight: 750 !important;
 }
 
 .action-btn.saved-btn .save-icon {
-  background: var(--blue-soft) !important;
-  border-color: var(--blue) !important;
+  background: #e2e8f0 !important;
+  border-color: #475569 !important;
 }
 
 .action-btn.saved-btn .save-icon::after {
-  background: var(--blue-soft) !important;
-  border-left-color: var(--blue) !important;
-  border-bottom-color: var(--blue) !important;
+  background: #e2e8f0 !important;
+  border-left-color: #475569 !important;
+  border-bottom-color: #475569 !important;
 }
 
 /* Paylaş popover buton stilleri */
 .share-popover-item {
   font-family: inherit;
+}
+
+/* Yorum Seçenekleri (3 Nokta Menüsü) Tasarımı */
+.comment-meta-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+}
+
+.comment-menu-trigger {
+  border: none;
+  background: transparent;
+  color: #94a3b8;
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 4px;
+  line-height: 1;
+  transition: all 0.12s ease;
+}
+
+.comment-menu-trigger:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.comment-menu-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.025);
+  z-index: 100;
+  display: none;
+  flex-direction: column;
+  padding: 4px;
+  min-width: 95px;
+}
+
+.comment-menu-dropdown.active {
+  display: flex;
+}
+
+.comment-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: none;
+  background: transparent;
+  color: #475569;
+  font-size: 11px;
+  font-weight: 550;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.12s ease;
+  width: 100%;
+  font-family: inherit;
+}
+
+.comment-menu-item:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.comment-menu-item.edit-btn:hover {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.comment-menu-item.report-btn:hover {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+/* Yorum Düzenleme Giriş Kutusu (Inline Edit Box) */
+.comment-edit-box {
+  width: 100%;
+  margin-top: 6px;
+}
+
+.comment-edit-input {
+  width: 100%;
+  border: 1px solid var(--blue);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 12px;
+  outline: none;
+  color: #0f172a;
+  background: #ffffff;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.comment-edit-input:focus {
+  border-color: #1d4ed8;
+}
+
+.comment-edit-btn {
+  border: none;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: opacity 0.15s ease;
+}
+
+.comment-edit-btn:hover {
+  opacity: 0.9;
+}
+
+.comment-edit-btn.cancel-btn {
+  background: #e2e8f0;
+  color: #475569;
+}
+
+.comment-edit-btn.save-btn {
+  background: var(--blue);
+  color: #ffffff;
 }
