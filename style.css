@@ -2915,6 +2915,14 @@ body {
     align-items: flex-start;
     flex-direction: column;
     margin-left: 0;
+    padding-right: 12px;
+  }
+
+  .selected-share-card #selectedShareCardMetrics,
+  .selected-share-card .report-privacy-container {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    margin-top: 8px;
   }
 
   .selected-share-metrics {
