@@ -313,18 +313,19 @@
       </section>
 
       <div class="feed-toolbar">
-        <details class="sort-menu">
-          <summary>En yeni</summary>
-          <div class="sort-menu-list">
-            <button>Son 1 saat</button>
-            <button>Son 5 saat</button>
-            <button>Son 1 gün</button>
-            <button>Son 1 hafta</button>
+        <details class="sort-menu" id="sortMenuDetails">
+          <summary id="sortMenuSummary">En yeni</summary>
+          <div class="sort-menu-list" id="sortMenuList">
+            <button class="active" data-filter="all">En yeni</button>
+            <button data-filter="1">Son 1 saat</button>
+            <button data-filter="5">Son 5 saat</button>
+            <button data-filter="24">Son 1 gün</button>
+            <button data-filter="168">Son 1 hafta</button>
           </div>
         </details>
       </div>
 
-      <article class="post-card" id="post-bmw">
+      <article class="post-card" id="post-bmw" data-time="2">
         <div class="post-top">
           <div class="user-line">
             <img class="profile-avatar-img" src="assets/mehmet-profile.png" alt="Mehmet K." style="width:36px; height:36px; margin-right:4px;" />
@@ -333,9 +334,23 @@
             <span class="source-badge">Analiz özeti</span>
           </div>
 
-          <div class="post-meta">
-            <span>2 saat önce</span>
-            <span>•••</span>
+          <div class="post-meta-container" style="position: relative;">
+            <span class="post-time">2 saat önce</span>
+            <button class="post-menu-trigger" aria-label="Seçenekler">•••</button>
+            <div class="post-menu-dropdown">
+              <button class="post-menu-item delete-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="menu-icon"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                Sil
+              </button>
+              <button class="post-menu-item ignore-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="menu-icon"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                Görmezden Gel
+              </button>
+              <button class="post-menu-item report-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="menu-icon"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>
+                Şikayet Et
+              </button>
+            </div>
           </div>
         </div>
 
@@ -399,7 +414,7 @@
         </div>
       </article>
 
-      <article class="post-card" id="post-golf">
+      <article class="post-card" id="post-golf" data-time="5">
         <div class="post-top">
           <div class="user-line">
             <img class="profile-avatar-img" src="assets/ayse-profile.png" alt="Ayşe Y." style="width:36px; height:36px; margin-right:4px;" />
@@ -408,9 +423,23 @@
             <span class="source-badge">Analiz özeti</span>
           </div>
 
-          <div class="post-meta">
-            <span>5 saat önce</span>
-            <span>•••</span>
+          <div class="post-meta-container" style="position: relative;">
+            <span class="post-time">5 saat önce</span>
+            <button class="post-menu-trigger" aria-label="Seçenekler">•••</button>
+            <div class="post-menu-dropdown">
+              <button class="post-menu-item delete-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="menu-icon"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                Sil
+              </button>
+              <button class="post-menu-item ignore-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="menu-icon"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                Görmezden Gel
+              </button>
+              <button class="post-menu-item report-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="menu-icon"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>
+                Şikayet Et
+              </button>
+            </div>
           </div>
         </div>
 
@@ -474,7 +503,7 @@
         </div>
       </article>
 
-      <article class="post-card" id="post-corolla">
+      <article class="post-card" id="post-corolla" data-time="7">
         <div class="post-top">
           <div class="user-line">
             <img class="profile-avatar-img" src="assets/melih-profile.png" alt="Melih A." style="width:36px; height:36px; margin-right:4px;" />
@@ -483,9 +512,23 @@
             <span class="source-badge liked">Beğenilen araç</span>
           </div>
 
-          <div class="post-meta">
-            <span>7 saat önce</span>
-            <span>•••</span>
+          <div class="post-meta-container" style="position: relative;">
+            <span class="post-time">7 saat önce</span>
+            <button class="post-menu-trigger" aria-label="Seçenekler">•••</button>
+            <div class="post-menu-dropdown">
+              <button class="post-menu-item delete-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="menu-icon"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                Sil
+              </button>
+              <button class="post-menu-item ignore-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="menu-icon"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                Görmezden Gel
+              </button>
+              <button class="post-menu-item report-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="menu-icon"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>
+                Şikayet Et
+              </button>
+            </div>
           </div>
         </div>
 
@@ -987,6 +1030,103 @@
         updatePreviewCard(null);
       });
 
+      // Sort / Filter Menu Handler
+      const sortMenuDetails = document.getElementById('sortMenuDetails');
+      const sortMenuSummary = document.getElementById('sortMenuSummary');
+      const sortMenuList = document.getElementById('sortMenuList');
+
+      if (sortMenuList && sortMenuSummary && sortMenuDetails) {
+        const filterBtns = sortMenuList.querySelectorAll('button');
+        filterBtns.forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            // Toggle active button
+            filterBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            const filterVal = btn.getAttribute('data-filter');
+            sortMenuSummary.textContent = btn.textContent;
+            
+            // Close details menu
+            sortMenuDetails.removeAttribute('open');
+            
+            // Filter post-cards
+            const cards = document.querySelectorAll('.post-card');
+            cards.forEach(card => {
+              const timeVal = parseInt(card.getAttribute('data-time') || '0', 10);
+              if (filterVal === 'all') {
+                card.style.display = 'block';
+              } else {
+                const limit = parseInt(filterVal, 10);
+                if (timeVal <= limit) {
+                  card.style.display = 'block';
+                } else {
+                  card.style.display = 'none';
+                }
+              }
+            });
+          });
+        });
+      }
+
+      // 3-dots Menu Event Delegation for actions
+      document.addEventListener('click', (e) => {
+        // Toggle menu dropdown
+        const trigger = e.target.closest('.post-menu-trigger');
+        if (trigger) {
+          e.stopPropagation();
+          const container = trigger.closest('.post-meta-container');
+          const dropdown = container.querySelector('.post-menu-dropdown');
+          
+          // Close other active menus
+          document.querySelectorAll('.post-menu-dropdown.active').forEach(menu => {
+            if (menu !== dropdown) menu.classList.remove('active');
+          });
+          
+          dropdown.classList.toggle('active');
+          return;
+        }
+
+        // Close all dropdowns if clicking elsewhere
+        document.querySelectorAll('.post-menu-dropdown.active').forEach(menu => {
+          menu.classList.remove('active');
+        });
+
+        // Handle action item click
+        const menuItem = e.target.closest('.post-menu-item');
+        if (menuItem) {
+          const card = menuItem.closest('.post-card');
+          const isOwner = card.getAttribute('data-owner') === 'true';
+          
+          if (menuItem.classList.contains('delete-btn')) {
+            if (isOwner) {
+              // Delete user's own post
+              card.style.transition = 'all 0.35s ease';
+              card.style.opacity = '0';
+              card.style.transform = 'scale(0.95)';
+              setTimeout(() => {
+                card.remove();
+                showCustomModal('success', 'Silindi', 'Paylaşımınız başarıyla silindi.');
+              }, 350);
+            } else {
+              showCustomModal('warning', 'Hata', 'Bu paylaşımı silme yetkiniz bulunmamaktadır. Sadece kendi paylaşımlarınızı silebilirsiniz.');
+            }
+          } else if (menuItem.classList.contains('ignore-btn')) {
+            // Smoothly hide ignored card
+            card.style.transition = 'all 0.35s ease';
+            card.style.opacity = '0';
+            card.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+              card.style.display = 'none';
+              showCustomModal('success', 'Görmezden Gelindi', 'Bu paylaşım artık akışınızda gösterilmeyecektir.');
+            }, 350);
+          } else if (menuItem.classList.contains('report-btn')) {
+            showCustomModal('success', 'Şikayet Edildi', 'Şikayetiniz başarıyla alındı. Topluluğu güvende tuttuğunuz için teşekkürler!');
+          }
+        }
+      });
+
       // Report Privacy Toggle state
       let reportPrivacyState = "public"; // default
 
@@ -1144,7 +1284,7 @@
         const randomPostId = "post-user-" + Math.floor(Math.random() * 10000);
 
         const newPostHTML = `
-          <article class="post-card" id="${randomPostId}">
+          <article class="post-card" id="${randomPostId}" data-time="0" data-owner="true">
             <div class="post-top">
               <div class="user-line">
                 <img class="profile-avatar-img" src="assets/erkan-profile.png" alt="Erkan" style="width:34px; height:34px; margin-right:4px;" />
@@ -1153,9 +1293,23 @@
                 <span class="source-badge">${type}</span>
               </div>
 
-              <div class="post-meta">
-                <span>Şimdi</span>
-                <span>•••</span>
+              <div class="post-meta-container" style="position: relative;">
+                <span class="post-time">Şimdi</span>
+                <button class="post-menu-trigger" aria-label="Seçenekler">•••</button>
+                <div class="post-menu-dropdown">
+                  <button class="post-menu-item delete-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="menu-icon"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                    Sil
+                  </button>
+                  <button class="post-menu-item ignore-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="menu-icon"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                    Görmezden Gel
+                  </button>
+                  <button class="post-menu-item report-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="menu-icon"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>
+                    Şikayet Et
+                  </button>
+                </div>
               </div>
             </div>
 
