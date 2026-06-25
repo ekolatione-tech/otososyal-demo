@@ -1727,7 +1727,7 @@
         }
 
         // 2. KAYDET / BOOKMARK ETKİLEŞİMİ
-        const saveBtn = e.target.closest('.save-btn');
+        const saveBtn = e.target.closest('.action-btn.save-btn');
         if (saveBtn) {
           const card = saveBtn.closest('.post-card');
           if (!card) return;
@@ -1946,7 +1946,7 @@
           
           if (commentEditBtn.classList.contains('cancel-btn')) {
             exitCommentEditMode(commentItem, false);
-          } else if (commentEditBtn.classList.contains('save-btn')) {
+          } else if (commentEditBtn.classList.contains('comment-save-btn')) {
             saveCommentEdit(commentItem);
           }
           return;
@@ -2161,7 +2161,7 @@
           <textarea class="comment-edit-input" rows="2" style="resize: vertical; min-height: 50px;">${originalText}</textarea>
           <div style="display: flex; gap: 8px; margin-top: 6px; justify-content: flex-end;">
             <button class="comment-edit-btn cancel-btn">İptal</button>
-            <button class="comment-edit-btn save-btn">Kaydet</button>
+            <button class="comment-edit-btn comment-save-btn">Kaydet</button>
           </div>
         `;
         

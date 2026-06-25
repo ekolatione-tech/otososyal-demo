@@ -4133,19 +4133,20 @@ body {
 
 /* Kaydedilen / Favoriye eklenen post butonu aktiflik stili */
 .action-btn.saved-btn {
-  color: #334155 !important;
-  font-weight: 750 !important;
+  color: #64748b !important; /* Yazı rengi varsayılan gri kalır */
+  font-weight: 600 !important;
 }
 
 .action-btn.saved-btn .save-icon {
-  background: #e2e8f0 !important;
-  border-color: #475569 !important;
+  background: var(--blue-soft) !important; /* İkon içi hafif mavi dolgu */
+  border-color: var(--blue) !important; /* İkon çerçevesi mavi */
+  color: var(--blue) !important; /* currentColor çizgilerini mavi yapar */
 }
 
 .action-btn.saved-btn .save-icon::after {
-  background: #e2e8f0 !important;
-  border-left-color: #475569 !important;
-  border-bottom-color: #475569 !important;
+  background: var(--blue-soft) !important;
+  border-left-color: var(--blue) !important;
+  border-bottom-color: var(--blue) !important;
 }
 
 /* Paylaş popover buton stilleri */
@@ -4274,7 +4275,7 @@ body {
   color: #475569;
 }
 
-.comment-edit-btn.save-btn {
+.comment-edit-btn.comment-save-btn {
   background: var(--blue);
   color: #ffffff;
 }
