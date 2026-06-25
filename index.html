@@ -338,10 +338,6 @@
             <span class="post-time">2 saat önce</span>
             <button class="post-menu-trigger" aria-label="Seçenekler">•••</button>
             <div class="post-menu-dropdown">
-              <button class="post-menu-item delete-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="menu-icon"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-                Sil
-              </button>
               <button class="post-menu-item ignore-btn">
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="menu-icon"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
                 Görmezden Gel
@@ -398,6 +394,54 @@
           <small>28 oy içinden öne çıkıyor</small>
         </div>
 
+        <div class="trend-percentages">
+          <div class="trend-bar-wrapper">
+            <div class="trend-bar-label">
+              <span>Alınır</span>
+              <span class="pct-val" data-option="good">14%</span>
+            </div>
+            <div class="trend-bar-bg">
+              <div class="trend-bar-fill good" style="width: 14%"></div>
+            </div>
+          </div>
+          <div class="trend-bar-wrapper">
+            <div class="trend-bar-label">
+              <span>Pazarlıkla alınır</span>
+              <span class="pct-val" data-option="blue">57%</span>
+            </div>
+            <div class="trend-bar-bg">
+              <div class="trend-bar-fill blue" style="width: 57%"></div>
+            </div>
+          </div>
+          <div class="trend-bar-wrapper">
+            <div class="trend-bar-label">
+              <span>Ekspertiz şart</span>
+              <span class="pct-val" data-option="orange">18%</span>
+            </div>
+            <div class="trend-bar-bg">
+              <div class="trend-bar-fill orange" style="width: 18%"></div>
+            </div>
+          </div>
+          <div class="trend-bar-wrapper">
+            <div class="trend-bar-label">
+              <span>Riskli</span>
+              <span class="pct-val" data-option="red">7%</span>
+            </div>
+            <div class="trend-bar-bg">
+              <div class="trend-bar-fill red" style="width: 7%"></div>
+            </div>
+          </div>
+          <div class="trend-bar-wrapper">
+            <div class="trend-bar-label">
+              <span>Uzak dur</span>
+              <span class="pct-val" data-option="muted">4%</span>
+            </div>
+            <div class="trend-bar-bg">
+              <div class="trend-bar-fill muted" style="width: 4%"></div>
+            </div>
+          </div>
+        </div>
+
         <div class="vote-row">
           <button class="vote-good">Alınır</button>
           <button class="vote-blue">Pazarlıkla alınır</button>
@@ -407,10 +451,55 @@
         </div>
 
         <div class="action-row">
-          <button class="action-btn"><span class="action-icon comment-icon"></span>15 Yorum</button>
-          <button class="action-btn"><span class="action-icon vote-icon"></span>28 Oy</button>
-          <button class="action-btn"><span class="action-icon save-icon"></span>Kaydet</button>
-          <button class="action-btn"><span class="action-icon share-icon"></span>Paylaş</button>
+          <button class="action-btn comment-btn"><span class="action-icon comment-icon"></span><span class="count-text">2 Yorum</span></button>
+          <button class="action-btn vote-count-btn"><span class="action-icon vote-icon"></span><span class="count-text">28 Oy</span></button>
+          <button class="action-btn save-btn"><span class="action-icon save-icon"></span>Kaydet</button>
+          <div class="share-container" style="position: relative;">
+            <button class="action-btn share-btn"><span class="action-icon share-icon"></span>Paylaş</button>
+            <div class="share-popover">
+              <button class="share-popover-item share-copy" data-url="https://www.ilaneksper.com/analiz/bmw-320i-p-294">🔗 Bağlantıyı Kopyala</button>
+              <button class="share-popover-item share-wa">💬 WhatsApp'ta Paylaş</button>
+              <button class="share-popover-item share-tw">🐦 Twitter'da Paylaş</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="comments-section" id="comments-bmw">
+          <div class="comments-container">
+            <div class="comment-item" data-id="bmw-c1">
+              <img class="comment-avatar" src="assets/ayse-profile.png" alt="Ayşe Y." />
+              <div class="comment-content-box">
+                <div class="comment-header">
+                  <span class="comment-user">Ayşe Y.</span>
+                  <span class="comment-time">1 saat önce</span>
+                </div>
+                <div class="comment-text">N13 motorlarda zincir değişimi 100 bin km'de bir şart. Fiyat fena değil ama ekspere sokmadan tek kuruş verilmez.</div>
+                <div class="comment-footer">
+                  <button class="comment-vote-btn upvote" data-votes="8">👍 8</button>
+                  <button class="comment-vote-btn downvote" data-votes="1">👎 1</button>
+                </div>
+              </div>
+            </div>
+            <div class="comment-item" data-id="bmw-c2">
+              <img class="comment-avatar" src="assets/melih-profile.png" alt="Melih A." />
+              <div class="comment-content-box">
+                <div class="comment-header">
+                  <span class="comment-user">Melih A.</span>
+                  <span class="comment-time">30 dk önce</span>
+                </div>
+                <div class="comment-text">Pazarlıkla 950 bin TL civarına biterse çok mantıklı bir araç gibi duruyor.</div>
+                <div class="comment-footer">
+                  <button class="comment-vote-btn upvote" data-votes="4">👍 4</button>
+                  <button class="comment-vote-btn downvote" data-votes="0">👎 0</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="comment-input-area">
+            <img class="comment-avatar" src="assets/erkan-profile.png" alt="Erkan Ö." />
+            <input type="text" class="comment-input" placeholder="Yorum yazın..." />
+            <button class="comment-submit-btn">Gönder</button>
+          </div>
         </div>
       </article>
 
@@ -427,10 +516,6 @@
             <span class="post-time">5 saat önce</span>
             <button class="post-menu-trigger" aria-label="Seçenekler">•••</button>
             <div class="post-menu-dropdown">
-              <button class="post-menu-item delete-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="menu-icon"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-                Sil
-              </button>
               <button class="post-menu-item ignore-btn">
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="menu-icon"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
                 Görmezden Gel
@@ -487,6 +572,54 @@
           <small>17 oy içinden öne çıkıyor</small>
         </div>
 
+        <div class="trend-percentages">
+          <div class="trend-bar-wrapper">
+            <div class="trend-bar-label">
+              <span>Alınır</span>
+              <span class="pct-val" data-option="good">59%</span>
+            </div>
+            <div class="trend-bar-bg">
+              <div class="trend-bar-fill good" style="width: 59%"></div>
+            </div>
+          </div>
+          <div class="trend-bar-wrapper">
+            <div class="trend-bar-label">
+              <span>Pazarlıkla alınır</span>
+              <span class="pct-val" data-option="blue">24%</span>
+            </div>
+            <div class="trend-bar-bg">
+              <div class="trend-bar-fill blue" style="width: 24%"></div>
+            </div>
+          </div>
+          <div class="trend-bar-wrapper">
+            <div class="trend-bar-label">
+              <span>Ekspertiz şart</span>
+              <span class="pct-val" data-option="orange">12%</span>
+            </div>
+            <div class="trend-bar-bg">
+              <div class="trend-bar-fill orange" style="width: 12%"></div>
+            </div>
+          </div>
+          <div class="trend-bar-wrapper">
+            <div class="trend-bar-label">
+              <span>Riskli</span>
+              <span class="pct-val" data-option="red">5%</span>
+            </div>
+            <div class="trend-bar-bg">
+              <div class="trend-bar-fill red" style="width: 5%"></div>
+            </div>
+          </div>
+          <div class="trend-bar-wrapper">
+            <div class="trend-bar-label">
+              <span>Uzak dur</span>
+              <span class="pct-val" data-option="muted">0%</span>
+            </div>
+            <div class="trend-bar-bg">
+              <div class="trend-bar-fill muted" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+
         <div class="vote-row">
           <button class="vote-good">Alınır</button>
           <button class="vote-blue">Pazarlıkla alınır</button>
@@ -496,10 +629,55 @@
         </div>
 
         <div class="action-row">
-          <button class="action-btn"><span class="action-icon comment-icon"></span>9 Yorum</button>
-          <button class="action-btn"><span class="action-icon vote-icon"></span>17 Oy</button>
-          <button class="action-btn"><span class="action-icon save-icon"></span>Kaydet</button>
-          <button class="action-btn"><span class="action-icon share-icon"></span>Paylaş</button>
+          <button class="action-btn comment-btn"><span class="action-icon comment-icon"></span><span class="count-text">2 Yorum</span></button>
+          <button class="action-btn vote-count-btn"><span class="action-icon vote-icon"></span><span class="count-text">17 Oy</span></button>
+          <button class="action-btn save-btn"><span class="action-icon save-icon"></span>Kaydet</button>
+          <div class="share-container" style="position: relative;">
+            <button class="action-btn share-btn"><span class="action-icon share-icon"></span>Paylaş</button>
+            <div class="share-popover">
+              <button class="share-popover-item share-copy" data-url="https://www.ilaneksper.com/analiz/golf-7-tsi-p-103">🔗 Bağlantıyı Kopyala</button>
+              <button class="share-popover-item share-wa">💬 WhatsApp'ta Paylaş</button>
+              <button class="share-popover-item share-tw">🐦 Twitter'da Paylaş</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="comments-section" id="comments-golf">
+          <div class="comments-container">
+            <div class="comment-item" data-id="golf-c1">
+              <img class="comment-avatar" src="assets/mehmet-profile.png" alt="Mehmet K." />
+              <div class="comment-content-box">
+                <div class="comment-header">
+                  <span class="comment-user">Mehmet K.</span>
+                  <span class="comment-time">3 saat önce</span>
+                </div>
+                <div class="comment-text">DSG şanzımanın vites geçişlerini kontrol ettirin, özellikle 2. viteste titreme var mı bakın. Araç temiz görünüyor.</div>
+                <div class="comment-footer">
+                  <button class="comment-vote-btn upvote" data-votes="5">👍 5</button>
+                  <button class="comment-vote-btn downvote" data-votes="0">👎 0</button>
+                </div>
+              </div>
+            </div>
+            <div class="comment-item" data-id="golf-c2">
+              <img class="comment-avatar" src="assets/melih-profile.png" alt="Melih A." />
+              <div class="comment-content-box">
+                <div class="comment-header">
+                  <span class="comment-user">Melih A.</span>
+                  <span class="comment-time">2 saat önce</span>
+                </div>
+                <div class="comment-text">Bu km'de ağır bakımları yapıldıysa kaçırılmayacak fırsat.</div>
+                <div class="comment-footer">
+                  <button class="comment-vote-btn upvote" data-votes="3">👍 3</button>
+                  <button class="comment-vote-btn downvote" data-votes="1">👎 1</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="comment-input-area">
+            <img class="comment-avatar" src="assets/erkan-profile.png" alt="Erkan Ö." />
+            <input type="text" class="comment-input" placeholder="Yorum yazın..." />
+            <button class="comment-submit-btn">Gönder</button>
+          </div>
         </div>
       </article>
 
@@ -516,10 +694,6 @@
             <span class="post-time">7 saat önce</span>
             <button class="post-menu-trigger" aria-label="Seçenekler">•••</button>
             <div class="post-menu-dropdown">
-              <button class="post-menu-item delete-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="menu-icon"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-                Sil
-              </button>
               <button class="post-menu-item ignore-btn">
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="menu-icon"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
                 Görmezden Gel
@@ -575,6 +749,54 @@
           <small>21 oy içinden öne çıkıyor</small>
         </div>
 
+        <div class="trend-percentages">
+          <div class="trend-bar-wrapper">
+            <div class="trend-bar-label">
+              <span>Alınır</span>
+              <span class="pct-val" data-option="good">10%</span>
+            </div>
+            <div class="trend-bar-bg">
+              <div class="trend-bar-fill good" style="width: 10%"></div>
+            </div>
+          </div>
+          <div class="trend-bar-wrapper">
+            <div class="trend-bar-label">
+              <span>Pazarlıkla alınır</span>
+              <span class="pct-val" data-option="blue">24%</span>
+            </div>
+            <div class="trend-bar-bg">
+              <div class="trend-bar-fill blue" style="width: 24%"></div>
+            </div>
+          </div>
+          <div class="trend-bar-wrapper">
+            <div class="trend-bar-label">
+              <span>Ekspertiz şart</span>
+              <span class="pct-val" data-option="orange">52%</span>
+            </div>
+            <div class="trend-bar-bg">
+              <div class="trend-bar-fill orange" style="width: 52%"></div>
+            </div>
+          </div>
+          <div class="trend-bar-wrapper">
+            <div class="trend-bar-label">
+              <span>Riskli</span>
+              <span class="pct-val" data-option="red">10%</span>
+            </div>
+            <div class="trend-bar-bg">
+              <div class="trend-bar-fill red" style="width: 10%"></div>
+            </div>
+          </div>
+          <div class="trend-bar-wrapper">
+            <div class="trend-bar-label">
+              <span>Uzak dur</span>
+              <span class="pct-val" data-option="muted">4%</span>
+            </div>
+            <div class="trend-bar-bg">
+              <div class="trend-bar-fill muted" style="width: 4%"></div>
+            </div>
+          </div>
+        </div>
+
         <div class="vote-row">
           <button class="vote-good">Alınır</button>
           <button class="vote-blue">Pazarlıkla alınır</button>
@@ -584,10 +806,55 @@
         </div>
 
         <div class="action-row">
-          <button class="action-btn"><span class="action-icon comment-icon"></span>12 Yorum</button>
-          <button class="action-btn"><span class="action-icon vote-icon"></span>21 Oy</button>
-          <button class="action-btn"><span class="action-icon save-icon"></span>Kaydet</button>
-          <button class="action-btn"><span class="action-icon share-icon"></span>Paylaş</button>
+          <button class="action-btn comment-btn"><span class="action-icon comment-icon"></span><span class="count-text">2 Yorum</span></button>
+          <button class="action-btn vote-count-btn"><span class="action-icon vote-icon"></span><span class="count-text">21 Oy</span></button>
+          <button class="action-btn save-btn"><span class="action-icon save-icon"></span>Kaydet</button>
+          <div class="share-container" style="position: relative;">
+            <button class="action-btn share-btn"><span class="action-icon share-icon"></span>Paylaş</button>
+            <div class="share-popover">
+              <button class="share-popover-item share-copy" data-url="https://www.ilaneksper.com/analiz/corolla-16-cvt-p-872">🔗 Bağlantıyı Kopyala</button>
+              <button class="share-popover-item share-wa">💬 WhatsApp'ta Paylaş</button>
+              <button class="share-popover-item share-tw">🐦 Twitter'da Paylaş</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="comments-section" id="comments-corolla">
+          <div class="comments-container">
+            <div class="comment-item" data-id="corolla-c1">
+              <img class="comment-avatar" src="assets/ayse-profile.png" alt="Ayşe Y." />
+              <div class="comment-content-box">
+                <div class="comment-header">
+                  <span class="comment-user">Ayşe Y.</span>
+                  <span class="comment-time">7 saat önce</span>
+                </div>
+                <div class="comment-text">CVT şanzımanda geri kaydırma yapmıyor ama yağ bakımı geciktiyse baş ağrıtabilir. Dikkatli olun.</div>
+                <div class="comment-footer">
+                  <button class="comment-vote-btn upvote" data-votes="7">👍 7</button>
+                  <button class="comment-vote-btn downvote" data-votes="2">👎 2</button>
+                </div>
+              </div>
+            </div>
+            <div class="comment-item" data-id="corolla-c2">
+              <img class="comment-avatar" src="assets/mehmet-profile.png" alt="Mehmet K." />
+              <div class="comment-content-box">
+                <div class="comment-header">
+                  <span class="comment-user">Mehmet K.</span>
+                  <span class="comment-time">6 saat önce</span>
+                </div>
+                <div class="comment-text">Fiyatı piyasaya göre gayet makul, ekspertiz temiz çıkarsa hemen alınır.</div>
+                <div class="comment-footer">
+                  <button class="comment-vote-btn upvote" data-votes="4">👍 4</button>
+                  <button class="comment-vote-btn downvote" data-votes="0">👎 0</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="comment-input-area">
+            <img class="comment-avatar" src="assets/erkan-profile.png" alt="Erkan Ö." />
+            <input type="text" class="comment-input" placeholder="Yorum yazın..." />
+            <button class="comment-submit-btn">Gönder</button>
+          </div>
         </div>
       </article>
     </section>
@@ -1127,6 +1394,411 @@
         }
       });
 
+      // ==========================================================================
+      // OTOSOSYAL ETKİLEŞİM VE DİNAMİK YÖNETİM SİSTEMİ (YENİ EKLEMEDİR)
+      // ==========================================================================
+
+      // Post verilerini (oylar, durumlar vb.) tutan yerel veri tabanı
+      const postDb = {
+        "post-bmw": {
+          voted: false,
+          bookmarked: false,
+          totalVotes: 28,
+          votes: { good: 4, blue: 16, orange: 5, red: 2, muted: 1 }
+        },
+        "post-golf": {
+          voted: false,
+          bookmarked: false,
+          totalVotes: 17,
+          votes: { good: 10, blue: 4, orange: 2, red: 1, muted: 0 }
+        },
+        "post-corolla": {
+          voted: false,
+          bookmarked: false,
+          totalVotes: 21,
+          votes: { good: 2, blue: 5, orange: 11, red: 2, muted: 1 }
+        }
+      };
+
+      // Oy seçeneği adlarının Türkçe karşılıkları
+      const optionNames = {
+        good: "Alınır",
+        blue: "Pazarlıkla alınır",
+        orange: "Ekspertiz şart",
+        red: "Riskli",
+        muted: "Uzak dur"
+      };
+
+      // Özel Toast Bildirim Sistemi fonksiyonu
+      function showToast(message) {
+        const container = document.getElementById('toastContainer');
+        if (!container) return;
+
+        const toast = document.createElement('div');
+        toast.className = 'custom-toast';
+        toast.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" style="flex-shrink:0;">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span>${message}</span>
+        `;
+
+        container.appendChild(toast);
+
+        // Giriş animasyonunu tetikle
+        setTimeout(() => {
+          toast.classList.add('show');
+        }, 10);
+
+        // 3 saniye sonra kaldır
+        setTimeout(() => {
+          toast.classList.remove('show');
+          setTimeout(() => {
+            toast.remove();
+          }, 300);
+        }, 3000);
+      }
+
+      // Oy yüzdelerini grafik çubuklarında güncelleyen yardımcı fonksiyon
+      function updatePercentagesUI(card, votes, totalVotes) {
+        const fillBars = card.querySelectorAll('.trend-bar-fill');
+
+        fillBars.forEach(bar => {
+          let opt = "";
+          if (bar.classList.contains('good')) opt = "good";
+          else if (bar.classList.contains('blue')) opt = "blue";
+          else if (bar.classList.contains('orange')) opt = "orange";
+          else if (bar.classList.contains('red')) opt = "red";
+          else if (bar.classList.contains('muted')) opt = "muted";
+
+          if (opt) {
+            const count = votes[opt] || 0;
+            const pct = totalVotes > 0 ? Math.round((count / totalVotes) * 100) : 0;
+            bar.style.width = pct + "%";
+            
+            // İlgili yazı alanını bulup güncelle
+            const wrapper = bar.closest('.trend-bar-wrapper');
+            if (wrapper) {
+              const textVal = wrapper.querySelector('.pct-val');
+              if (textVal) {
+                textVal.textContent = pct + "%";
+              }
+            }
+          }
+        });
+      }
+
+      // Genel Tıklama Dinleyicisi (Event Delegation)
+      document.addEventListener('click', (e) => {
+        // 1. TOPLULUK EĞİLİMİ OYLAMA İŞLEMİ
+        const voteBtn = e.target.closest('.vote-row button');
+        if (voteBtn && !voteBtn.disabled) {
+          const card = voteBtn.closest('.post-card');
+          if (!card) return;
+          const postId = card.id;
+
+          // Eğer veri tabanında post kaydı yoksa yeni oluştur (yeni eklenen araçlar için)
+          if (!postDb[postId]) {
+            postDb[postId] = {
+              voted: false,
+              bookmarked: false,
+              totalVotes: 0,
+              votes: { good: 0, blue: 0, orange: 0, red: 0, muted: 0 }
+            };
+          }
+
+          const dbEntry = postDb[postId];
+          if (dbEntry.voted) return; // Zaten oy verilmişse işlem yapma
+
+          // Hangi seçeneğin tıklandığını belirle
+          let option = "";
+          if (voteBtn.classList.contains('vote-good')) option = "good";
+          else if (voteBtn.classList.contains('vote-blue')) option = "blue";
+          else if (voteBtn.classList.contains('vote-orange')) option = "orange";
+          else if (voteBtn.classList.contains('vote-red')) option = "red";
+          else if (voteBtn.classList.contains('vote-muted')) option = "muted";
+
+          if (option) {
+            // Oyları güncelle
+            dbEntry.votes[option]++;
+            dbEntry.totalVotes++;
+            dbEntry.voted = true;
+
+            // En çok oy alan seçeneği bul (Lider seçeneği belirleme)
+            let maxVotes = -1;
+            let leadingOption = "";
+            for (let key in dbEntry.votes) {
+              if (dbEntry.votes[key] > maxVotes) {
+                maxVotes = dbEntry.votes[key];
+                leadingOption = key;
+              }
+            }
+
+            // Topluluk Eğilimi metinlerini güncelle
+            const trendStrong = card.querySelector('.community-trend strong');
+            const trendSmall = card.querySelector('.community-trend small');
+            if (trendStrong) {
+              trendStrong.textContent = optionNames[leadingOption] || "Henüz oy yok";
+            }
+            if (trendSmall) {
+              trendSmall.textContent = `${dbEntry.totalVotes} oy içinden öne çıkıyor`;
+            }
+
+            // Aksiyon butonlarındaki toplam oy sayısını güncelle
+            const voteCountBtn = card.querySelector('.vote-count-btn .count-text');
+            if (voteCountBtn) {
+              voteCountBtn.textContent = `${dbEntry.totalVotes} Oy`;
+            }
+
+            // Grafik yüzde değerlerini ve genişliklerini güncelle
+            updatePercentagesUI(card, dbEntry.votes, dbEntry.totalVotes);
+
+            // Grafik alanını aşağı doğru kaydırarak göster
+            const percentagesBlock = card.querySelector('.trend-percentages');
+            if (percentagesBlock) {
+              percentagesBlock.classList.add('active');
+            }
+
+            // Tıklanan butonu aktifleştir ve diğerlerini devre dışı bırak
+            const allVoteBtns = voteBtn.parentNode.querySelectorAll('button');
+            allVoteBtns.forEach(btn => {
+              btn.disabled = true;
+              if (btn === voteBtn) {
+                btn.classList.add('selected-vote');
+              }
+            });
+
+            showToast("Oyunuz başarıyla kaydedildi!");
+          }
+          return;
+        }
+
+        // 2. KAYDET / BOOKMARK ETKİLEŞİMİ
+        const saveBtn = e.target.closest('.save-btn');
+        if (saveBtn) {
+          const card = saveBtn.closest('.post-card');
+          if (!card) return;
+          const postId = card.id;
+
+          if (!postDb[postId]) {
+            postDb[postId] = {
+              voted: false,
+              bookmarked: false,
+              totalVotes: 0,
+              votes: { good: 0, blue: 0, orange: 0, red: 0, muted: 0 }
+            };
+          }
+
+          const dbEntry = postDb[postId];
+          dbEntry.bookmarked = !dbEntry.bookmarked;
+
+          if (dbEntry.bookmarked) {
+            saveBtn.classList.add('saved-btn');
+            showToast("Paylaşım başarıyla kaydedildi!");
+          } else {
+            saveBtn.classList.remove('saved-btn');
+            showToast("Paylaşım kaydedilenlerden kaldırıldı.");
+          }
+          return;
+        }
+
+        // 3. PAYLAŞ POPOVER MENÜSÜNÜ AÇMA/KAPAMA
+        const shareBtn = e.target.closest('.share-btn');
+        if (shareBtn) {
+          e.stopPropagation();
+          const container = shareBtn.closest('.share-container');
+          const popover = container.querySelector('.share-popover');
+          
+          // Diğer açık olan paylaşım popover'larını kapat
+          document.querySelectorAll('.share-popover.active').forEach(p => {
+            if (p !== popover) p.classList.remove('active');
+          });
+
+          popover.classList.toggle('active');
+          return;
+        }
+
+        // Paylaş popover içindeki bir seçeneğe tıklama
+        const shareItem = e.target.closest('.share-popover-item');
+        if (shareItem) {
+          e.stopPropagation();
+          const popover = shareItem.closest('.share-popover');
+          popover.classList.remove('active');
+
+          if (shareItem.classList.contains('share-copy')) {
+            const url = shareItem.getAttribute('data-url') || "https://www.ilaneksper.com/analiz/demo";
+            navigator.clipboard.writeText(url).then(() => {
+              showToast("Bağlantı panoya kopyalandı!");
+            }).catch(() => {
+              showToast("Kopyalama başarısız oldu.");
+            });
+          } else if (shareItem.classList.contains('share-wa')) {
+            showToast("WhatsApp paylaşım ekranı açılıyor...");
+          } else if (shareItem.classList.contains('share-tw')) {
+            showToast("Twitter paylaşım ekranı açılıyor...");
+          }
+          return;
+        }
+
+        // Paylaş popover dışına tıklandığında açık olanları kapat
+        document.querySelectorAll('.share-popover.active').forEach(p => {
+          p.classList.remove('active');
+        });
+
+        // 4. AÇILIR-KAPANIR YORUMLAR PANELİ TETİKLEYİCİSİ
+        const commentBtn = e.target.closest('.comment-btn');
+        if (commentBtn) {
+          const card = commentBtn.closest('.post-card');
+          if (!card) return;
+          const commentsSection = card.querySelector('.comments-section');
+          if (commentsSection) {
+            commentsSection.classList.toggle('active');
+          }
+          return;
+        }
+
+        // 5. YORUMLARI BEĞENME (UPVOTE/DOWNVOTE) ETKİLEŞİMİ
+        const commentVote = e.target.closest('.comment-vote-btn');
+        if (commentVote) {
+          const isUpvote = commentVote.classList.contains('upvote');
+          let currentVotes = parseInt(commentVote.getAttribute('data-votes') || '0', 10);
+          
+          if (isUpvote) {
+            if (commentVote.classList.contains('upvoted')) {
+              // Beğeniyi geri al
+              currentVotes--;
+              commentVote.classList.remove('upvoted');
+              commentVote.textContent = `👍 ${currentVotes}`;
+              commentVote.setAttribute('data-votes', currentVotes);
+            } else {
+              // Beğeniyi ekle
+              currentVotes++;
+              commentVote.classList.add('upvoted');
+              commentVote.textContent = `👍 ${currentVotes}`;
+              commentVote.setAttribute('data-votes', currentVotes);
+              
+              // Eğer tersi yönünde oy verilmişse onu sıfırla
+              const downSibling = commentVote.parentNode.querySelector('.downvote');
+              if (downSibling && downSibling.classList.contains('downvoted')) {
+                let downVotes = parseInt(downSibling.getAttribute('data-votes') || '0', 10);
+                downVotes--;
+                downSibling.classList.remove('downvoted');
+                downSibling.textContent = `👎 ${downVotes}`;
+                downSibling.setAttribute('data-votes', downVotes);
+              }
+            }
+          } else {
+            // Downvote
+            if (commentVote.classList.contains('downvoted')) {
+              // Dislike geri al
+              currentVotes--;
+              commentVote.classList.remove('downvoted');
+              commentVote.textContent = `👎 ${currentVotes}`;
+              commentVote.setAttribute('data-votes', currentVotes);
+            } else {
+              // Dislike ekle
+              currentVotes++;
+              commentVote.classList.add('downvoted');
+              commentVote.textContent = `👎 ${currentVotes}`;
+              commentVote.setAttribute('data-votes', currentVotes);
+              
+              // Eğer tersi yönünde oy verilmişse onu sıfırla
+              const upSibling = commentVote.parentNode.querySelector('.upvote');
+              if (upSibling && upSibling.classList.contains('upvoted')) {
+                let upVotes = parseInt(upSibling.getAttribute('data-votes') || '0', 10);
+                upVotes--;
+                upSibling.classList.remove('upvoted');
+                upSibling.textContent = `👍 ${upVotes}`;
+                upSibling.setAttribute('data-votes', upVotes);
+              }
+            }
+          }
+          return;
+        }
+
+        // 6. YENİ YORUM GÖNDERME TETİKLEMESİ
+        const submitBtn = e.target.closest('.comment-submit-btn');
+        if (submitBtn) {
+          const card = submitBtn.closest('.post-card');
+          if (!card) return;
+          const input = card.querySelector('.comment-input');
+          handleNewCommentSubmission(card, input);
+          return;
+        }
+      });
+
+      // Yorum girişi sırasında Enter tuşu dinlemesi
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          const input = e.target.closest('.comment-input');
+          if (input) {
+            const card = input.closest('.post-card');
+            if (card) {
+              handleNewCommentSubmission(card, input);
+            }
+          }
+        }
+      });
+
+      // Yorum gönderilmesini işleyen ana fonksiyon
+      function handleNewCommentSubmission(card, input) {
+        if (!input) return;
+        const text = input.value.trim();
+        if (!text) {
+          showToast("Lütfen bir yorum yazın!");
+          return;
+        }
+
+        // Güvenlik filtrelerini çalıştır (Composer'daki kuralların aynısı)
+        const validationError = validateInput(text);
+        if (validationError) {
+          showCustomModal('warning', 'Güvenlik Filtresi', validationError);
+          return;
+        }
+
+        const container = card.querySelector('.comments-container');
+        if (!container) return;
+
+        // Rastgele yorum ID'si oluştur
+        const commentId = "c-" + Math.floor(Math.random() * 100000);
+
+        // Yeni yorum HTML şablonu (Premium görünüm)
+        const commentHTML = `
+          <div class="comment-item" data-id="${commentId}">
+            <img class="comment-avatar" src="assets/erkan-profile.png" alt="Erkan Ö." />
+            <div class="comment-content-box">
+              <div class="comment-header">
+                <span class="comment-user">Erkan Ö.</span>
+                <span class="comment-time">Şimdi</span>
+              </div>
+              <div class="comment-text">${text}</div>
+              <div class="comment-footer">
+                <button class="comment-vote-btn upvote" data-votes="0">👍 0</button>
+                <button class="comment-vote-btn downvote" data-votes="0">👎 0</button>
+              </div>
+            </div>
+          </div>
+        `;
+
+        // Yorum kutusuna yeni yorumu ekle (en alta ekliyoruz)
+        container.insertAdjacentHTML('beforeend', commentHTML);
+
+        // Yorum yazma kutusunu temizle
+        input.value = "";
+
+        // Aksiyon satırındaki yorum sayacını arttır
+        const commentCountText = card.querySelector('.comment-btn .count-text');
+        if (commentCountText) {
+          const currentCount = parseInt(commentCountText.textContent || '0', 10);
+          commentCountText.textContent = `${currentCount + 1} Yorum`;
+        }
+
+        // Yorum eklendikten sonra yorum kutusunu aşağı kaydır
+        container.scrollTop = container.scrollHeight;
+
+        showToast("Yorumunuz başarıyla paylaşıldı!");
+      }
+
       // Report Privacy Toggle state
       let reportPrivacyState = "public"; // default
 
@@ -1283,6 +1955,14 @@
         // Generate a random post ID
         const randomPostId = "post-user-" + Math.floor(Math.random() * 10000);
 
+        // Dinamik veri tabanında yeni post için yer aç (Türkçe not eklenmiştir)
+        postDb[randomPostId] = {
+          voted: false,
+          bookmarked: false,
+          totalVotes: 0,
+          votes: { good: 0, blue: 0, orange: 0, red: 0, muted: 0 }
+        };
+
         const newPostHTML = `
           <article class="post-card" id="${randomPostId}" data-time="0" data-owner="true">
             <div class="post-top">
@@ -1354,6 +2034,54 @@
               <small>Yeni paylaşım</small>
             </div>
 
+            <div class="trend-percentages">
+              <div class="trend-bar-wrapper">
+                <div class="trend-bar-label">
+                  <span>Alınır</span>
+                  <span class="pct-val" data-option="good">0%</span>
+                </div>
+                <div class="trend-bar-bg">
+                  <div class="trend-bar-fill good" style="width: 0%"></div>
+                </div>
+              </div>
+              <div class="trend-bar-wrapper">
+                <div class="trend-bar-label">
+                  <span>Pazarlıkla alınır</span>
+                  <span class="pct-val" data-option="blue">0%</span>
+                </div>
+                <div class="trend-bar-bg">
+                  <div class="trend-bar-fill blue" style="width: 0%"></div>
+                </div>
+              </div>
+              <div class="trend-bar-wrapper">
+                <div class="trend-bar-label">
+                  <span>Ekspertiz şart</span>
+                  <span class="pct-val" data-option="orange">0%</span>
+                </div>
+                <div class="trend-bar-bg">
+                  <div class="trend-bar-fill orange" style="width: 0%"></div>
+                </div>
+              </div>
+              <div class="trend-bar-wrapper">
+                <div class="trend-bar-label">
+                  <span>Riskli</span>
+                  <span class="pct-val" data-option="red">0%</span>
+                </div>
+                <div class="trend-bar-bg">
+                  <div class="trend-bar-fill red" style="width: 0%"></div>
+                </div>
+              </div>
+              <div class="trend-bar-wrapper">
+                <div class="trend-bar-label">
+                  <span>Uzak dur</span>
+                  <span class="pct-val" data-option="muted">0%</span>
+                </div>
+                <div class="trend-bar-bg">
+                  <div class="trend-bar-fill muted" style="width: 0%"></div>
+                </div>
+              </div>
+            </div>
+
             <div class="vote-row">
               <button class="vote-good">Alınır</button>
               <button class="vote-blue">Pazarlıkla alınır</button>
@@ -1363,10 +2091,26 @@
             </div>
 
             <div class="action-row">
-              <button class="action-btn"><span class="action-icon comment-icon"></span>0 Yorum</button>
-              <button class="action-btn"><span class="action-icon vote-icon"></span>0 Oy</button>
-              <button class="action-btn"><span class="action-icon save-icon"></span>Kaydet</button>
-              <button class="action-btn"><span class="action-icon share-icon"></span>Paylaş</button>
+              <button class="action-btn comment-btn"><span class="action-icon comment-icon"></span><span class="count-text">0 Yorum</span></button>
+              <button class="action-btn vote-count-btn"><span class="action-icon vote-icon"></span><span class="count-text">0 Oy</span></button>
+              <button class="action-btn save-btn"><span class="action-icon save-icon"></span>Kaydet</button>
+              <div class="share-container" style="position: relative;">
+                <button class="action-btn share-btn"><span class="action-icon share-icon"></span>Paylaş</button>
+                <div class="share-popover">
+                  <button class="share-popover-item share-copy" data-url="https://www.ilaneksper.com/analiz/${brand.toLowerCase()}-${Math.floor(Math.random() * 10000)}">🔗 Bağlantıyı Kopyala</button>
+                  <button class="share-popover-item share-wa">💬 WhatsApp'ta Paylaş</button>
+                  <button class="share-popover-item share-tw">🐦 Twitter'da Paylaş</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="comments-section" id="comments-${randomPostId}">
+              <div class="comments-container"></div>
+              <div class="comment-input-area">
+                <img class="comment-avatar" src="assets/erkan-profile.png" alt="Erkan Ö." />
+                <input type="text" class="comment-input" placeholder="Yorum yazın..." />
+                <button class="comment-submit-btn">Gönder</button>
+              </div>
             </div>
           </article>
         `;
@@ -1410,6 +2154,7 @@
       <button class="modal-action-btn" id="modalActionBtn">Tamam</button>
     </div>
   </div>
+  <div class="toast-container" id="toastContainer"></div>
 </body>
 </html>
 

@@ -903,14 +903,47 @@ select {
   }
 
   .post-top {
-    align-items: flex-start;
-    gap: 12px;
-    flex-direction: column;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 10px 12px !important;
+    gap: 4px !important;
   }
 
-  .post-meta {
-    width: 100%;
-    justify-content: space-between;
+  .user-line {
+    gap: 4px !important;
+    font-size: 11px !important;
+  }
+
+  .user-line strong {
+    font-size: 12px !important;
+  }
+
+  .profile-avatar-img {
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  .mini-badge, .source-badge {
+    padding: 2px 6px !important;
+    font-size: 9px !important;
+    white-space: nowrap !important;
+  }
+
+  .post-meta-container {
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+  }
+
+  .post-time {
+    font-size: 10px !important;
+    white-space: nowrap !important;
+  }
+
+  .post-menu-trigger {
+    padding: 2px 4px !important;
+    font-size: 12px !important;
   }
 
   .score-row {
@@ -3769,4 +3802,341 @@ body {
 .menu-icon {
   flex-shrink: 0;
   color: currentColor;
+}
+
+/* Share popover tooltip */
+.share-popover {
+  position: absolute;
+  bottom: 110%;
+  left: 50%;
+  transform: translateX(-50%) translateY(5px);
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
+  padding: 6px;
+  z-index: 1000;
+  display: none;
+  flex-direction: column;
+  min-width: 145px;
+  opacity: 0;
+  transition: all 0.2s ease;
+}
+
+.share-popover.active {
+  display: flex;
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.share-popover-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border: none;
+  background: transparent;
+  color: #475569;
+  font-size: 11.5px;
+  font-weight: 550;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.15s ease;
+  width: 100%;
+}
+
+.share-popover-item:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+/* Toast Notifications styling */
+.toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 10000;
+  pointer-events: none;
+}
+
+.custom-toast {
+  background: #0f172a;
+  color: #ffffff;
+  padding: 12px 18px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 550;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: auto;
+}
+
+.custom-toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ==========================================================================
+   OTOMATİK VE DİNAMİK ETKİLEŞİM ELEMANLARI (YENİ EKLEMEDİR)
+   ========================================================================== */
+
+/* Topluluk Eğilimi Yüzde Grafiği (Aşağı doğru kayarak açılır) */
+.trend-percentages {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 16px;
+  background: #f8fafc;
+  border-top: 1px dashed var(--border);
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease-out, padding 0.35s ease-out;
+}
+
+.trend-percentages.active {
+  max-height: 500px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--soft-border);
+}
+
+.trend-bar-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.trend-bar-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #475569;
+  font-weight: 600;
+}
+
+.trend-bar-bg {
+  height: 6px;
+  background: #e2e8f0;
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+}
+
+.trend-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 0%;
+}
+
+.trend-bar-fill.good { background: #22c55e; }
+.trend-bar-fill.blue { background: #3b82f6; }
+.trend-bar-fill.orange { background: #f59e0b; }
+.trend-bar-fill.red { background: #ef4444; }
+.trend-bar-fill.muted { background: #94a3b8; }
+
+/* Açılır-Kapanır Yorumlar Alanı (Collapsible Comments) */
+.comments-section {
+  background: #f8fafc;
+  border-top: 1px solid var(--soft-border);
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.comments-section.active {
+  max-height: 600px;
+}
+
+.comments-container {
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.comment-item {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  animation: fadeInComment 0.3s ease-out;
+}
+
+@keyframes fadeInComment {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.comment-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+}
+
+.comment-content-box {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 8px 12px;
+  flex-grow: 1;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.comment-user {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.comment-time {
+  font-size: 10px;
+  color: #94a3b8;
+}
+
+.comment-text {
+  font-size: 12px;
+  color: #334155;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.comment-footer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.comment-vote-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10.5px;
+  font-weight: 600;
+  transition: all 0.15s;
+}
+
+.comment-vote-btn:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.comment-vote-btn.upvoted {
+  color: #22c55e;
+  background: #f0fdf4;
+}
+
+.comment-vote-btn.downvoted {
+  color: #ef4444;
+  background: #fef2f2;
+}
+
+.comment-input-area {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px;
+  border-top: 1px solid #e2e8f0;
+  background: #ffffff;
+  align-items: center;
+}
+
+.comment-input {
+  flex-grow: 1;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 12.5px;
+  outline: none;
+  transition: border-color 0.2s;
+  color: #0f172a;
+}
+
+.comment-input::placeholder {
+  color: #94a3b8;
+}
+
+.comment-input:focus {
+  border-color: var(--blue);
+}
+
+.comment-submit-btn {
+  background: var(--blue);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  height: 34px;
+  padding: 0 14px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.comment-submit-btn:hover {
+  opacity: 0.9;
+}
+
+/* Seçilen oy butonuna aktiflik geri bildirimi */
+.vote-row button.selected-vote {
+  background: #f1f5f9 !important;
+  border-color: #cbd5e1 !important;
+  font-weight: 750 !important;
+}
+
+.vote-row button:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Kaydedilen / Favoriye eklenen post butonu aktiflik stili */
+.action-btn.saved-btn {
+  color: var(--blue) !important;
+  font-weight: 750 !important;
+}
+
+.action-btn.saved-btn .save-icon {
+  background: var(--blue-soft) !important;
+  border-color: var(--blue) !important;
+}
+
+.action-btn.saved-btn .save-icon::after {
+  background: var(--blue-soft) !important;
+  border-left-color: var(--blue) !important;
+  border-bottom-color: var(--blue) !important;
+}
+
+/* Paylaş popover buton stilleri */
+.share-popover-item {
+  font-family: inherit;
 }
