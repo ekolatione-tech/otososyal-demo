@@ -894,7 +894,7 @@ select {
     max-height: 42px;
   }
 
-  .profile strong {
+  .profile-user-trigger strong {
     display: none;
   }
 
