@@ -1578,6 +1578,20 @@
       // OTOSOSYAL ETKİLEŞİM VE DİNAMİK YÖNETİM SİSTEMİ (YENİ EKLEMEDİR)
       // ==========================================================================
 
+      // Safe LocalStorage Reader to prevent crashes with corrupted or "undefined" values
+      function safeGetLocalStorage(key, defaultValue) {
+        try {
+          const item = localStorage.getItem(key);
+          if (!item) return defaultValue;
+          if (item === "undefined") return defaultValue;
+          const parsed = JSON.parse(item);
+          return parsed !== null ? parsed : defaultValue;
+        } catch (e) {
+          console.error("LocalStorage parse error for key " + key + ":", e);
+          return defaultValue;
+        }
+      }
+
       // Post verilerini (oylar, durumlar vb.) tutan yerel veri tabanı (Kalıcılık destekli)
       const defaultPostDb = {
         "post-bmw": {
@@ -1600,17 +1614,102 @@
         }
       };
 
-      let postDb = JSON.parse(localStorage.getItem('postDb'));
-      if (!postDb) {
+      let postDb = safeGetLocalStorage('postDb', defaultPostDb);
+      // Sanitize postDb structure to heal any corrupt or outdated entries
+      if (postDb && typeof postDb === 'object') {
+        let postDbChanged = false;
+        for (let postId in postDb) {
+          const entry = postDb[postId];
+          if (!entry || typeof entry !== 'object') {
+            postDb[postId] = { voted: false, bookmarked: false, totalVotes: 0, votes: { good: 0, blue: 0, orange: 0, red: 0, muted: 0 } };
+            postDbChanged = true;
+          } else {
+            if (!entry.votes || typeof entry.votes !== 'object') {
+              entry.votes = { good: 0, blue: 0, orange: 0, red: 0, muted: 0 };
+              postDbChanged = true;
+            }
+            if (typeof entry.totalVotes !== 'number') {
+              entry.totalVotes = 0;
+              postDbChanged = true;
+            }
+          }
+        }
+        if (postDbChanged) {
+          localStorage.setItem('postDb', JSON.stringify(postDb));
+        }
+      } else {
         postDb = defaultPostDb;
         localStorage.setItem('postDb', JSON.stringify(postDb));
       }
 
       // Kullanıcı paylaşımları veritabanı (Kalıcılık destekli)
-      let userPosts = JSON.parse(localStorage.getItem('userPosts')) || [];
+      let userPosts = safeGetLocalStorage('userPosts', []);
+      if (Array.isArray(userPosts)) {
+        let postsChanged = false;
+        userPosts = userPosts.filter(post => {
+          if (!post || typeof post !== 'object') {
+            postsChanged = true;
+            return false;
+          }
+          if (!post.id) {
+            post.id = "post-user-" + Math.floor(Math.random() * 10000);
+            postsChanged = true;
+          }
+          if (!post.brand) { post.brand = "Araç"; postsChanged = true; }
+          if (!post.model) { post.model = ""; postsChanged = true; }
+          if (!post.specs) { post.specs = ""; postsChanged = true; }
+          if (!post.price) { post.price = "Fiyat belirtilmemiş"; postsChanged = true; }
+          if (!post.score) { post.score = "70/100"; postsChanged = true; }
+          if (!post.risk) { post.risk = "Orta"; postsChanged = true; }
+          if (!post.type) { post.type = "Analizden seçildi"; postsChanged = true; }
+          if (!Array.isArray(post.risks)) { post.risks = []; postsChanged = true; }
+          if (!post.reportPrivacyState) { post.reportPrivacyState = "public"; postsChanged = true; }
+          if (!post.questionText) { post.questionText = ""; postsChanged = true; }
+          return true;
+        });
+        if (postsChanged) {
+          localStorage.setItem('userPosts', JSON.stringify(userPosts));
+        }
+      } else {
+        userPosts = [];
+        localStorage.setItem('userPosts', JSON.stringify(userPosts));
+      }
 
       // Yeni eklenen yorumlar veritabanı (Kalıcılık destekli)
-      let commentsDb = JSON.parse(localStorage.getItem('commentsDb')) || {};
+      let commentsDb = safeGetLocalStorage('commentsDb', {});
+      if (commentsDb && typeof commentsDb === 'object') {
+        let commentsChanged = false;
+        for (let postId in commentsDb) {
+          if (!Array.isArray(commentsDb[postId])) {
+            commentsDb[postId] = [];
+            commentsChanged = true;
+          } else {
+            commentsDb[postId] = commentsDb[postId].filter(comment => {
+              if (!comment || typeof comment !== 'object') {
+                commentsChanged = true;
+                return false;
+              }
+              if (!comment.id) {
+                comment.id = "c-" + Math.floor(Math.random() * 100000);
+                commentsChanged = true;
+              }
+              if (!comment.user) { comment.user = "Erkan Ö."; commentsChanged = true; }
+              if (!comment.avatar) { comment.avatar = "assets/erkan-profile.png"; commentsChanged = true; }
+              if (!comment.time) { comment.time = "Şimdi"; commentsChanged = true; }
+              if (!comment.text) { comment.text = ""; commentsChanged = true; }
+              if (typeof comment.votesUp !== 'number') { comment.votesUp = 0; commentsChanged = true; }
+              if (typeof comment.votesDown !== 'number') { comment.votesDown = 0; commentsChanged = true; }
+              return true;
+            });
+          }
+        }
+        if (commentsChanged) {
+          localStorage.setItem('commentsDb', JSON.stringify(commentsDb));
+        }
+      } else {
+        commentsDb = {};
+        localStorage.setItem('commentsDb', JSON.stringify(commentsDb));
+      }
 
       // Oy seçeneği adlarının Türkçe karşılıkları
       const optionNames = {
@@ -1623,8 +1722,21 @@
 
       // Dinamik Gönderi HTML Üretici
       function createPostHTML(post) {
-        let risksHTML = "";
+        if (!post) return "";
+        const brand = post.brand || "Araç";
+        const model = post.model || "";
+        const specs = post.specs || "";
+        const price = post.price || "Fiyat belirtilmemiş";
+        const score = post.score || "70/100";
+        const risk = post.risk || "Orta";
+        const type = post.type || "Analizden seçildi";
         const risks = post.risks || [];
+        const questionText = post.questionText || "";
+        const reportPrivacyState = post.reportPrivacyState || "public";
+        const id = post.id || ("post-user-" + Math.floor(Math.random() * 10000));
+        const timeText = post.timeText || "Şimdi";
+
+        let risksHTML = "";
         risks.forEach(r => {
           risksHTML += `<li>${r}</li>`;
         });
@@ -1633,32 +1745,32 @@
         }
 
         let privacyControlHTML = "";
-        if (post.reportPrivacyState === "public") {
-          const vehicleSlug = `${post.brand.toLowerCase()}-${post.model.toLowerCase().replace(/[\s.]+/g, '-')}`;
+        if (reportPrivacyState === "public") {
+          const vehicleSlug = `${brand.toLowerCase()}-${model.toLowerCase().replace(/[\s.]+/g, '-')}`;
           privacyControlHTML = `<a href="https://www.ilaneksper.com/analiz/${vehicleSlug}" target="_blank" class="privacy-btn" title="Rapor özeti, paylaşım sahibinin izin verdiği kontrollü bilgileri içerir.">Rapor Özetini Gör</a>`;
         } else {
           privacyControlHTML = `<span class="privacy-chip">Rapor kullanıcı tarafından gizlendi</span>`;
         }
 
         let riskClass = "medium";
-        if (post.risk.toLowerCase() === "düşük") riskClass = "low";
-        if (post.risk.toLowerCase() === "yüksek") riskClass = "high";
+        if (risk.toLowerCase() === "düşük") riskClass = "low";
+        if (risk.toLowerCase() === "yüksek") riskClass = "high";
 
-        const brandSlug = brandLogoMap[post.brand.toLowerCase()] || post.brand.toLowerCase();
+        const brandSlug = brandLogoMap[brand.toLowerCase()] || brand.toLowerCase() || 'default';
         const logoUrl = `https://unpkg.com/simple-icons@v9/icons/${brandSlug}.svg`;
 
         return `
-          <article class="post-card" id="${post.id}" data-time="0" data-owner="true">
+          <article class="post-card" id="${id}" data-time="0" data-owner="true">
             <div class="post-top">
               <div class="user-line">
                 <img class="profile-avatar-img" src="assets/erkan-profile.png" alt="Erkan" style="width:34px; height:34px; margin-right:4px;" />
                 <strong>Erkan Ö.</strong>
                 <span class="mini-badge pro">Pro</span>
-                <span class="source-badge">${post.type}</span>
+                <span class="source-badge">${type}</span>
               </div>
-
+ 
               <div class="post-meta-container" style="position: relative;">
-                <span class="post-time">${post.timeText || 'Şimdi'}</span>
+                <span class="post-time">${timeText}</span>
                 <button class="post-menu-trigger" aria-label="Seçenekler">•••</button>
                 <div class="post-menu-dropdown">
                   <button class="post-menu-item delete-btn">
@@ -1676,33 +1788,33 @@
                 </div>
               </div>
             </div>
-
+ 
             <div class="post-body">
               <div class="car-visual">
-                <img class="brand-bg-logo" src="${logoUrl}" alt="${post.brand}" />
+                <img class="brand-bg-logo" src="${logoUrl}" alt="${brand}" />
                 <div class="car-fallback-info">
-                  <span class="fallback-brand">${post.brand}</span>
-                  <span class="fallback-model">${post.model}</span>
-                  <span class="fallback-meta">${post.specs}</span>
+                  <span class="fallback-brand">${brand}</span>
+                  <span class="fallback-model">${model}</span>
+                  <span class="fallback-meta">${specs}</span>
                 </div>
                 <span class="fallback-badge">Ilan gorseli yok</span>
               </div>
-
+ 
               <div class="post-main">
-                <h2>${post.brand} ${post.model}</h2>
-                <p class="vehicle-meta">${post.specs}</p>
-                <p class="price">${post.price}</p>
-
+                <h2>${brand} ${model}</h2>
+                <p class="vehicle-meta">${specs}</p>
+                <p class="price">${price}</p>
+ 
                 <div class="score-row">
-                  <div class="score-box">Skor ${post.score}</div>
-                  <span class="risk-badge risk-${riskClass}">Risk: ${post.risk}</span>
+                  <div class="score-box">Skor ${score}</div>
+                  <span class="risk-badge risk-${riskClass}">Risk: ${risk}</span>
                 </div>
-
+ 
                 <div class="question-box">
-                  ${post.questionText}
+                  ${questionText}
                 </div>
               </div>
-
+ 
               <div class="risk-panel">
                 <h3>Öne Çıkan Riskler</h3>
                 <ul>
@@ -1711,13 +1823,13 @@
                 ${privacyControlHTML}
               </div>
             </div>
-
+ 
             <div class="community-trend">
               <span>Topluluk eğilimi</span>
               <strong>Henüz oy yok</strong>
               <small>Yeni paylaşım</small>
             </div>
-
+ 
             <div class="trend-percentages">
               <div class="trend-bar-wrapper">
                 <div class="trend-bar-label">
@@ -1765,7 +1877,7 @@
                 </div>
               </div>
             </div>
-
+ 
             <div class="vote-row">
               <button class="vote-good">Alınır</button>
               <button class="vote-blue">Pazarlıkla alınır</button>
@@ -1773,7 +1885,7 @@
               <button class="vote-red">Riskli</button>
               <button class="vote-muted">Uzak dur</button>
             </div>
-
+ 
             <div class="action-row">
               <button class="action-btn comment-btn"><span class="action-icon comment-icon"></span><span class="count-text">0 Yorum</span></button>
               <button class="action-btn vote-count-btn"><span class="action-icon vote-icon"></span><span class="count-text">0 Oy</span></button>
@@ -1781,7 +1893,7 @@
               <div class="share-container" style="position: relative;">
                 <button class="action-btn share-btn"><span class="action-icon share-icon"></span>Paylaş</button>
                 <div class="share-popover">
-                  <button class="share-popover-item share-copy" data-url="https://www.ilaneksper.com/analiz/${post.brand.toLowerCase()}-${Math.floor(Math.random() * 10000)}">
+                  <button class="share-popover-item share-copy" data-url="https://www.ilaneksper.com/analiz/${brand.toLowerCase()}-${Math.floor(Math.random() * 10000)}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="menu-icon"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
                     Bağlantıyı Kopyala
                   </button>
@@ -1804,8 +1916,8 @@
                 </div>
               </div>
             </div>
-
-            <div class="comments-section" id="comments-${post.id}">
+ 
+            <div class="comments-section" id="comments-${id}">
               <div class="comments-container"></div>
               <div class="comment-input-area">
                 <img class="comment-avatar" src="assets/erkan-profile.png" alt="Erkan Ö." />
@@ -1837,6 +1949,9 @@
           `;
         }
 
+        const upvotedClass = comment.upvoted ? ' upvoted' : '';
+        const downvotedClass = comment.downvoted ? ' downvoted' : '';
+
         return `
           <div class="comment-item" data-id="${comment.id}"${isOwnerAttr}>
             <img class="comment-avatar" src="${comment.avatar}" alt="${comment.user}" />
@@ -1855,11 +1970,11 @@
               </div>
               <div class="comment-text">${comment.text}</div>
               <div class="comment-footer">
-                <button class="comment-vote-btn upvote" data-votes="${comment.votesUp || 0}">
+                <button class="comment-vote-btn upvote${upvotedClass}" data-votes="${comment.votesUp || 0}">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="comment-vote-icon"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>
                   <span class="vote-count">${comment.votesUp || 0}</span>
                 </button>
-                <button class="comment-vote-btn downvote" data-votes="${comment.votesDown || 0}">
+                <button class="comment-vote-btn downvote${downvotedClass}" data-votes="${comment.votesDown || 0}">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="comment-vote-icon"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3"></path></svg>
                   <span class="vote-count">${comment.votesDown || 0}</span>
                 </button>
@@ -1937,49 +2052,65 @@
 
       // LocalStorage Verilerini Geri Yükleme
       function restoreSavedState() {
-        const feedToolbar = document.querySelector('.feed-toolbar');
-        
-        // 1. Kullanıcı paylaşımlarını yükle (Kronolojik sırayla prepend ederek en yeniyi üstte gösterir)
-        userPosts.forEach(post => {
-          if (feedToolbar) {
-            feedToolbar.insertAdjacentHTML('afterend', createPostHTML(post));
+        try {
+          const feedToolbar = document.querySelector('.feed-toolbar');
+          
+          // 1. Kullanıcı paylaşımlarını yükle (Kronolojik sırayla prepend ederek en yeniyi üstte gösterir)
+          if (Array.isArray(userPosts)) {
+            userPosts.forEach(post => {
+              if (feedToolbar && post && typeof post === 'object' && post.id) {
+                feedToolbar.insertAdjacentHTML('afterend', createPostHTML(post));
+              }
+            });
           }
-        });
 
-        // 2. Dinamik yorumları yükle
-        for (let postId in commentsDb) {
-          const card = document.getElementById(postId);
-          if (card) {
-            const container = card.querySelector('.comments-container');
-            if (container) {
-              commentsDb[postId].forEach(comment => {
-                container.insertAdjacentHTML('beforeend', createCommentHTML(comment));
-              });
+          // 2. Dinamik yorumları yükle
+          if (commentsDb && typeof commentsDb === 'object') {
+            for (let postId in commentsDb) {
+              const card = document.getElementById(postId);
+              if (card) {
+                const container = card.querySelector('.comments-container');
+                if (container && Array.isArray(commentsDb[postId])) {
+                  commentsDb[postId].forEach(comment => {
+                    if (comment && typeof comment === 'object') {
+                      container.insertAdjacentHTML('beforeend', createCommentHTML(comment));
+                    }
+                  });
+                }
+              }
             }
           }
-        }
 
-        // 3. Yorum sayılarını güncelle
-        document.querySelectorAll('.post-card').forEach(card => {
-          const container = card.querySelector('.comments-container');
-          const countText = card.querySelector('.comment-btn .count-text');
-          if (container && countText) {
-            const count = container.querySelectorAll('.comment-item').length;
-            countText.textContent = `${count} Yorum`;
-          }
-        });
+          // 3. Yorum sayılarını güncelle
+          document.querySelectorAll('.post-card').forEach(card => {
+            const container = card.querySelector('.comments-container');
+            const countText = card.querySelector('.comment-btn .count-text');
+            if (container && countText) {
+              const count = container.querySelectorAll('.comment-item').length;
+              countText.textContent = `${count} Yorum`;
+            }
+          });
 
-        // 4. Oy ve bookmark durumlarını yükle
-        for (let postId in postDb) {
-          const card = document.getElementById(postId);
-          if (card) {
-            restorePostStates(card, postDb[postId]);
+          // 4. Oy ve bookmark durumlarını yükle
+          if (postDb && typeof postDb === 'object') {
+            for (let postId in postDb) {
+              const card = document.getElementById(postId);
+              if (card && postDb[postId] && typeof postDb[postId] === 'object') {
+                restorePostStates(card, postDb[postId]);
+              }
+            }
           }
+        } catch (e) {
+          console.error("Error in restoreSavedState:", e);
         }
       }
 
       // Restorasyon işlemini başlat
-      restoreSavedState();
+      try {
+        restoreSavedState();
+      } catch (err) {
+        console.error("Failed to run restoreSavedState:", err);
+      }
 
       // Side Nav ve Konular Filtreleme Entegrasyonu
       const sideLinks = document.querySelectorAll('.side-nav a');
@@ -2054,8 +2185,8 @@
               show = card.getAttribute('data-owner') !== 'true';
               break;
             case 'commented':
-              // Erkan Ö. tarafından yorum yapılmış olanlar
-              show = !!(commentsDb[postId] && commentsDb[postId].length > 0);
+              // Erkan Ö. tarafından yorum yapılmış olanlar (kullanıcının kendi yorumları)
+              show = !!(commentsDb[postId] && commentsDb[postId].some(c => c.owner === true || c.user === 'Erkan Ö.'));
               break;
             case 'voted':
               show = !!(postDb[postId] && postDb[postId].voted);
@@ -2082,13 +2213,15 @@
                 // En çok oy alan seçeneği bul (Lider seçenek)
                 let maxVotes = -1;
                 let leadingOption = "";
-                for (let key in dbEntry.votes) {
-                  if (dbEntry.votes[key] > maxVotes) {
-                    maxVotes = dbEntry.votes[key];
-                    leadingOption = key;
+                if (dbEntry && dbEntry.votes) {
+                  for (let key in dbEntry.votes) {
+                    if (dbEntry.votes[key] > maxVotes) {
+                      maxVotes = dbEntry.votes[key];
+                      leadingOption = key;
+                    }
                   }
                 }
-                show = (leadingOption === targetOpt && dbEntry.totalVotes > 0);
+                show = (leadingOption === targetOpt && dbEntry && dbEntry.totalVotes > 0);
               }
               break;
             default:
@@ -2112,6 +2245,162 @@
       function getActiveFilter() {
         const activeLink = document.querySelector('.side-nav a.side-active');
         return activeLink ? (activeLink.getAttribute('data-filter') || 'all') : 'all';
+      }
+
+      // Mobile Tabbar Navigation Logic
+      const mobileTabLinks = document.querySelectorAll('.mobile-tabbar a');
+      const mobileSheetOverlay = document.getElementById('mobileSheetOverlay');
+      const mobileSheetTitle = document.getElementById('mobileSheetTitle');
+      const mobileSheetBody = document.getElementById('mobileSheetBody');
+      const mobileSheetClose = document.getElementById('mobileSheetClose');
+
+      if (mobileTabLinks.length > 0 && mobileSheetOverlay) {
+        mobileTabLinks.forEach((tab, index) => {
+          // Skip the external link (İlanEksper) which is at index 4
+          if (index === 4) return;
+
+          tab.addEventListener('click', (e) => {
+            e.preventDefault();
+
+            // Handle active class
+            mobileTabLinks.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+
+            if (index === 0) {
+              // Ana sayfa: Close drawer and apply 'all' filter
+              hideMobileSheet();
+              applyFeedFilter('all');
+              updateSideNavActiveFilter('all');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else if (index === 1) {
+              // Akışlar: Open bottom sheet with Feeds options
+              showMobileSheet("Akışlar", getFeedsOptions());
+            } else if (index === 2) {
+              // Konular: Open bottom sheet with Topics options
+              showMobileSheet("Konular", getTopicsOptions());
+            } else if (index === 3) {
+              // Filtreler: Open bottom sheet with Time Filters options
+              showMobileSheet("Filtreler", getTimeFilterOptions());
+            }
+          });
+        });
+
+        if (mobileSheetClose) {
+          mobileSheetClose.addEventListener('click', hideMobileSheet);
+        }
+        mobileSheetOverlay.addEventListener('click', (e) => {
+          if (e.target === mobileSheetOverlay) {
+            hideMobileSheet();
+          }
+        });
+      }
+
+      function showMobileSheet(title, options) {
+        if (!mobileSheetOverlay || !mobileSheetTitle || !mobileSheetBody) return;
+        mobileSheetTitle.textContent = title;
+        mobileSheetBody.innerHTML = "";
+
+        options.forEach(opt => {
+          const btn = document.createElement('button');
+          btn.className = 'sheet-option-btn' + (opt.active ? ' active' : '');
+          
+          let dotColor = "var(--muted)";
+          if (opt.filter.startsWith('topic-')) {
+            const topicType = opt.filter.replace('topic-', '');
+            if (topicType === 'good') dotColor = '#22c55e';
+            else if (topicType === 'blue') dotColor = '#3b82f6';
+            else if (topicType === 'orange') dotColor = '#f97316';
+            else if (topicType === 'red') dotColor = '#ef4444';
+            else if (topicType === 'muted') dotColor = '#64748b';
+            else if (topicType === 'hot') dotColor = '#f43f5e';
+          } else {
+            if (opt.active) dotColor = 'var(--blue)';
+          }
+
+          btn.innerHTML = `
+            <span class="option-icon" style="background-color: ${dotColor};"></span>
+            <span>${opt.label}</span>
+          `;
+
+          btn.addEventListener('click', () => {
+            // Apply filter
+            if (opt.type === 'time') {
+              const sortBtn = document.querySelector(`#sortMenuList button[data-filter="${opt.filter}"]`);
+              if (sortBtn) {
+                sortBtn.click();
+              }
+            } else {
+              applyFeedFilter(opt.filter);
+              updateSideNavActiveFilter(opt.filter);
+            }
+            hideMobileSheet();
+          });
+
+          mobileSheetBody.appendChild(btn);
+        });
+
+        mobileSheetOverlay.classList.add('active');
+      }
+
+      function hideMobileSheet() {
+        if (mobileSheetOverlay) mobileSheetOverlay.classList.remove('active');
+      }
+
+      function updateSideNavActiveFilter(filterVal) {
+        const sideLinks = document.querySelectorAll('.side-nav a');
+        sideLinks.forEach(l => {
+          l.classList.remove('side-active');
+          const span = l.querySelector('span');
+          if (span) span.remove();
+          
+          if (l.getAttribute('data-filter') === filterVal) {
+            l.classList.add('side-active');
+            if (!l.querySelector('span')) {
+              const span = document.createElement('span');
+              l.insertBefore(span, l.firstChild);
+            }
+          }
+        });
+      }
+
+      function getFeedsOptions() {
+        const activeFilter = getActiveFilter();
+        return [
+          { label: "Tüm Akış", filter: "all", active: activeFilter === 'all' },
+          { label: "Takip Ettiklerim", filter: "following", active: activeFilter === 'following' },
+          { label: "Yorum Yaptıklarım", filter: "commented", active: activeFilter === 'commented' },
+          { label: "Oy Verdiklerim", filter: "voted", active: activeFilter === 'voted' },
+          { label: "Kaydettiklerim", filter: "saved", active: activeFilter === 'saved' }
+        ];
+      }
+
+      function getTopicsOptions() {
+        const activeFilter = getActiveFilter();
+        return [
+          { label: "Alınır", filter: "topic-good", active: activeFilter === 'topic-good' },
+          { label: "Pazarlıkla alınır", filter: "topic-blue", active: activeFilter === 'topic-blue' },
+          { label: "Ekspertiz şart", filter: "topic-orange", active: activeFilter === 'topic-orange' },
+          { label: "Riskli", filter: "topic-red", active: activeFilter === 'topic-red' },
+          { label: "Uzak dur", filter: "topic-muted", active: activeFilter === 'topic-muted' },
+          { label: "En çok yorumlananlar", filter: "topic-hot", active: activeFilter === 'topic-hot' }
+        ];
+      }
+
+      function getTimeFilterOptions() {
+        const sortMenuList = document.getElementById('sortMenuList');
+        const options = [];
+        if (sortMenuList) {
+          const filterBtns = sortMenuList.querySelectorAll('button');
+          filterBtns.forEach(btn => {
+            options.push({
+              label: btn.textContent.trim(),
+              filter: btn.getAttribute('data-filter'),
+              active: btn.classList.contains('active'),
+              type: 'time'
+            });
+          });
+        }
+        return options;
       }
 
       // Özel Toast Bildirim Sistemi fonksiyonu
@@ -2421,6 +2710,26 @@
                 const upCountSpan = upSibling.querySelector('.vote-count');
                 if (upCountSpan) upCountSpan.textContent = upVotes;
                 upSibling.setAttribute('data-votes', upVotes);
+              }
+            }
+          }
+
+          // Persist dynamic comment vote state if it exists in commentsDb
+          const card = commentVote.closest('.post-card');
+          const commentItem = commentVote.closest('.comment-item');
+          if (card && commentItem) {
+            const postId = card.id;
+            const commentId = commentItem.getAttribute('data-id');
+            if (commentsDb[postId]) {
+              const commentObj = commentsDb[postId].find(c => c.id === commentId);
+              if (commentObj) {
+                const upBtn = commentItem.querySelector('.upvote');
+                const downBtn = commentItem.querySelector('.downvote');
+                commentObj.votesUp = parseInt(upBtn.getAttribute('data-votes') || '0', 10);
+                commentObj.votesDown = parseInt(downBtn.getAttribute('data-votes') || '0', 10);
+                commentObj.upvoted = upBtn.classList.contains('upvoted');
+                commentObj.downvoted = downBtn.classList.contains('downvoted');
+                localStorage.setItem('commentsDb', JSON.stringify(commentsDb));
               }
             }
           }
@@ -2915,6 +3224,20 @@
       });
     });
   </script>
+
+  <!-- Mobile Bottom Sheet Menu -->
+  <div class="mobile-sheet-overlay" id="mobileSheetOverlay">
+    <div class="mobile-sheet-content">
+      <div class="mobile-sheet-header">
+        <div class="sheet-drag-handle"></div>
+        <h3 id="mobileSheetTitle">Akış Seçin</h3>
+        <button class="sheet-close-btn" id="mobileSheetClose">&times;</button>
+      </div>
+      <div class="mobile-sheet-body" id="mobileSheetBody">
+        <!-- Dynamic options injected here -->
+      </div>
+    </div>
+  </div>
 
   <!-- Premium Custom Modal -->
   <div class="custom-modal-overlay" id="customModal">
