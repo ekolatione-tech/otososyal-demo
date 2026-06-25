@@ -201,7 +201,7 @@
               <span></span>
               Tüm Akış
             </a>
-            <a href="#" data-filter="following">Takip Ettiklerim</a>
+            <a href="#" data-filter="liked">Beğendiklerim</a>
             <a href="#" data-filter="commented">Yorum Yaptıklarım</a>
             <a href="#" data-filter="voted">Oy Verdiklerim</a>
             <a href="#" data-filter="saved">Kaydettiklerim</a>
@@ -219,6 +219,18 @@
         </nav>
 
         <button class="share-button">+ Paylaşım Yap</button>
+
+        <!-- Promosyon Butonları -->
+        <div class="promo-buttons-container">
+          <a href="https://www.ilaneksper.com/odeme?plan=plus" target="_blank" class="sidebar-promo-btn plus-promo-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink: 0;"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            <span>İlanEksper Plus'a Geç</span>
+          </a>
+          <a href="https://www.ilaneksper.com/odeme?plan=pro" target="_blank" class="sidebar-promo-btn pro-promo-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink: 0;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <span>İlanEksper Pro'ya Katıl</span>
+          </a>
+        </div>
 
         <div class="info-card">
           <h3>Otososyal Nedir?</h3>
@@ -333,7 +345,7 @@
         <p style="font-size: 13px; max-width: 300px; margin: 0 auto; color: var(--muted);">Bu kategoriye ait herhangi bir paylaşım bulunmuyor.</p>
       </div>
 
-      <article class="post-card" id="post-bmw" data-time="2">
+      <article class="post-card" id="post-bmw" data-time="2" data-brand="BMW" data-model="520i 1.6 F10" data-fuel="Benzin" data-price="1540000" data-km="178000">
         <div class="post-top">
           <div class="user-line">
             <img class="profile-avatar-img" src="assets/mehmet-profile.png" alt="Mehmet K." style="width:36px; height:36px; margin-right:4px;" />
@@ -459,11 +471,12 @@
         </div>
 
         <div class="action-row">
-          <button class="action-btn comment-btn"><span class="action-icon comment-icon"></span><span class="count-text">2 Yorum</span></button>
-          <button class="action-btn vote-count-btn"><span class="action-icon vote-icon"></span><span class="count-text">28 Oy</span></button>
-          <button class="action-btn save-btn"><span class="action-icon save-icon"></span>Kaydet</button>
+          <button class="action-btn like-btn"><span class="action-icon like-icon"></span><span class="count-text">12</span><span class="btn-label-text"> Beğeni</span></button>
+          <button class="action-btn comment-btn"><span class="action-icon comment-icon"></span><span class="count-text">2</span><span class="btn-label-text"> Yorum</span></button>
+          <button class="action-btn vote-count-btn"><span class="action-icon vote-icon"></span><span class="count-text">28</span><span class="btn-label-text"> Oy</span></button>
+          <button class="action-btn save-btn"><span class="action-icon save-icon"></span><span class="btn-label-text">Kaydet</span></button>
           <div class="share-container" style="position: relative;">
-            <button class="action-btn share-btn"><span class="action-icon share-icon"></span>Paylaş</button>
+            <button class="action-btn share-btn"><span class="action-icon share-icon"></span><span class="btn-label-text">Paylaş</span></button>
             <div class="share-popover">
               <button class="share-popover-item share-copy" data-url="https://www.ilaneksper.com/analiz/bmw-320i-p-294">
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="menu-icon"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
@@ -562,7 +575,7 @@
         </div>
       </article>
 
-      <article class="post-card" id="post-golf" data-time="5">
+      <article class="post-card" id="post-golf" data-time="5" data-brand="Volkswagen" data-model="Golf 7 1.4 TSI" data-fuel="Benzin" data-price="1085000" data-km="152000">
         <div class="post-top">
           <div class="user-line">
             <img class="profile-avatar-img" src="assets/ayse-profile.png" alt="Ayşe Y." style="width:36px; height:36px; margin-right:4px;" />
@@ -688,11 +701,12 @@
         </div>
 
         <div class="action-row">
-          <button class="action-btn comment-btn"><span class="action-icon comment-icon"></span><span class="count-text">2 Yorum</span></button>
-          <button class="action-btn vote-count-btn"><span class="action-icon vote-icon"></span><span class="count-text">17 Oy</span></button>
-          <button class="action-btn save-btn"><span class="action-icon save-icon"></span>Kaydet</button>
+          <button class="action-btn like-btn"><span class="action-icon like-icon"></span><span class="count-text">5</span><span class="btn-label-text"> Beğeni</span></button>
+          <button class="action-btn comment-btn"><span class="action-icon comment-icon"></span><span class="count-text">2</span><span class="btn-label-text"> Yorum</span></button>
+          <button class="action-btn vote-count-btn"><span class="action-icon vote-icon"></span><span class="count-text">17</span><span class="btn-label-text"> Oy</span></button>
+          <button class="action-btn save-btn"><span class="action-icon save-icon"></span><span class="btn-label-text">Kaydet</span></button>
           <div class="share-container" style="position: relative;">
-            <button class="action-btn share-btn"><span class="action-icon share-icon"></span>Paylaş</button>
+            <button class="action-btn share-btn"><span class="action-icon share-icon"></span><span class="btn-label-text">Paylaş</span></button>
             <div class="share-popover">
               <button class="share-popover-item share-copy" data-url="https://www.ilaneksper.com/analiz/golf-7-tsi-p-103">
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="menu-icon"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
@@ -791,7 +805,7 @@
         </div>
       </article>
 
-      <article class="post-card" id="post-corolla" data-time="7">
+      <article class="post-card" id="post-corolla" data-time="7" data-brand="Toyota" data-model="Corolla 1.6 CVT" data-fuel="Benzin" data-price="1025000" data-km="196000">
         <div class="post-top">
           <div class="user-line">
             <img class="profile-avatar-img" src="assets/melih-profile.png" alt="Melih A." style="width:36px; height:36px; margin-right:4px;" />
@@ -916,11 +930,12 @@
         </div>
 
         <div class="action-row">
-          <button class="action-btn comment-btn"><span class="action-icon comment-icon"></span><span class="count-text">2 Yorum</span></button>
-          <button class="action-btn vote-count-btn"><span class="action-icon vote-icon"></span><span class="count-text">21 Oy</span></button>
-          <button class="action-btn save-btn"><span class="action-icon save-icon"></span>Kaydet</button>
+          <button class="action-btn like-btn"><span class="action-icon like-icon"></span><span class="count-text">8</span><span class="btn-label-text"> Beğeni</span></button>
+          <button class="action-btn comment-btn"><span class="action-icon comment-icon"></span><span class="count-text">2</span><span class="btn-label-text"> Yorum</span></button>
+          <button class="action-btn vote-count-btn"><span class="action-icon vote-icon"></span><span class="count-text">21</span><span class="btn-label-text"> Oy</span></button>
+          <button class="action-btn save-btn"><span class="action-icon save-icon"></span><span class="btn-label-text">Kaydet</span></button>
           <div class="share-container" style="position: relative;">
-            <button class="action-btn share-btn"><span class="action-icon share-icon"></span>Paylaş</button>
+            <button class="action-btn share-btn"><span class="action-icon share-icon"></span><span class="btn-label-text">Paylaş</span></button>
             <div class="share-popover">
               <button class="share-popover-item share-copy" data-url="https://www.ilaneksper.com/analiz/corolla-16-cvt-p-872">
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="menu-icon"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
@@ -1026,78 +1041,58 @@
 
         <label>
           <span>Marka</span>
-          <select>
-            <option>Tümü</option>
+          <select id="filterBrand">
+            <option value="">Tümü</option>
           </select>
         </label>
 
         <label>
           <span>Model</span>
-          <select>
-            <option>Tümü</option>
+          <select id="filterModel">
+            <option value="">Tümü</option>
           </select>
         </label>
 
         <label>
           <span>Yakıt Tipi</span>
-          <select>
-            <option>Tümü</option>
+          <select id="filterFuel">
+            <option value="">Tümü</option>
           </select>
         </label>
 
         <label>
           <span>Fiyat Aralığı</span>
-          <select>
-            <option>Tümü</option>
+          <select id="filterPrice">
+            <option value="">Tümü</option>
+            <option value="0-500000">0 - 500.000 TL</option>
+            <option value="500000-1000000">500.000 - 1.000.000 TL</option>
+            <option value="1000000-1500000">1.000.000 - 1.500.000 TL</option>
+            <option value="1500000+">1.500.000 TL ve üzeri</option>
           </select>
         </label>
 
         <label>
           <span>Kilometre</span>
-          <select>
-            <option>Tümü</option>
+          <select id="filterKm">
+            <option value="">Tümü</option>
+            <option value="0-50000">0 - 50.000 km</option>
+            <option value="50000-100000">50.000 - 100.000 km</option>
+            <option value="100000-150000">100.000 - 150.000 km</option>
+            <option value="150000+">150.000 km ve üzeri</option>
           </select>
         </label>
 
-        <button>Filtrele</button>
+        <button id="btnApplyFilters">Filtrele</button>
       </section>
 
-      <section class="card topic-card">
+      <section class="card topic-card" id="popularTopicsCard">
         <h3>Popüler Konular</h3>
-        <a href="#"><span></span>BMW 5 Serisi Alınır mı?</a>
-        <a href="#"><span></span>DSG Şanzıman Sorunları</a>
-        <a href="#"><span></span>İlk Arabam Ne Olmalı?</a>
-        <a href="#"><span></span>Tramer Kaydı Sorgulama</a>
-        <a href="#"><span></span>Pazarlık Taktikleri</a>
+        <div style="padding: 8px 0; color: var(--muted); font-size: 13px; text-align: center;">Şu anlık popüler konu yok</div>
       </section>
 
-      <section class="card recent-topic-card">
+      <section class="card recent-topic-card" id="recentTopicsCard">
         <h3>Yeni Paylaşılan Konular</h3>
-
-        <a href="#">
-          <strong>BMW 520i F10 fiyat yorumu</strong>
-          <span>2 dk önce</span>
-        </a>
-
-        <a href="#">
-          <strong>Golf 7 DSG bakım geçmişi</strong>
-          <span>8 dk önce</span>
-        </a>
-
-        <a href="#">
-          <strong>İlk arabam için otomatik öneri</strong>
-          <span>14 dk önce</span>
-        </a>
-
-        <a href="#">
-          <strong>Tramer kaydı olan araç alınır mı?</strong>
-          <span>22 dk önce</span>
-        </a>
-
-        <a href="#">
-          <strong>Corolla CVT yüksek km yorumu</strong>
-          <span>31 dk önce</span>
-        </a>
+        <div style="padding: 8px 0; color: var(--muted); font-size: 13px; text-align: center;">Şu anlık konu yok</div>
       </section>
     </aside>
   </main>
@@ -1554,6 +1549,8 @@
                 delete commentsDb[postId];
                 localStorage.setItem('commentsDb', JSON.stringify(commentsDb));
 
+                refreshRightSidebar();
+                applyFeedFilter(getActiveFilter());
                 showCustomModal('success', 'Silindi', 'Paylaşımınız başarıyla silindi.');
               }, 350);
             } else {
@@ -1597,18 +1594,24 @@
         "post-bmw": {
           voted: false,
           bookmarked: false,
+          liked: false,
+          likesCount: 12,
           totalVotes: 28,
           votes: { good: 4, blue: 16, orange: 5, red: 2, muted: 1 }
         },
         "post-golf": {
           voted: false,
           bookmarked: false,
+          liked: false,
+          likesCount: 5,
           totalVotes: 17,
           votes: { good: 10, blue: 4, orange: 2, red: 1, muted: 0 }
         },
         "post-corolla": {
           voted: false,
           bookmarked: false,
+          liked: false,
+          likesCount: 8,
           totalVotes: 21,
           votes: { good: 2, blue: 5, orange: 11, red: 2, muted: 1 }
         }
@@ -1621,7 +1624,7 @@
         for (let postId in postDb) {
           const entry = postDb[postId];
           if (!entry || typeof entry !== 'object') {
-            postDb[postId] = { voted: false, bookmarked: false, totalVotes: 0, votes: { good: 0, blue: 0, orange: 0, red: 0, muted: 0 } };
+            postDb[postId] = { voted: false, bookmarked: false, liked: false, likesCount: 0, totalVotes: 0, votes: { good: 0, blue: 0, orange: 0, red: 0, muted: 0 } };
             postDbChanged = true;
           } else {
             if (!entry.votes || typeof entry.votes !== 'object') {
@@ -1630,6 +1633,14 @@
             }
             if (typeof entry.totalVotes !== 'number') {
               entry.totalVotes = 0;
+              postDbChanged = true;
+            }
+            if (typeof entry.liked !== 'boolean') {
+              entry.liked = false;
+              postDbChanged = true;
+            }
+            if (typeof entry.likesCount !== 'number') {
+              entry.likesCount = 0;
               postDbChanged = true;
             }
           }
@@ -1736,6 +1747,16 @@
         const id = post.id || ("post-user-" + Math.floor(Math.random() * 10000));
         const timeText = post.timeText || "Şimdi";
 
+        // Parse meta values for quick filters
+        const fuel = post.fuel || (specs.includes("Dizel") ? "Dizel" : (specs.includes("LPG") ? "LPG" : "Benzin"));
+        const priceNumeric = post.priceNumeric || (parseInt(price.replace(/[^0-9]/g, '')) || 0);
+        let kmVal = 0;
+        const kmMatch = specs.match(/([\d.]+)\s*km/);
+        if (kmMatch) {
+          kmVal = parseInt(kmMatch[1].replace(/[^0-9]/g, '')) || 0;
+        }
+        const kmNumeric = post.kmNumeric || kmVal;
+
         let risksHTML = "";
         risks.forEach(r => {
           risksHTML += `<li>${r}</li>`;
@@ -1760,7 +1781,7 @@
         const logoUrl = `https://unpkg.com/simple-icons@v9/icons/${brandSlug}.svg`;
 
         return `
-          <article class="post-card" id="${id}" data-time="0" data-owner="true">
+          <article class="post-card" id="${id}" data-time="0" data-owner="true" data-brand="${brand}" data-model="${model}" data-fuel="${fuel}" data-price="${priceNumeric}" data-km="${kmNumeric}">
             <div class="post-top">
               <div class="user-line">
                 <img class="profile-avatar-img" src="assets/erkan-profile.png" alt="Erkan" style="width:34px; height:34px; margin-right:4px;" />
@@ -1887,11 +1908,12 @@
             </div>
  
             <div class="action-row">
-              <button class="action-btn comment-btn"><span class="action-icon comment-icon"></span><span class="count-text">0 Yorum</span></button>
-              <button class="action-btn vote-count-btn"><span class="action-icon vote-icon"></span><span class="count-text">0 Oy</span></button>
-              <button class="action-btn save-btn"><span class="action-icon save-icon"></span>Kaydet</button>
+              <button class="action-btn like-btn"><span class="action-icon like-icon"></span><span class="count-text">0</span><span class="btn-label-text"> Beğeni</span></button>
+              <button class="action-btn comment-btn"><span class="action-icon comment-icon"></span><span class="count-text">0</span><span class="btn-label-text"> Yorum</span></button>
+              <button class="action-btn vote-count-btn"><span class="action-icon vote-icon"></span><span class="count-text">0</span><span class="btn-label-text"> Oy</span></button>
+              <button class="action-btn save-btn"><span class="action-icon save-icon"></span><span class="btn-label-text">Kaydet</span></button>
               <div class="share-container" style="position: relative;">
-                <button class="action-btn share-btn"><span class="action-icon share-icon"></span>Paylaş</button>
+                <button class="action-btn share-btn"><span class="action-icon share-icon"></span><span class="btn-label-text">Paylaş</span></button>
                 <div class="share-popover">
                   <button class="share-popover-item share-copy" data-url="https://www.ilaneksper.com/analiz/${brand.toLowerCase()}-${Math.floor(Math.random() * 10000)}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="menu-icon"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
@@ -2002,7 +2024,6 @@
           if (option) {
             const allVoteBtns = card.querySelectorAll('.vote-row button');
             allVoteBtns.forEach(btn => {
-              btn.disabled = true;
               let btnOpt = "";
               if (btn.classList.contains('vote-good')) btnOpt = "good";
               else if (btn.classList.contains('vote-blue')) btnOpt = "blue";
@@ -2045,8 +2066,20 @@
           // Aksiyon butonlarındaki toplam oy sayısını güncelle
           const voteCountBtn = card.querySelector('.vote-count-btn .count-text');
           if (voteCountBtn) {
-            voteCountBtn.textContent = `${dbEntry.totalVotes} Oy`;
+            voteCountBtn.textContent = dbEntry.totalVotes;
           }
+        }
+
+        // Beğeni durumunu geri yükle
+        if (dbEntry.liked) {
+          const likeBtn = card.querySelector('.action-btn.like-btn');
+          if (likeBtn) {
+            likeBtn.classList.add('liked');
+          }
+        }
+        const likeCountText = card.querySelector('.like-btn .count-text');
+        if (likeCountText) {
+          likeCountText.textContent = dbEntry.likesCount || 0;
         }
       }
 
@@ -2087,7 +2120,7 @@
             const countText = card.querySelector('.comment-btn .count-text');
             if (container && countText) {
               const count = container.querySelectorAll('.comment-item').length;
-              countText.textContent = `${count} Yorum`;
+              countText.textContent = count;
             }
           });
 
@@ -2163,10 +2196,29 @@
           });
         }
 
-        // Sıralanmış kartları DOM'da yeniden konumlandır
+        // Sıralanmış kartları DOM'da yeniden konumlandır (Sadece sıra değişmişse DOM'a müdahale et)
         if (feedToolbar && feedToolbar.parentNode) {
-          for (let i = cardsArray.length - 1; i >= 0; i--) {
-            feedToolbar.parentNode.insertBefore(cardsArray[i], feedToolbar.nextSibling);
+          let orderChanged = false;
+          let currentSibling = feedToolbar.nextSibling;
+          
+          for (let i = 0; i < cardsArray.length; i++) {
+            // post-card sınıfı taşımayan kardeşleri atla
+            while (currentSibling && !currentSibling.classList.contains('post-card')) {
+              currentSibling = currentSibling.nextSibling;
+            }
+            if (currentSibling !== cardsArray[i]) {
+              orderChanged = true;
+              break;
+            }
+            if (currentSibling) {
+              currentSibling = currentSibling.nextSibling;
+            }
+          }
+
+          if (orderChanged) {
+            for (let i = cardsArray.length - 1; i >= 0; i--) {
+              feedToolbar.parentNode.insertBefore(cardsArray[i], feedToolbar.nextSibling);
+            }
           }
         }
 
@@ -2180,9 +2232,8 @@
             case 'topic-hot':
               show = true;
               break;
-            case 'following':
-              // Sadece diğer kullanıcıların gönderileri (Erkan Ö. olmayanlar)
-              show = card.getAttribute('data-owner') !== 'true';
+            case 'liked':
+              show = !!(postDb[postId] && postDb[postId].liked);
               break;
             case 'commented':
               // Erkan Ö. tarafından yorum yapılmış olanlar (kullanıcının kendi yorumları)
@@ -2226,6 +2277,43 @@
               break;
             default:
               show = true;
+          }
+
+          if (show) {
+            // Check quick filters
+            const cardBrand = card.getAttribute('data-brand') || "";
+            const cardModel = card.getAttribute('data-model') || "";
+            const cardFuel = card.getAttribute('data-fuel') || "";
+            const cardPrice = parseInt(card.getAttribute('data-price')) || 0;
+            const cardKm = parseInt(card.getAttribute('data-km')) || 0;
+
+            const selectedBrand = document.getElementById('filterBrand')?.value || "";
+            const selectedModel = document.getElementById('filterModel')?.value || "";
+            const selectedFuel = document.getElementById('filterFuel')?.value || "";
+            const selectedPrice = document.getElementById('filterPrice')?.value || "";
+            const selectedKm = document.getElementById('filterKm')?.value || "";
+
+            if (selectedBrand && cardBrand !== selectedBrand) {
+              show = false;
+            }
+            if (selectedModel && cardModel !== selectedModel) {
+              show = false;
+            }
+            if (selectedFuel && cardFuel !== selectedFuel) {
+              show = false;
+            }
+            if (selectedPrice) {
+              if (selectedPrice === '0-500000' && (cardPrice < 0 || cardPrice > 500000)) show = false;
+              else if (selectedPrice === '500000-1000000' && (cardPrice <= 500000 || cardPrice > 1000000)) show = false;
+              else if (selectedPrice === '1000000-1500000' && (cardPrice <= 1000000 || cardPrice > 1500000)) show = false;
+              else if (selectedPrice === '1500000+' && cardPrice <= 1500000) show = false;
+            }
+            if (selectedKm) {
+              if (selectedKm === '0-50000' && (cardKm < 0 || cardKm > 50000)) show = false;
+              else if (selectedKm === '50000-100000' && (cardKm <= 50000 || cardKm > 100000)) show = false;
+              else if (selectedKm === '100000-150000' && (cardKm <= 100000 || cardKm > 150000)) show = false;
+              else if (selectedKm === '150000+' && cardKm <= 150000) show = false;
+            }
           }
 
           if (show) {
@@ -2367,7 +2455,7 @@
         const activeFilter = getActiveFilter();
         return [
           { label: "Tüm Akış", filter: "all", active: activeFilter === 'all' },
-          { label: "Takip Ettiklerim", filter: "following", active: activeFilter === 'following' },
+          { label: "Beğendiklerim", filter: "liked", active: activeFilter === 'liked' },
           { label: "Yorum Yaptıklarım", filter: "commented", active: activeFilter === 'commented' },
           { label: "Oy Verdiklerim", filter: "voted", active: activeFilter === 'voted' },
           { label: "Kaydettiklerim", filter: "saved", active: activeFilter === 'saved' }
@@ -2476,13 +2564,14 @@
             postDb[postId] = {
               voted: false,
               bookmarked: false,
+              liked: false,
+              likesCount: 0,
               totalVotes: 0,
               votes: { good: 0, blue: 0, orange: 0, red: 0, muted: 0 }
             };
           }
 
           const dbEntry = postDb[postId];
-          if (dbEntry.voted) return; // Zaten oy verilmişse işlem yapma
 
           // Hangi seçeneğin tıklandığını belirle
           let option = "";
@@ -2493,12 +2582,52 @@
           else if (voteBtn.classList.contains('vote-muted')) option = "muted";
 
           if (option) {
-            // Oyları güncelle
-            dbEntry.votes[option]++;
-            dbEntry.totalVotes++;
-            dbEntry.voted = true;
-            dbEntry.selectedOption = option;
+            const alreadyVoted = dbEntry.voted;
+            const previousOption = dbEntry.selectedOption;
+
+            if (alreadyVoted) {
+              if (previousOption === option) {
+                // Tıklanan seçenek ZATEN seçili olan seçenek -> Oy İptali
+                dbEntry.votes[option] = Math.max(0, dbEntry.votes[option] - 1);
+                dbEntry.totalVotes = Math.max(0, dbEntry.totalVotes - 1);
+                dbEntry.voted = false;
+                dbEntry.selectedOption = null;
+                showToast("Oyunuz geri alındı.");
+              } else {
+                // Tıklanan seçenek FARKLI bir seçenek -> Oy Değiştirme
+                dbEntry.votes[previousOption] = Math.max(0, dbEntry.votes[previousOption] - 1);
+                dbEntry.votes[option]++;
+                dbEntry.selectedOption = option;
+                showToast("Oyunuz güncellendi!");
+              }
+            } else {
+              // İlk kez oy kullanma
+              dbEntry.votes[option]++;
+              dbEntry.totalVotes++;
+              dbEntry.voted = true;
+              dbEntry.selectedOption = option;
+              showToast("Oyunuz başarıyla kaydedildi!");
+            }
+
             localStorage.setItem('postDb', JSON.stringify(postDb));
+
+            // Butonların sınıflarını güncelle (Devre dışı bırakmıyoruz)
+            const allVoteBtns = voteBtn.parentNode.querySelectorAll('button');
+            allVoteBtns.forEach(btn => {
+              btn.classList.remove('selected-vote');
+              btn.disabled = false;
+              
+              let btnOpt = "";
+              if (btn.classList.contains('vote-good')) btnOpt = "good";
+              else if (btn.classList.contains('vote-blue')) btnOpt = "blue";
+              else if (btn.classList.contains('vote-orange')) btnOpt = "orange";
+              else if (btn.classList.contains('vote-red')) btnOpt = "red";
+              else if (btn.classList.contains('vote-muted')) btnOpt = "muted";
+
+              if (dbEntry.voted && btnOpt === dbEntry.selectedOption) {
+                btn.classList.add('selected-vote');
+              }
+            });
 
             // En çok oy alan seçeneği bul (Lider seçeneği belirleme)
             let maxVotes = -1;
@@ -2513,40 +2642,86 @@
             // Topluluk Eğilimi metinlerini güncelle
             const trendStrong = card.querySelector('.community-trend strong');
             const trendSmall = card.querySelector('.community-trend small');
-            if (trendStrong) {
-              trendStrong.textContent = optionNames[leadingOption] || "Henüz oy yok";
-            }
-            if (trendSmall) {
-              trendSmall.textContent = `${dbEntry.totalVotes} oy içinden öne çıkıyor`;
+            if (dbEntry.totalVotes > 0) {
+              if (trendStrong) {
+                trendStrong.textContent = optionNames[leadingOption] || "Henüz oy yok";
+              }
+              if (trendSmall) {
+                trendSmall.textContent = `${dbEntry.totalVotes} oy içinden öne çıkıyor`;
+              }
+            } else {
+              if (trendStrong) {
+                trendStrong.textContent = "Henüz oy yok";
+              }
+              if (trendSmall) {
+                trendSmall.textContent = "Yeni paylaşım";
+              }
             }
 
             // Aksiyon butonlarındaki toplam oy sayısını güncelle
             const voteCountBtn = card.querySelector('.vote-count-btn .count-text');
             if (voteCountBtn) {
-              voteCountBtn.textContent = `${dbEntry.totalVotes} Oy`;
+              voteCountBtn.textContent = dbEntry.totalVotes;
             }
 
             // Grafik yüzde değerlerini ve genişliklerini güncelle
             updatePercentagesUI(card, dbEntry.votes, dbEntry.totalVotes);
 
-            // Grafik alanını aşağı doğru kaydırarak göster
+            // Grafik alanını oylama durumuna göre göster veya gizle
             const percentagesBlock = card.querySelector('.trend-percentages');
             if (percentagesBlock) {
-              percentagesBlock.classList.add('active');
+              if (dbEntry.voted) {
+                percentagesBlock.classList.add('active');
+              } else {
+                percentagesBlock.classList.remove('active');
+              }
             }
 
-            // Tıklanan butonu aktifleştir ve diğerlerini devre dışı bırak
-            const allVoteBtns = voteBtn.parentNode.querySelectorAll('button');
-            allVoteBtns.forEach(btn => {
-              btn.disabled = true;
-              if (btn === voteBtn) {
-                btn.classList.add('selected-vote');
-              }
-            });
-
-            showToast("Oyunuz başarıyla kaydedildi!");
             applyFeedFilter(getActiveFilter());
+            refreshRightSidebar();
           }
+          return;
+        }
+
+        // 1.5 BEĞENİ ETKİLEŞİMİ
+        const likeBtn = e.target.closest('.action-btn.like-btn');
+        if (likeBtn) {
+          const card = likeBtn.closest('.post-card');
+          if (!card) return;
+          const postId = card.id;
+
+          if (!postDb[postId]) {
+            postDb[postId] = {
+              voted: false,
+              bookmarked: false,
+              liked: false,
+              likesCount: 0,
+              totalVotes: 0,
+              votes: { good: 0, blue: 0, orange: 0, red: 0, muted: 0 }
+            };
+          }
+
+          const dbEntry = postDb[postId];
+          dbEntry.liked = !dbEntry.liked;
+          
+          if (dbEntry.liked) {
+            dbEntry.likesCount = (dbEntry.likesCount || 0) + 1;
+            likeBtn.classList.add('liked');
+            showToast("Paylaşım beğenildi!");
+          } else {
+            dbEntry.likesCount = Math.max(0, (dbEntry.likesCount || 0) - 1);
+            likeBtn.classList.remove('liked');
+            showToast("Beğeni kaldırıldı.");
+          }
+
+          const likeCountText = likeBtn.querySelector('.count-text');
+          if (likeCountText) {
+            likeCountText.textContent = dbEntry.likesCount;
+          }
+
+          localStorage.setItem('postDb', JSON.stringify(postDb));
+          applyFeedFilter(getActiveFilter());
+          refreshRightSidebar();
           return;
         }
 
@@ -2889,7 +3064,7 @@
         const commentCountText = card.querySelector('.comment-btn .count-text');
         if (commentCountText) {
           const count = container.querySelectorAll('.comment-item').length;
-          commentCountText.textContent = `${count} Yorum`;
+          commentCountText.textContent = count;
         }
 
         // Yorum eklendikten sonra yorum kutusunu aşağı kaydır
@@ -2897,6 +3072,7 @@
 
         showToast("Yorumunuz başarıyla paylaşıldı!");
         applyFeedFilter(getActiveFilter());
+        refreshRightSidebar();
       }
 
       // Report Privacy Toggle state
@@ -3167,10 +3343,24 @@
         postDb[randomPostId] = {
           voted: false,
           bookmarked: false,
+          liked: false,
+          likesCount: 0,
           totalVotes: 0,
           votes: { good: 0, blue: 0, orange: 0, red: 0, muted: 0 }
         };
         localStorage.setItem('postDb', JSON.stringify(postDb));
+
+        let fuel = "Benzin";
+        if (specs.includes("Dizel")) fuel = "Dizel";
+        else if (specs.includes("LPG")) fuel = "LPG";
+
+        let priceNumeric = parseInt(price.replace(/[^0-9]/g, '')) || 0;
+
+        let kmNumeric = 0;
+        const kmMatch = specs.match(/([\d.]+)\s*km/);
+        if (kmMatch) {
+          kmNumeric = parseInt(kmMatch[1].replace(/[^0-9]/g, '')) || 0;
+        }
 
         const postData = {
           id: randomPostId,
@@ -3178,6 +3368,9 @@
           model: model,
           specs: specs,
           price: price,
+          fuel: fuel,
+          priceNumeric: priceNumeric,
+          kmNumeric: kmNumeric,
           score: score,
           risk: risk,
           type: type,
@@ -3215,13 +3408,276 @@
         }
 
         showCustomModal('success', 'Paylaşıldı', 'Tebrikler, araç analiziniz başarıyla topluluk akışına eklendi!');
-        
-        // Scroll to the newly added post
-        const newPostElement = document.getElementById(randomPostId);
-        if (newPostElement) {
-          newPostElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
+        refreshRightSidebar();
       });
+
+      // ==========================================================================
+      // SAĞ SİDEBAR ETKİLEŞİM VE DİNAMİK YÖNETİM SİSTEMİ
+      // ==========================================================================
+
+      function getPostTopicTitle(post) {
+        if (post.id === 'post-bmw') return "BMW 5 Serisi Alınır mı?";
+        if (post.id === 'post-golf') return "DSG Şanzıman Sorunları";
+        if (post.id === 'post-corolla') return "İlk Arabam Ne Olmalı?";
+        
+        const brand = post.brand || "Araç";
+        let model = post.model || "";
+        model = model.replace(" 1.6", "").replace(" 1.4", "").replace(" 1.5", "").replace(" 1.3", "");
+        
+        const questionText = post.questionText || "";
+        let suffix = "Alınır mı?";
+        if (questionText.includes("ekspertiz") || questionText.includes("Fiyatı")) {
+          suffix = "Alınır mı? (Fiyat/Ekspertiz)";
+        } else if (questionText.includes("kilometrede") || questionText.includes("pazarlık")) {
+          suffix = "Alınır mı? (Km/Pazarlık)";
+        } else if (questionText.includes("servis geçmişi")) {
+          suffix = "Alınır mı? (Servis Geçmişi)";
+        } else if (questionText.includes("Tramer") || questionText.includes("tramer")) {
+          suffix = "Tramerli Araç Alınır mı?";
+        } else if (questionText.includes("ilk arabam")) {
+          suffix = "İlk Arabam Olur mu?";
+        }
+        
+        return `${brand} ${model} ${suffix}`;
+      }
+
+      function updatePopularTopics() {
+        const popularTopicsCard = document.getElementById('popularTopicsCard');
+        if (!popularTopicsCard) return;
+
+        const allPosts = [];
+        
+        // 1. Get static posts
+        const staticCards = document.querySelectorAll('.post-card:not([data-owner="true"])');
+        staticCards.forEach(card => {
+          const id = card.id;
+          const dbEntry = postDb[id] || { liked: false, likesCount: 0, totalVotes: 0, votes: {} };
+          const commentsCount = card.querySelectorAll('.comments-container .comment-item').length;
+          const popularity = (dbEntry.likesCount || 0) + (dbEntry.totalVotes || 0) + commentsCount;
+
+          allPosts.push({
+            id: id,
+            brand: card.getAttribute('data-brand') || (id === 'post-bmw' ? 'BMW' : id === 'post-golf' ? 'Volkswagen' : 'Toyota'),
+            model: card.getAttribute('data-model') || (id === 'post-bmw' ? '520i 1.6 F10' : id === 'post-golf' ? 'Golf 7 1.4 TSI' : 'Corolla 1.6 CVT'),
+            questionText: card.querySelector('.question-box')?.textContent?.trim() || "",
+            popularity: popularity
+          });
+        });
+
+        // 2. Get dynamic user posts
+        if (Array.isArray(userPosts)) {
+          userPosts.forEach(post => {
+            const id = post.id;
+            const dbEntry = postDb[id] || { liked: false, likesCount: 0, totalVotes: 0, votes: {} };
+            const commentsCount = (commentsDb[id] || []).length;
+            const popularity = (dbEntry.likesCount || 0) + (dbEntry.totalVotes || 0) + commentsCount;
+
+            allPosts.push({
+              id: id,
+              brand: post.brand,
+              model: post.model,
+              questionText: post.questionText,
+              popularity: popularity
+            });
+          });
+        }
+
+        const popularPosts = allPosts.filter(p => p.popularity > 0);
+        popularPosts.sort((a, b) => b.popularity - a.popularity);
+
+        let html = '<h3>Popüler Konular</h3>';
+        if (popularPosts.length === 0) {
+          html += '<div style="padding: 8px 0; color: var(--muted); font-size: 13px; text-align: center;">Şu anlık popüler konu yok</div>';
+        } else {
+          const top5 = popularPosts.slice(0, 5);
+          top5.forEach(post => {
+            const title = getPostTopicTitle(post);
+            html += `<a href="#${post.id}"><span></span>${title}</a>`;
+          });
+        }
+
+        popularTopicsCard.innerHTML = html;
+        bindSidebarScrollEvents(popularTopicsCard);
+      }
+
+      function updateRecentTopics() {
+        const recentTopicsCard = document.getElementById('recentTopicsCard');
+        if (!recentTopicsCard) return;
+
+        const allPosts = [];
+        
+        // 1. Get static posts
+        const staticCards = document.querySelectorAll('.post-card:not([data-owner="true"])');
+        staticCards.forEach(card => {
+          const id = card.id;
+          const timeVal = parseFloat(card.getAttribute('data-time') || '999');
+
+          allPosts.push({
+            id: id,
+            brand: card.getAttribute('data-brand') || (id === 'post-bmw' ? 'BMW' : id === 'post-golf' ? 'Volkswagen' : 'Toyota'),
+            model: card.getAttribute('data-model') || (id === 'post-bmw' ? '520i 1.6 F10' : id === 'post-golf' ? 'Golf 7 1.4 TSI' : 'Corolla 1.6 CVT'),
+            questionText: card.querySelector('.question-box')?.textContent?.trim() || "",
+            timeText: id === 'post-bmw' ? '2 saat önce' : id === 'post-golf' ? '5 saat önce' : '7 saat önce',
+            timeSortVal: timeVal * 60
+          });
+        });
+
+        // 2. Get dynamic user posts
+        if (Array.isArray(userPosts)) {
+          userPosts.forEach((post, idx) => {
+            allPosts.push({
+              id: post.id,
+              brand: post.brand,
+              model: post.model,
+              questionText: post.questionText,
+              timeText: post.timeText || "Şimdi",
+              timeSortVal: -idx - 1
+            });
+          });
+        }
+
+        allPosts.sort((a, b) => a.timeSortVal - b.timeSortVal);
+
+        let html = '<h3>Yeni Paylaşılan Konular</h3>';
+        if (allPosts.length === 0) {
+          html += '<div style="padding: 8px 0; color: var(--muted); font-size: 13px; text-align: center;">Şu anlık konu yok</div>';
+        } else {
+          const top5 = allPosts.slice(0, 5);
+          top5.forEach(post => {
+            const title = getPostTopicTitle(post);
+            html += `
+              <a href="#${post.id}">
+                <strong>${title}</strong>
+                <span>${post.timeText}</span>
+              </a>
+            `;
+          });
+        }
+
+        recentTopicsCard.innerHTML = html;
+        bindSidebarScrollEvents(recentTopicsCard);
+      }
+
+      function bindSidebarScrollEvents(container) {
+        container.querySelectorAll('a').forEach(link => {
+          link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href').substring(1);
+            const targetElement = document.getElementById(targetId);
+            if (targetElement) {
+              targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              
+              // Flash highlight effect on target card
+              targetElement.classList.remove('sidebar-target-highlight');
+              void targetElement.offsetWidth;
+              targetElement.classList.add('sidebar-target-highlight');
+              
+              setTimeout(() => {
+                targetElement.classList.remove('sidebar-target-highlight');
+              }, 2000);
+            }
+          });
+        });
+      }
+
+      function updateQuickFilterDropdowns() {
+        const cards = document.querySelectorAll('.post-card');
+        const brands = new Set();
+        const fuels = new Set();
+
+        cards.forEach(card => {
+          const brand = card.getAttribute('data-brand');
+          const fuel = card.getAttribute('data-fuel');
+          if (brand) brands.add(brand);
+          if (fuel) fuels.add(fuel);
+        });
+
+        const filterBrandSelect = document.getElementById('filterBrand');
+        const filterFuelSelect = document.getElementById('filterFuel');
+
+        if (!filterBrandSelect || !filterFuelSelect) return;
+
+        const prevBrand = filterBrandSelect.value;
+        const prevFuel = filterFuelSelect.value;
+
+        // Populate Brands
+        filterBrandSelect.innerHTML = '<option value="">Tümü</option>';
+        Array.from(brands).sort().forEach(b => {
+          const opt = document.createElement('option');
+          opt.value = b;
+          opt.textContent = b;
+          filterBrandSelect.appendChild(opt);
+        });
+        if (brands.has(prevBrand)) {
+          filterBrandSelect.value = prevBrand;
+        }
+
+        // Populate Fuels
+        filterFuelSelect.innerHTML = '<option value="">Tümü</option>';
+        Array.from(fuels).sort().forEach(f => {
+          const opt = document.createElement('option');
+          opt.value = f;
+          opt.textContent = f;
+          filterFuelSelect.appendChild(opt);
+        });
+        if (fuels.has(prevFuel)) {
+          filterFuelSelect.value = prevFuel;
+        }
+
+        updateModelDropdownOptions();
+      }
+
+      function updateModelDropdownOptions() {
+        const filterBrandSelect = document.getElementById('filterBrand');
+        const filterModelSelect = document.getElementById('filterModel');
+        if (!filterBrandSelect || !filterModelSelect) return;
+
+        const selectedBrand = filterBrandSelect.value;
+        const prevModel = filterModelSelect.value;
+        const models = new Set();
+
+        const cards = document.querySelectorAll('.post-card');
+        cards.forEach(card => {
+          const brand = card.getAttribute('data-brand');
+          const model = card.getAttribute('data-model');
+          if (model && (!selectedBrand || brand === selectedBrand)) {
+            models.add(model);
+          }
+        });
+
+        filterModelSelect.innerHTML = '<option value="">Tümü</option>';
+        Array.from(models).sort().forEach(m => {
+          const opt = document.createElement('option');
+          opt.value = m;
+          opt.textContent = m;
+          filterModelSelect.appendChild(opt);
+        });
+        if (models.has(prevModel)) {
+          filterModelSelect.value = prevModel;
+        }
+      }
+
+      function refreshRightSidebar() {
+        updateQuickFilterDropdowns();
+        updatePopularTopics();
+        updateRecentTopics();
+      }
+
+      // Bind filter events
+      const filterBrandSelect = document.getElementById('filterBrand');
+      if (filterBrandSelect) {
+        filterBrandSelect.addEventListener('change', updateModelDropdownOptions);
+      }
+
+      const btnApplyFilters = document.getElementById('btnApplyFilters');
+      if (btnApplyFilters) {
+        btnApplyFilters.addEventListener('click', () => {
+          applyFeedFilter(getActiveFilter());
+        });
+      }
+
+      // Initialize right sidebar components
+      refreshRightSidebar();
     });
   </script>
 
