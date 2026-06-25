@@ -341,6 +341,7 @@
 
         <div class="post-body">
           <div class="car-visual">
+            <img class="brand-bg-logo" src="https://unpkg.com/simple-icons@v9/icons/bmw.svg" alt="BMW" />
             <div class="car-fallback-info">
               <span class="fallback-brand">BMW</span>
               <span class="fallback-model">520i 1.6 F10</span>
@@ -415,6 +416,7 @@
 
         <div class="post-body">
           <div class="car-visual">
+            <img class="brand-bg-logo" src="https://unpkg.com/simple-icons@v9/icons/volkswagen.svg" alt="Volkswagen" />
             <div class="car-fallback-info">
               <span class="fallback-brand">Volkswagen</span>
               <span class="fallback-model">Golf 7 1.4 TSI</span>
@@ -489,6 +491,7 @@
 
         <div class="post-body">
           <div class="car-visual">
+            <img class="brand-bg-logo" src="https://unpkg.com/simple-icons@v9/icons/toyota.svg" alt="Toyota" />
             <div class="car-fallback-info">
               <span class="fallback-brand">Toyota</span>
               <span class="fallback-model">Corolla 1.6 CVT</span>
@@ -728,6 +731,23 @@
       });
 
       // --- OTO-SOSYAL COMPOSER LOGIC ---
+      // Brand logo mapping for Simple Icons CDN
+      const brandLogoMap = {
+        "bmw": "bmw",
+        "volkswagen": "volkswagen",
+        "toyota": "toyota",
+        "honda": "honda",
+        "renault": "renault",
+        "ford": "ford",
+        "opel": "opel",
+        "mercedes": "mercedesbenz",
+        "audi": "audi",
+        "peugeot": "peugeot",
+        "hyundai": "hyundai",
+        "nissan": "nissan",
+        "fiat": "fiat"
+      };
+
       const vehicleData = {
         bmw_520: {
           brand: "BMW",
@@ -1117,6 +1137,9 @@
         if (risk.toLowerCase() === "düşük") riskClass = "low";
         if (risk.toLowerCase() === "yüksek") riskClass = "high";
 
+        const brandSlug = brandLogoMap[brand.toLowerCase()] || brand.toLowerCase();
+        const logoUrl = `https://unpkg.com/simple-icons@v9/icons/${brandSlug}.svg`;
+
         // Generate a random post ID
         const randomPostId = "post-user-" + Math.floor(Math.random() * 10000);
 
@@ -1138,6 +1161,7 @@
 
             <div class="post-body">
               <div class="car-visual">
+                <img class="brand-bg-logo" src="${logoUrl}" alt="${brand}" />
                 <div class="car-fallback-info">
                   <span class="fallback-brand">${brand}</span>
                   <span class="fallback-model">${model}</span>

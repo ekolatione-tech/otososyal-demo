@@ -2575,11 +2575,25 @@ body {
 }
 
 .car-visual {
+  position: relative;
+  overflow: hidden;
   isolation: isolate;
   padding: 14px;
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(248, 250, 252, 0.72)),
     linear-gradient(180deg, #f8fafc, #f1f5f9);
+}
+
+.brand-bg-logo {
+  position: absolute;
+  top: 50%;
+  right: -15px;
+  transform: translateY(-50%) rotate(-12deg);
+  width: 130px;
+  height: 130px;
+  opacity: 0.055;
+  pointer-events: none;
+  z-index: 0;
 }
 
 .risk-panel {
