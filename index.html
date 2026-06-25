@@ -1612,6 +1612,15 @@
       // Yeni eklenen yorumlar veritabanı (Kalıcılık destekli)
       let commentsDb = JSON.parse(localStorage.getItem('commentsDb')) || {};
 
+      // Oy seçeneği adlarının Türkçe karşılıkları
+      const optionNames = {
+        good: "Alınır",
+        blue: "Pazarlıkla alınır",
+        orange: "Ekspertiz şart",
+        red: "Riskli",
+        muted: "Uzak dur"
+      };
+
       // Dinamik Gönderi HTML Üretici
       function createPostHTML(post) {
         let risksHTML = "";
@@ -2104,15 +2113,6 @@
         const activeLink = document.querySelector('.side-nav a.side-active');
         return activeLink ? (activeLink.getAttribute('data-filter') || 'all') : 'all';
       }
-
-      // Oy seçeneği adlarının Türkçe karşılıkları
-      const optionNames = {
-        good: "Alınır",
-        blue: "Pazarlıkla alınır",
-        orange: "Ekspertiz şart",
-        red: "Riskli",
-        muted: "Uzak dur"
-      };
 
       // Özel Toast Bildirim Sistemi fonksiyonu
       function showToast(message) {
