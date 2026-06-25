@@ -4138,15 +4138,7 @@ body {
 }
 
 .action-btn.saved-btn .save-icon {
-  background: var(--blue-soft) !important; /* İkon içi hafif mavi dolgu */
-  border-color: var(--blue) !important; /* İkon çerçevesi mavi */
-  color: var(--blue) !important; /* currentColor çizgilerini mavi yapar */
-}
-
-.action-btn.saved-btn .save-icon::after {
-  background: var(--blue-soft) !important;
-  border-left-color: var(--blue) !important;
-  border-bottom-color: var(--blue) !important;
+  background-color: var(--blue) !important; /* Maske dolgu rengini mavi yapar */
 }
 
 /* Paylaş popover buton stilleri */

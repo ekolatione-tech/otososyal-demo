@@ -1971,12 +1971,28 @@
         }
       });
 
+      // Spam koruması için son yorum zamanı
+      let lastCommentTime = 0;
+
       // Yorum gönderilmesini işleyen ana fonksiyon
       function handleNewCommentSubmission(card, input) {
         if (!input) return;
         const text = input.value.trim();
         if (!text) {
           showToast("Lütfen bir yorum yazın!");
+          return;
+        }
+
+        // Spam koruması kota kontrolü (ardışık yorumlar arası 10 saniye limit)
+        const now = Date.now();
+        const cooldownMs = 10000; // 10 saniye
+        if (now - lastCommentTime < cooldownMs) {
+          const remainingSeconds = Math.ceil((cooldownMs - (now - lastCommentTime)) / 1000);
+          showCustomModal(
+            'warning', 
+            'Spam Koruması', 
+            `Çok hızlı yorum yapıyorsunuz! Lütfen yeni bir yorum yapmadan önce ${remainingSeconds} saniye bekleyin.`
+          );
           return;
         }
 
@@ -1989,6 +2005,9 @@
 
         const container = card.querySelector('.comments-container');
         if (!container) return;
+
+        // Son yorum zamanını güncelle
+        lastCommentTime = now;
 
         // Rastgele yorum ID'si oluştur
         const commentId = "c-" + Math.floor(Math.random() * 100000);
@@ -2128,7 +2147,7 @@
         // General Turkish phone match: e.g. 05xxxxxxxxx, 5xxxxxxxxx, +905xxxxxxxxx, 0 5xx...
         const phoneRegex = /(?:\+?90?\s*5\d{2}\s*\d{3}\s*\d{2}\s*\d{2})|(?:\b0?5\d{9}\b)|(?:\b5\d{2}[-.\s]?\d{3}[-.\s]?\d{4}\b)/;
         const instagramRegex = /@\w+/;
-        const linkRegex = /https?:\/\/[^\s]+|www\.[^\s]+|\b\w+\.(?:com|net|org|co|info|biz|me|xyz|tr|io|gov)\b/i;
+        const linkRegex = /https?:\/\/[^\s]+|www\.[^\s]+|\b\w+\.(?:com|net|org|co|info|biz|me|xyz|tr|io|gov)\b/gi;
 
         if (emailRegex.test(text)) {
           return "E-posta adresi paylaşmak güvenlik nedeniyle yasaktır.";
@@ -2139,8 +2158,14 @@
         if (instagramRegex.test(text)) {
           return "Instagram kullanıcı adı (@) paylaşmak güvenlik nedeniyle yasaktır.";
         }
-        if (linkRegex.test(text)) {
-          return "Dış bağlantı (link) paylaşmak spam engelleme amacıyla yasaktır.";
+        
+        // Linkleri çıkar ve kontrol et (Sadece ilaneksper.com bağlantılarına izin ver)
+        const links = text.match(linkRegex);
+        if (links) {
+          const hasForbiddenLink = links.some(link => !link.toLowerCase().includes('ilaneksper.com'));
+          if (hasForbiddenLink) {
+            return "Dış bağlantı (link) paylaşmak spam engelleme amacıyla yasaktır. Sadece ilaneksper.com bağlantılarına izin verilmektedir.";
+          }
         }
         return null;
       }
