@@ -3132,3 +3132,361 @@ body {
     align-self: flex-end;
   }
 }
+
+/* -------------------------------------------------------------
+   OTO-SOSYAL DROPDOWN PANELS (NOTIFICATIONS & PROFILE MENUS)
+   ------------------------------------------------------------- */
+
+/* Containers for absolute positioning */
+.notification-bell-container,
+.profile-user-container {
+  position: relative;
+  display: inline-block;
+}
+
+.profile-user-trigger {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+  outline: none;
+}
+
+.chevron-down-icon {
+  color: var(--muted);
+  transition: transform 0.2s ease;
+  margin-left: -2px;
+}
+
+.profile-user-container.active .chevron-down-icon {
+  transform: rotate(180deg);
+  color: var(--text);
+}
+
+/* Base Dropdown Styles */
+.notifications-dropdown,
+.profile-dropdown {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  z-index: 1000;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.notifications-dropdown.active,
+.profile-dropdown.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* Arrow indicator for dropdowns */
+.notifications-dropdown::before,
+.profile-dropdown::before {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  right: 14px;
+  width: 10px;
+  height: 10px;
+  background: #ffffff;
+  border-left: 1px solid var(--border);
+  border-top: 1px solid var(--border);
+  transform: translateY(5px) rotate(45deg);
+  z-index: -1;
+}
+
+/* Notifications Dropdown Layout */
+.notifications-dropdown {
+  width: 330px;
+}
+
+.dropdown-header {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--soft-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dropdown-header h3 {
+  margin: 0;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.mark-all-read-btn {
+  background: transparent;
+  border: 0;
+  color: var(--blue, #2563eb);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  outline: none;
+}
+
+.mark-all-read-btn:hover {
+  text-decoration: underline;
+}
+
+.dropdown-list {
+  max-height: 380px;
+  overflow-y: auto;
+}
+
+.notification-item {
+  display: flex;
+  gap: 11px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--soft-border);
+  transition: background 0.15s ease;
+  cursor: pointer;
+}
+
+.notification-item:last-child {
+  border-bottom: 0;
+}
+
+.notification-item:hover {
+  background: #f8fafc;
+}
+
+.notification-item.unread {
+  background: #fbfdff;
+}
+
+.notification-icon-wrapper {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8fafc;
+  flex: 0 0 auto;
+}
+
+.notification-icon-wrapper.text-blue {
+  color: #2563eb;
+  background: #eff6ff;
+}
+
+.notification-icon-wrapper.text-green {
+  color: #16a34a;
+  background: #ecfdf3;
+}
+
+.notification-icon-wrapper.text-orange {
+  color: #f97316;
+  background: #fff7ed;
+}
+
+.notification-icon-wrapper.text-purple {
+  color: #8b5cf6;
+  background: #f5f3ff;
+}
+
+.notification-icon-wrapper.text-red {
+  color: #dc2626;
+  background: #fef2f2;
+}
+
+.notification-icon-wrapper.text-yellow {
+  color: #d97706;
+  background: #fef3c7;
+}
+
+.notification-content {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.notification-content p {
+  margin: 0;
+  font-size: 12px;
+  color: var(--text);
+  line-height: 1.4;
+}
+
+.notification-content p strong {
+  font-weight: 600;
+}
+
+.notification-time {
+  font-size: 10.5px;
+  color: var(--muted);
+}
+
+.notification-action {
+  font-size: 11px;
+  font-weight: 600;
+  color: #2563eb;
+  text-decoration: none;
+  align-self: flex-start;
+  margin-top: 2px;
+}
+
+.notification-action:hover {
+  text-decoration: underline;
+}
+
+.dropdown-footer-link {
+  display: block;
+  text-align: center;
+  padding: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  border-top: 1px solid var(--soft-border);
+  background: #f8fafc;
+  border-radius: 0 0 12px 12px;
+}
+
+.dropdown-footer-link:hover {
+  color: var(--text);
+}
+
+/* Profile Dropdown Layout */
+.profile-dropdown {
+  width: 220px;
+  padding: 6px;
+}
+
+.profile-dropdown-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 8px 10px;
+  border-bottom: 1px solid var(--soft-border);
+  margin-bottom: 6px;
+}
+
+.profile-dropdown-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #eff6ff;
+  color: #2563eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.profile-dropdown-user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.profile-dropdown-user-info strong {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.25;
+}
+
+.profile-dropdown-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #b45309;
+  background: #fffbeb;
+  border: 1px solid #fef3c7;
+  padding: 1px 6px;
+  border-radius: 999px;
+  width: fit-content;
+  margin-top: 2px;
+}
+
+.badge-star-icon {
+  color: #d97706;
+}
+
+.profile-dropdown-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.profile-dropdown-menu a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  color: #334155;
+  font-size: 12.5px;
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+
+.profile-dropdown-menu a:hover {
+  background: #f1f5f9;
+  color: var(--text);
+}
+
+.profile-dropdown-menu .menu-icon {
+  color: #64748b;
+  flex: 0 0 auto;
+}
+
+.profile-dropdown-menu a:hover .menu-icon {
+  color: var(--text);
+}
+
+.dropdown-divider {
+  border: 0;
+  border-top: 1px solid var(--soft-border);
+  margin: 4px 0;
+}
+
+.profile-dropdown-menu .logout-link {
+  color: var(--red);
+}
+
+.profile-dropdown-menu .logout-link:hover {
+  background: var(--red-soft);
+  color: var(--red);
+}
+
+.profile-dropdown-menu .logout-link .menu-icon {
+  color: var(--red);
+}
+
+/* Mobile responsive safeguards */
+@media (max-width: 480px) {
+  .notifications-dropdown {
+    width: 290px;
+    right: -10px;
+  }
+  .notifications-dropdown::before {
+    right: 22px;
+  }
+  .profile-dropdown {
+    width: 200px;
+    right: -5px;
+  }
+  .profile-dropdown::before {
+    right: 32px;
+  }
+}
