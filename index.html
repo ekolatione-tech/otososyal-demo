@@ -3416,6 +3416,7 @@
       // ==========================================================================
 
       function getPostTopicTitle(post) {
+        // Statik postlar için orijinal başlıkları koru
         if (post.id === 'post-bmw') return "BMW 5 Serisi Alınır mı?";
         if (post.id === 'post-golf') return "DSG Şanzıman Sorunları";
         if (post.id === 'post-corolla') return "İlk Arabam Ne Olmalı?";
@@ -3424,21 +3425,44 @@
         let model = post.model || "";
         model = model.replace(" 1.6", "").replace(" 1.4", "").replace(" 1.5", "").replace(" 1.3", "");
         
-        const questionText = post.questionText || "";
-        let suffix = "Alınır mı?";
-        if (questionText.includes("ekspertiz") || questionText.includes("Fiyatı")) {
-          suffix = "Alınır mı? (Fiyat/Ekspertiz)";
-        } else if (questionText.includes("kilometrede") || questionText.includes("pazarlık")) {
-          suffix = "Alınır mı? (Km/Pazarlık)";
-        } else if (questionText.includes("servis geçmişi")) {
-          suffix = "Alınır mı? (Servis Geçmişi)";
-        } else if (questionText.includes("Tramer") || questionText.includes("tramer")) {
-          suffix = "Tramerli Araç Alınır mı?";
-        } else if (questionText.includes("ilk arabam")) {
-          suffix = "İlk Arabam Olur mu?";
+        const questionText = (post.questionText || "").trim();
+        if (!questionText) {
+          return `${brand} ${model} Analizi`;
+        }
+
+        // Eğer hazır sorulardan biriyse optimize edilmiş kısa başlıklar üretelim
+        if (questionText.includes("ekspertize götürmeye değer mi")) {
+          return `${brand} ${model} Ekspertize Değer mi?`;
+        }
+        if (questionText.includes("kilometrede alınır mı")) {
+          return `${brand} ${model} bu km'de alınır mı?`;
+        }
+        if (questionText.includes("servis geçmişi düzenli")) {
+          return `${brand} ${model} Servis Geçmişi Yorumu`;
+        }
+        if (questionText.includes("Tramer kaydı olan")) {
+          return `${brand} ${model} Tramerli Alınır mı?`;
+        }
+        if (questionText.includes("İlk arabam için")) {
+          return `${brand} ${model} İlk Araba Önerisi`;
+        }
+
+        // Kullanıcı tamamen kendi özel sorusunu yazdıysa:
+        // Çok uzunsa kısaltalım ve sığacak şekilde düzenleyelim (Örn: "BMW f10 zincir değişimi ne kadar...")
+        let cleanQuestion = questionText;
+        if (cleanQuestion.length > 35) {
+          cleanQuestion = cleanQuestion.substring(0, 35) + "...";
         }
         
-        return `${brand} ${model} ${suffix}`;
+        // Eğer kullanıcı zaten araç adını sorusunda geçirdiyse (örn: "BMW f10 kronik sorunları")
+        // Direkt o soruyu başlık yapalım, geçirmediyse "[Marka] [Model] - [Soru]" formatında birleştirelim
+        const lowerQuestion = questionText.toLowerCase();
+        const lowerBrand = brand.toLowerCase();
+        if (lowerQuestion.includes(lowerBrand)) {
+          return cleanQuestion;
+        } else {
+          return `${brand} ${model} - ${cleanQuestion}`;
+        }
       }
 
       function updatePopularTopics() {
