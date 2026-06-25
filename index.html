@@ -1,0 +1,497 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Otososyal | İlanEksper</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <img class="brand-logo" src="assets/otososyal-logo-header.png" alt="OtoSosyal" />
+      </div>
+
+      <nav class="nav">
+        <a href="#">Araç Analiz Et</a>
+        <a href="#" class="active">Otososyal</a>
+        <a href="#">Paketler</a>
+        <a href="#">SSS</a>
+        <a href="#">Hakkımızda</a>
+      </nav>
+
+      <div class="profile">
+        <div class="notification-bell">
+          <span class="bell-icon">🔔</span>
+          <span class="bell-dot"></span>
+        </div>
+        <span class="profile-avatar">E</span>
+        <strong>Erkan</strong>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-shell">
+    <div class="left-column">
+      <aside class="left-sidebar card">
+        <nav class="side-nav">
+          <div class="side-section">
+            <div class="side-section-title">Akışlar</div>
+            <a href="#" class="side-active">
+              <span></span>
+              Tüm Akış
+            </a>
+            <a href="#">Takip Ettiklerim</a>
+            <a href="#">Yorum Yaptıklarım</a>
+            <a href="#">Oy Verdiklerim</a>
+            <a href="#">Kaydettiklerim</a>
+          </div>
+
+          <div class="side-section">
+            <div class="side-section-title">Konular</div>
+            <a href="#" class="trend-filter trend-good">Alınır</a>
+            <a href="#" class="trend-filter trend-blue">Pazarlıkla alınır</a>
+            <a href="#" class="trend-filter trend-orange">Ekspertiz şart</a>
+            <a href="#" class="trend-filter trend-red">Riskli</a>
+            <a href="#" class="trend-filter trend-muted">Uzak dur</a>
+            <a href="#" class="trend-filter trend-hot">En çok yorumlananlar</a>
+          </div>
+        </nav>
+
+        <button class="share-button">+ Paylaşım Yap</button>
+
+        <div class="info-card">
+          <h3>Otososyal Nedir?</h3>
+          <p>
+            Analiz ettiğin aracı toplulukla paylaş, deneyimlerden faydalan ve daha güvenli karar ver.
+          </p>
+        </div>
+      </aside>
+
+      <footer class="sidebar-footer">
+        <a href="#">Kullanım</a>
+        <a href="#">Gizlilik</a>
+        <a href="#">Çerezler</a>
+        <span>© 2026 İlanEksper</span>
+      </footer>
+    </div>
+
+    <section class="feed">
+      <div class="feed-header">
+        <div>
+          <h1>OtoSosyal</h1>
+          <p>Analiz et, paylaş, fikir al, daha güvenli karar ver.</p>
+        </div>
+      </div>
+
+      <div class="notice-box">
+        <div class="notice-text">
+          Analiz edilen araçlar için topluluk yorumu ve karar desteği.
+        </div>
+        <div class="notice-pills">
+          <span>Rapor özeti kontrollü</span>
+          <span>İlan linki gizli</span>
+          <span>Skor değişmez</span>
+        </div>
+      </div>
+
+      <section class="share-composer card">
+        <div class="composer-top">
+          <span class="avatar composer-avatar">E</span>
+          <textarea placeholder="Hazır soru seçebilir veya kendi sorunu yazabilirsin.">Bu araç ekspertize götürmeye değer mi? Fiyatı sizce nasıl?</textarea>
+        </div>
+
+        <div class="selected-share-card">
+          <div>
+            <span>Analizden seçildi</span>
+            <strong>BMW 520i 1.6 F10</strong>
+            <p>2015 · 178.000 km · Benzin · Otomatik</p>
+          </div>
+          <div class="selected-share-metrics">
+            <span>Skor 72/100</span>
+            <span>Risk: Orta</span>
+          </div>
+        </div>
+
+        <div class="composer-bottom">
+          <div class="composer-tools">
+            <select aria-label="Analizden araç seç">
+              <option>Analizden araç seç</option>
+              <option selected>BMW 520i 1.6 F10 · Skor 72</option>
+              <option>Volkswagen Golf 7 1.4 TSI · Skor 81</option>
+              <option>Toyota Corolla 1.6 CVT · Skor 76</option>
+              <option>Honda Civic 1.6 Elegance · Skor 79</option>
+              <option>Renault Megane 1.5 dCi · Skor 74</option>
+              <option>Ford Focus 1.5 TDCi · Skor 77</option>
+              <option>Opel Astra 1.4 Turbo · Skor 71</option>
+              <option>Mercedes C180 AMG · Skor 69</option>
+              <option>Audi A3 1.6 TDI · Skor 75</option>
+              <option>Peugeot 3008 1.5 BlueHDi · Skor 82</option>
+            </select>
+
+            <select aria-label="Beğendiğim araçtan seç" disabled>
+              <option>Beğendiğim araçtan seç</option>
+              <option>BMW 320i ED · Beğenilen</option>
+              <option>Skoda Superb 1.6 TDI · Beğenilen</option>
+              <option>Hyundai i20 1.4 MPI · Beğenilen</option>
+              <option>Nissan Qashqai 1.3 DIG-T · Beğenilen</option>
+              <option>Fiat Egea Cross 1.4 · Beğenilen</option>
+            </select>
+
+            <select aria-label="Hazır soru seç">
+              <option>Hazır soru seç</option>
+              <option selected>Bu araç ekspertize götürmeye değer mi? Fiyatı sizce nasıl?</option>
+              <option>Bu araç bu kilometrede alınır mı? Pazarlık payı ne kadar olur?</option>
+              <option>Yüksek kilometreye rağmen servis geçmişi düzenli. Bu araç mantıklı mı?</option>
+              <option>Tramer kaydı olan bu araç alınır mı?</option>
+              <option>İlk arabam için bu otomatik araç uygun olur mu?</option>
+            </select>
+          </div>
+
+          <button class="composer-submit">Paylaş</button>
+        </div>
+      </section>
+
+      <div class="feed-toolbar">
+        <details class="sort-menu">
+          <summary>En yeni</summary>
+          <div class="sort-menu-list">
+            <button>Son 1 saat</button>
+            <button>Son 5 saat</button>
+            <button>Son 1 gün</button>
+            <button>Son 1 hafta</button>
+          </div>
+        </details>
+      </div>
+
+      <article class="post-card">
+        <div class="post-top">
+          <div class="user-line">
+            <span class="avatar blue">MK</span>
+            <strong>Mehmet K.</strong>
+            <span class="mini-badge">Üye</span>
+            <span class="source-badge">Analiz özeti</span>
+          </div>
+
+          <div class="post-meta">
+            <span>2 saat önce</span>
+            <span>•••</span>
+          </div>
+        </div>
+
+        <div class="post-body">
+          <div class="car-visual">
+            <div class="car-fallback-info">
+              <span class="fallback-brand">BMW</span>
+              <span class="fallback-model">520i 1.6 F10</span>
+              <span class="fallback-meta">2015 · Benzin · Otomatik</span>
+            </div>
+            <span class="fallback-badge">Ilan gorseli yok</span>
+          </div>
+
+          <div class="post-main">
+            <h2>BMW 520i 1.6 F10</h2>
+            <p class="vehicle-meta">2015 · 178.000 km · Benzin · Otomatik</p>
+            <p class="price">1.540.000 TL</p>
+
+            <div class="score-row">
+              <div class="score-box">Skor 72/100</div>
+              <span class="risk-badge risk-medium">Risk: Orta</span>
+            </div>
+
+            <div class="question-box">
+              Bu araç ekspertize götürmeye değer mi? Fiyatı sizce nasıl?
+            </div>
+
+          </div>
+
+          <div class="risk-panel">
+            <h3>Öne Çıkan Riskler</h3>
+            <ul>
+              <li>N13 motor zincir geçmişi doğrulanmalı</li>
+              <li>Yağ kaçakları kontrol edilmeli</li>
+              <li>Soğutma sistemi incelenmeli</li>
+            </ul>
+            <span class="privacy-chip">Tam rapor gizli</span>
+          </div>
+        </div>
+
+        <div class="community-trend">
+          <span>Topluluk eğilimi</span>
+          <strong>Pazarlıkla alınır</strong>
+          <small>28 oy içinden öne çıkıyor</small>
+        </div>
+
+        <div class="vote-row">
+          <button class="vote-good">Alınır</button>
+          <button class="vote-blue">Pazarlıkla alınır</button>
+          <button class="vote-orange">Ekspertiz şart</button>
+          <button class="vote-red">Riskli</button>
+          <button class="vote-muted">Uzak dur</button>
+        </div>
+
+        <div class="action-row">
+          <button class="action-btn"><span class="action-icon comment-icon"></span>15 Yorum</button>
+          <button class="action-btn"><span class="action-icon vote-icon"></span>28 Oy</button>
+          <button class="action-btn"><span class="action-icon save-icon"></span>Kaydet</button>
+          <button class="action-btn"><span class="action-icon share-icon"></span>Paylaş</button>
+        </div>
+      </article>
+
+      <article class="post-card">
+        <div class="post-top">
+          <div class="user-line">
+            <span class="avatar green">AY</span>
+            <strong>Ayşe Y.</strong>
+            <span class="mini-badge pro">Pro</span>
+            <span class="source-badge">Analiz özeti</span>
+          </div>
+
+          <div class="post-meta">
+            <span>5 saat önce</span>
+            <span>•••</span>
+          </div>
+        </div>
+
+        <div class="post-body">
+          <div class="car-visual">
+            <div class="car-fallback-info">
+              <span class="fallback-brand">Volkswagen</span>
+              <span class="fallback-model">Golf 7 1.4 TSI</span>
+              <span class="fallback-meta">2016 · Benzin · Otomatik</span>
+            </div>
+            <span class="fallback-badge">Ilan gorseli yok</span>
+          </div>
+
+          <div class="post-main">
+            <h2>Volkswagen Golf 7 1.4 TSI</h2>
+            <p class="vehicle-meta">2016 · 152.000 km · Benzin · Otomatik</p>
+            <p class="price">1.085.000 TL</p>
+
+            <div class="score-row">
+              <div class="score-box">Skor 81/100</div>
+              <span class="risk-badge risk-low">Risk: Düşük</span>
+            </div>
+
+            <div class="question-box">
+              DSG şanzıman için bu km'de alınır mı? Pazarlık payı ne kadar olur?
+            </div>
+
+          </div>
+
+          <div class="risk-panel">
+            <h3>Öne Çıkan Riskler</h3>
+            <ul>
+              <li>DSG şanzıman yağ bakımı kontrol edilmeli</li>
+              <li>Triger seti değişim geçmişi sorgulanmalı</li>
+            </ul>
+            <!-- Rapor özeti, paylaşım sahibinin izin verdiği kontrollü bilgileri içerir. -->
+            <a href="/otososyal/p/demo-post" class="privacy-btn" title="Rapor özeti, paylaşım sahibinin izin verdiği kontrollü bilgileri içerir.">Rapor Özetini Gör</a>
+          </div>
+        </div>
+
+        <div class="community-trend">
+          <span>Topluluk eğilimi</span>
+          <strong>Alınır</strong>
+          <small>17 oy içinden öne çıkıyor</small>
+        </div>
+
+        <div class="vote-row">
+          <button class="vote-good">Alınır</button>
+          <button class="vote-blue">Pazarlıkla alınır</button>
+          <button class="vote-orange">Ekspertiz şart</button>
+          <button class="vote-red">Riskli</button>
+          <button class="vote-muted">Uzak dur</button>
+        </div>
+
+        <div class="action-row">
+          <button class="action-btn"><span class="action-icon comment-icon"></span>9 Yorum</button>
+          <button class="action-btn"><span class="action-icon vote-icon"></span>17 Oy</button>
+          <button class="action-btn"><span class="action-icon save-icon"></span>Kaydet</button>
+          <button class="action-btn"><span class="action-icon share-icon"></span>Paylaş</button>
+        </div>
+      </article>
+
+      <article class="post-card">
+        <div class="post-top">
+          <div class="user-line">
+            <span class="avatar plus">MA</span>
+            <strong>Melih A.</strong>
+            <span class="mini-badge plus">Plus</span>
+            <span class="source-badge liked">Beğenilen araç</span>
+          </div>
+
+          <div class="post-meta">
+            <span>7 saat önce</span>
+            <span>•••</span>
+          </div>
+        </div>
+
+        <div class="post-body">
+          <div class="car-visual">
+            <div class="car-fallback-info">
+              <span class="fallback-brand">Toyota</span>
+              <span class="fallback-model">Corolla 1.6 CVT</span>
+              <span class="fallback-meta">2018 · Benzin · Otomatik</span>
+            </div>
+            <span class="fallback-badge">Ilan gorseli yok</span>
+          </div>
+
+          <div class="post-main">
+            <h2>Toyota Corolla 1.6 CVT</h2>
+            <p class="vehicle-meta">2018 · 196.000 km · Benzin · Otomatik</p>
+            <p class="price">1.025.000 TL</p>
+
+            <div class="score-row">
+              <div class="score-box">Skor 76/100</div>
+              <span class="risk-badge risk-medium">Risk: Orta</span>
+            </div>
+
+            <div class="question-box">
+              Yüksek kilometreye rağmen servis geçmişi düzenli. CVT şanzıman için bu araç mantıklı mı?
+            </div>
+          </div>
+
+          <div class="risk-panel">
+            <h3>Öne Çıkan Riskler</h3>
+            <ul>
+              <li>CVT bakım kayıtları detaylı kontrol edilmeli</li>
+              <li>Yüksek km nedeniyle süspansiyon ve yürüyen aksam incelenmeli</li>
+              <li>Kaporta boya geçmişi netleştirilmeli</li>
+            </ul>
+            <span class="privacy-chip">Tam rapor gizli</span>
+          </div>
+        </div>
+
+        <div class="community-trend">
+          <span>Topluluk eğilimi</span>
+          <strong>Ekspertiz şart</strong>
+          <small>21 oy içinden öne çıkıyor</small>
+        </div>
+
+        <div class="vote-row">
+          <button class="vote-good">Alınır</button>
+          <button class="vote-blue">Pazarlıkla alınır</button>
+          <button class="vote-orange">Ekspertiz şart</button>
+          <button class="vote-red">Riskli</button>
+          <button class="vote-muted">Uzak dur</button>
+        </div>
+
+        <div class="action-row">
+          <button class="action-btn"><span class="action-icon comment-icon"></span>12 Yorum</button>
+          <button class="action-btn"><span class="action-icon vote-icon"></span>21 Oy</button>
+          <button class="action-btn"><span class="action-icon save-icon"></span>Kaydet</button>
+          <button class="action-btn"><span class="action-icon share-icon"></span>Paylaş</button>
+        </div>
+      </article>
+    </section>
+
+    <aside class="right-sidebar">
+      <section class="card filter-card">
+        <h3>Hızlı Filtreler</h3>
+
+        <label>
+          <span>Marka</span>
+          <select>
+            <option>Tümü</option>
+          </select>
+        </label>
+
+        <label>
+          <span>Model</span>
+          <select>
+            <option>Tümü</option>
+          </select>
+        </label>
+
+        <label>
+          <span>Yakıt Tipi</span>
+          <select>
+            <option>Tümü</option>
+          </select>
+        </label>
+
+        <label>
+          <span>Fiyat Aralığı</span>
+          <select>
+            <option>Tümü</option>
+          </select>
+        </label>
+
+        <label>
+          <span>Kilometre</span>
+          <select>
+            <option>Tümü</option>
+          </select>
+        </label>
+
+        <button>Filtrele</button>
+      </section>
+
+      <section class="card topic-card">
+        <h3>Popüler Konular</h3>
+        <a href="#"><span></span>BMW 5 Serisi Alınır mı?</a>
+        <a href="#"><span></span>DSG Şanzıman Sorunları</a>
+        <a href="#"><span></span>İlk Arabam Ne Olmalı?</a>
+        <a href="#"><span></span>Tramer Kaydı Sorgulama</a>
+        <a href="#"><span></span>Pazarlık Taktikleri</a>
+      </section>
+
+      <section class="card recent-topic-card">
+        <h3>Yeni Paylaşılan Konular</h3>
+
+        <a href="#">
+          <strong>BMW 520i F10 fiyat yorumu</strong>
+          <span>2 dk önce</span>
+        </a>
+
+        <a href="#">
+          <strong>Golf 7 DSG bakım geçmişi</strong>
+          <span>8 dk önce</span>
+        </a>
+
+        <a href="#">
+          <strong>İlk arabam için otomatik öneri</strong>
+          <span>14 dk önce</span>
+        </a>
+
+        <a href="#">
+          <strong>Tramer kaydı olan araç alınır mı?</strong>
+          <span>22 dk önce</span>
+        </a>
+
+        <a href="#">
+          <strong>Corolla CVT yüksek km yorumu</strong>
+          <span>31 dk önce</span>
+        </a>
+      </section>
+    </aside>
+  </main>
+
+  <nav class="mobile-tabbar" aria-label="Mobil gezinme">
+    <a href="#" class="active">
+      <span class="tab-icon home-icon"></span>
+      Ana sayfa
+    </a>
+    <a href="#">
+      <span class="tab-icon feed-icon"></span>
+      Akışlar
+    </a>
+    <a href="#">
+      <span class="tab-icon topic-icon"></span>
+      Konular
+    </a>
+    <a href="#">
+      <span class="tab-icon filter-icon"></span>
+      Filtreler
+    </a>
+    <a href="#">
+      <span class="tab-icon brand-icon"></span>
+      İlanEksper
+    </a>
+  </nav>
+</body>
+</html>
+
+
