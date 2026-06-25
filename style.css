@@ -2361,15 +2361,18 @@ body {
   height: 14px;
   border-radius: 999px;
   display: inline-block;
-  background-color: #2563eb;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4 8.2 6.7 11 12 5.2' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   background-size: 12px 12px;
   background-position: center;
   background-repeat: no-repeat;
 }
 
-.mini-badge.plus::after {
+.mini-badge.pro::after {
   background-color: #d69e2e;
+}
+
+.mini-badge.plus::after {
+  background-color: #2563eb;
 }
 
 .avatar.plus {
