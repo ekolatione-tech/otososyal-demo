@@ -2471,6 +2471,17 @@
         muted: "Uzak dur"
       };
 
+      // HTML kaçış (escaping) yardımcı fonksiyonu
+      function escapeHTML(str) {
+        if (!str) return "";
+        return str
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
       // Gönderi Zamanı Formatlama (Göreli Zaman)
       function formatRelativeTime(timestamp) {
         if (!timestamp) return "Şimdi";
@@ -2606,7 +2617,7 @@
                 </div>
  
                 <div class="question-box">
-                  ${questionText}
+                  ${escapeHTML(questionText)}
                 </div>
               </div>
  
@@ -2752,11 +2763,11 @@
 
         return `
           <div class="comment-item" data-id="${comment.id}"${isOwnerAttr}>
-            <img class="comment-avatar" src="${avatar}" alt="${user}" />
+            <img class="comment-avatar" src="${avatar}" alt="${escapeHTML(user)}" />
             <div class="comment-content-box">
               <div class="comment-header">
                 <div class="comment-user-info" style="display: flex; align-items: center; gap: 8px;">
-                  <span class="comment-user">${user}</span>
+                  <span class="comment-user">${escapeHTML(user)}</span>
                   <span class="comment-time">${comment.time}</span>
                 </div>
                 <div class="comment-meta-actions">
@@ -2766,7 +2777,7 @@
                   </div>
                 </div>
               </div>
-              <div class="comment-text">${comment.text}</div>
+              <div class="comment-text">${escapeHTML(comment.text)}</div>
               <div class="comment-footer">
                 <button class="comment-vote-btn upvote${upvotedClass}" data-votes="${comment.votesUp || 0}">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="comment-vote-icon"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>
@@ -3396,7 +3407,7 @@
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" style="flex-shrink:0;">
             <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          <span>${message}</span>
+          <span>${escapeHTML(message)}</span>
         `;
 
         container.appendChild(toast);
@@ -4090,18 +4101,22 @@
         const editBox = document.createElement('div');
         editBox.className = 'comment-edit-box';
         editBox.innerHTML = `
-          <textarea class="comment-edit-input" rows="2" style="resize: vertical; min-height: 50px;">${originalText}</textarea>
+          <textarea class="comment-edit-input" rows="2" style="resize: vertical; min-height: 50px;"></textarea>
           <div style="display: flex; gap: 8px; margin-top: 6px; justify-content: flex-end;">
             <button class="comment-edit-btn cancel-btn">İptal</button>
             <button class="comment-edit-btn comment-save-btn">Kaydet</button>
           </div>
         `;
         
+        const textarea = editBox.querySelector('.comment-edit-input');
+        if (textarea) {
+          textarea.value = originalText;
+        }
+        
         textBox.style.display = 'none';
         textBox.parentNode.insertBefore(editBox, textBox.nextSibling);
         commentItem.classList.add('editing');
         
-        const textarea = editBox.querySelector('.comment-edit-input');
         if (textarea) {
           textarea.focus();
           textarea.setSelectionRange(textarea.value.length, textarea.value.length);
@@ -4414,7 +4429,7 @@
           const top5 = popularPosts.slice(0, 5);
           top5.forEach(post => {
             const title = getPostTopicTitle(post);
-            html += `<a href="#${post.id}"><span></span>${title}</a>`;
+            html += `<a href="#${post.id}"><span></span>${escapeHTML(title)}</a>`;
           });
         }
 
@@ -4453,7 +4468,7 @@
             const title = getPostTopicTitle(post);
             html += `
               <a href="#${post.id}">
-                <strong>${title}</strong>
+                <strong>${escapeHTML(title)}</strong>
                 <span>${post.timeText}</span>
               </a>
             `;
