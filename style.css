@@ -5131,3 +5131,52 @@ body {
   color: var(--blue) !important;
   border-color: rgba(37, 99, 235, 0.3) !important;
 }
+
+/* Koyu Mod Profil Dropdown Menü ve Elemanları */
+[data-theme="dark"] .profile-dropdown-header {
+  border-bottom-color: var(--border) !important;
+}
+
+[data-theme="dark"] .profile-dropdown-menu a {
+  color: var(--muted) !important;
+}
+
+[data-theme="dark"] .profile-dropdown-menu a:hover {
+  background-color: var(--soft-border) !important;
+  color: var(--text) !important;
+}
+
+[data-theme="dark"] .profile-dropdown-menu .menu-icon {
+  color: var(--muted) !important;
+}
+
+[data-theme="dark"] .profile-dropdown-menu a:hover .menu-icon {
+  color: var(--text) !important;
+}
+
+[data-theme="dark"] .profile-dropdown-badge {
+  background-color: rgba(217, 119, 6, 0.15) !important;
+  color: #fbbf24 !important;
+  border-color: rgba(217, 119, 6, 0.3) !important;
+}
+
+[data-theme="dark"] .profile-dropdown::before,
+[data-theme="dark"] .notifications-dropdown::before {
+  background-color: var(--card) !important;
+  border-left-color: var(--border) !important;
+  border-top-color: var(--border) !important;
+}
+
+[data-theme="dark"] .profile-dropdown-menu .logout-link {
+  color: var(--red) !important;
+}
+
+[data-theme="dark"] .profile-dropdown-menu .logout-link:hover {
+  background-color: var(--red-soft) !important;
+  color: var(--red) !important;
+}
+
+[data-theme="dark"] .profile-dropdown-menu .logout-link .menu-icon {
+  color: var(--red) !important;
+}
+
