@@ -1400,6 +1400,33 @@
   </nav>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      // Global guest mode interceptor
+      document.addEventListener('click', (e) => {
+        const isLoggedIn = localStorage.getItem('isLoggedIn') !== 'false';
+        if (isLoggedIn) return;
+
+        const isProtected = e.target.closest('.like-btn') || 
+                            e.target.closest('.comment-btn') || 
+                            e.target.closest('.save-btn') || 
+                            e.target.closest('.vote-row button') || 
+                            e.target.closest('#composerSubmit') ||
+                            e.target.closest('.share-composer textarea') ||
+                            e.target.closest('.composer-tools') ||
+                            e.target.closest('.comment-input-row button') ||
+                            e.target.closest('.comment-input-row textarea') ||
+                            e.target.closest('.post-menu-trigger') ||
+                            e.target.closest('.comment-menu-trigger');
+
+        if (isProtected) {
+          e.preventDefault();
+          e.stopPropagation();
+          const loginModal = document.getElementById('loginModal');
+          if (loginModal) {
+            loginModal.classList.add('active');
+          }
+        }
+      }, true);
+
       // Elements
       const bellBtn = document.getElementById('notificationBellBtn');
       const notificationsDropdown = document.getElementById('notificationsDropdown');
