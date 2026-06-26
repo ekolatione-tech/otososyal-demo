@@ -1252,21 +1252,41 @@
         
         const badgeText = badge.textContent.trim().toLowerCase();
         
+        // Reset defaults
+        plusBtn.style.display = 'inline-flex';
+        plusBtn.style.pointerEvents = 'auto';
+        plusBtn.style.opacity = '1';
+        
+        proBtn.style.display = 'inline-flex';
+        proBtn.style.pointerEvents = 'auto';
+        proBtn.style.opacity = '1';
+        proBtn.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <span>Pro'ya Katıl</span>
+        `;
+        
+        if (promoContainer) promoContainer.style.display = 'flex';
+        if (promoDivider) promoDivider.style.display = 'block';
+
         if (badgeText.includes('pro')) {
+          // Kullanıcı zaten Pro olduğu için Plus'a geçemez
           plusBtn.style.display = 'none';
-          proBtn.style.display = 'none';
-          if (promoContainer) promoContainer.style.display = 'none';
-          if (promoDivider) promoDivider.style.display = 'none';
+          // Pro butonunu aktif üyelik olarak gösterip tıklamayı kapatıyoruz (Tasarımı görebilmeniz için)
+          proBtn.style.display = 'inline-flex';
+          proBtn.style.pointerEvents = 'none';
+          proBtn.style.opacity = '0.75';
+          proBtn.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0;"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            <span>Pro Üyeliğiniz Aktif</span>
+          `;
         } else if (badgeText.includes('plus')) {
+          // Kullanıcı zaten Plus olduğu için Plus'ı gizle, sadece Pro kalsın
           plusBtn.style.display = 'none';
           proBtn.style.display = 'inline-flex';
-          if (promoContainer) promoContainer.style.display = 'flex';
-          if (promoDivider) promoDivider.style.display = 'block';
         } else {
+          // Normal/Free kullanıcı: her iki buton da aktif
           plusBtn.style.display = 'inline-flex';
           proBtn.style.display = 'inline-flex';
-          if (promoContainer) promoContainer.style.display = 'flex';
-          if (promoDivider) promoDivider.style.display = 'block';
         }
       };
 
