@@ -5112,3 +5112,22 @@ body {
   background-size: 14px !important;
   padding-right: 30px !important;
 }
+
+/* Koyu Mod Rozetler (Badges) */
+[data-theme="dark"] .mini-badge,
+[data-theme="dark"] .source-badge,
+[data-theme="dark"] .risk-badge,
+[data-theme="dark"] .risk-medium,
+[data-theme="dark"] .risk-low,
+[data-theme="dark"] .risk-high {
+  background-color: var(--bg) !important;
+  color: var(--text) !important;
+  border-color: var(--border) !important;
+}
+
+[data-theme="dark"] .mini-badge.pro,
+[data-theme="dark"] .mini-badge.plus {
+  background-color: rgba(37, 99, 235, 0.15) !important;
+  color: var(--blue) !important;
+  border-color: rgba(37, 99, 235, 0.3) !important;
+}
