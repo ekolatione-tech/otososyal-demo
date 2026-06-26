@@ -2766,22 +2766,27 @@
         }
 
         // Topluluk eğilimi metinlerini güncelle (Her zaman veritabanına göre gösterilir)
-        let maxVotes = -1;
-        let leadingOption = "";
-        for (let key in dbEntry.votes) {
-          if (dbEntry.votes[key] > maxVotes) {
-            maxVotes = dbEntry.votes[key];
-            leadingOption = key;
-          }
-        }
-
         const trendStrong = card.querySelector('.community-trend strong');
         const trendSmall = card.querySelector('.community-trend small');
-        if (trendStrong) {
-          trendStrong.textContent = optionNames[leadingOption] || "Henüz oy yok";
-        }
-        if (trendSmall) {
-          trendSmall.textContent = `${dbEntry.totalVotes} oy içinden öne çıkıyor`;
+
+        if (dbEntry.totalVotes === 0) {
+          if (trendStrong) trendStrong.textContent = "Henüz oy yok";
+          if (trendSmall) trendSmall.textContent = "Yeni paylaşım";
+        } else {
+          let maxVotes = -1;
+          let leadingOption = "";
+          for (let key in dbEntry.votes) {
+            if (dbEntry.votes[key] > maxVotes) {
+              maxVotes = dbEntry.votes[key];
+              leadingOption = key;
+            }
+          }
+          if (trendStrong) {
+            trendStrong.textContent = optionNames[leadingOption] || "Henüz oy yok";
+          }
+          if (trendSmall) {
+            trendSmall.textContent = `${dbEntry.totalVotes} oy içinden öne çıkıyor`;
+          }
         }
 
         // Aksiyon butonlarındaki toplam oy sayısını güncelle
