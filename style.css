@@ -5185,3 +5185,32 @@ body {
   color: var(--red) !important;
 }
 
+/* Koyu Mod Mobil Alt Sayfası (Bottom Sheet) Elemanları */
+[data-theme="dark"] .sheet-close-btn {
+  background-color: var(--soft-border) !important;
+  color: var(--muted) !important;
+}
+
+[data-theme="dark"] .sheet-close-btn:hover {
+  background-color: var(--border) !important;
+  color: var(--text) !important;
+}
+
+[data-theme="dark"] .sheet-drag-handle {
+  background-color: var(--border) !important;
+}
+
+[data-theme="dark"] .sheet-option-btn {
+  background-color: var(--bg) !important;
+  border-color: var(--border) !important;
+  color: var(--text) !important;
+}
+
+[data-theme="dark"] .sheet-option-btn:hover,
+[data-theme="dark"] .sheet-option-btn.active {
+  background-color: var(--soft-border) !important;
+  border-color: var(--blue) !important;
+  color: var(--blue) !important;
+}
+
+
