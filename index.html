@@ -2268,25 +2268,25 @@
         // Sıralanmış kartları DOM'da yeniden konumlandır (Sadece sıra değişmişse DOM'a müdahale et)
         if (feedToolbar && feedToolbar.parentNode) {
           let orderChanged = false;
-          let currentSibling = feedToolbar.nextSibling;
+          let currentSibling = feedToolbar.nextElementSibling;
           
           for (let i = 0; i < cardsArray.length; i++) {
             // post-card sınıfı taşımayan kardeşleri atla
             while (currentSibling && !currentSibling.classList.contains('post-card')) {
-              currentSibling = currentSibling.nextSibling;
+              currentSibling = currentSibling.nextElementSibling;
             }
             if (currentSibling !== cardsArray[i]) {
               orderChanged = true;
               break;
             }
             if (currentSibling) {
-              currentSibling = currentSibling.nextSibling;
+              currentSibling = currentSibling.nextElementSibling;
             }
           }
 
           if (orderChanged) {
             for (let i = cardsArray.length - 1; i >= 0; i--) {
-              feedToolbar.parentNode.insertBefore(cardsArray[i], feedToolbar.nextSibling);
+              feedToolbar.parentNode.insertBefore(cardsArray[i], feedToolbar.nextElementSibling);
             }
           }
         }
@@ -3774,8 +3774,36 @@
 
       // Bind filter events
       const filterBrandSelect = document.getElementById('filterBrand');
+      const filterModelSelect = document.getElementById('filterModel');
+      const filterFuelSelect = document.getElementById('filterFuel');
+      const filterPriceSelect = document.getElementById('filterPrice');
+      const filterKmSelect = document.getElementById('filterKm');
+
       if (filterBrandSelect) {
-        filterBrandSelect.addEventListener('change', updateModelDropdownOptions);
+        filterBrandSelect.addEventListener('change', () => {
+          updateModelDropdownOptions();
+          applyFeedFilter(getActiveFilter());
+        });
+      }
+      if (filterModelSelect) {
+        filterModelSelect.addEventListener('change', () => {
+          applyFeedFilter(getActiveFilter());
+        });
+      }
+      if (filterFuelSelect) {
+        filterFuelSelect.addEventListener('change', () => {
+          applyFeedFilter(getActiveFilter());
+        });
+      }
+      if (filterPriceSelect) {
+        filterPriceSelect.addEventListener('change', () => {
+          applyFeedFilter(getActiveFilter());
+        });
+      }
+      if (filterKmSelect) {
+        filterKmSelect.addEventListener('change', () => {
+          applyFeedFilter(getActiveFilter());
+        });
       }
 
       const btnApplyFilters = document.getElementById('btnApplyFilters');
