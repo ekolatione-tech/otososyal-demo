@@ -1399,12 +1399,14 @@
         plusBtn.style.opacity = '1';
         plusBtn.style.setProperty('color', '#ffffff', 'important');
         plusBtn.style.setProperty('background', '#7f4dfd', 'important');
+        plusBtn.style.setProperty('border', 'none', 'important');
         
         proBtn.style.display = 'inline-flex';
         proBtn.style.pointerEvents = 'auto';
         proBtn.style.opacity = '1';
         proBtn.style.setProperty('color', '#ffffff', 'important');
         proBtn.style.setProperty('background', '#caa365', 'important');
+        proBtn.style.setProperty('border', 'none', 'important');
         proBtn.innerHTML = `
           <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
           <span>Pro'ya Katıl</span>
@@ -1414,32 +1416,27 @@
         if (promoDivider) promoDivider.style.display = 'block';
 
         if (badgeText.includes('pro')) {
-          // Kullanıcı zaten Pro olduğu için Plus'a geçemez
+          // Kullanıcı zaten Pro olduğu için Plus'a geçemez (Plus gizlenir)
           plusBtn.style.display = 'none';
-          // Pro butonunu aktif üyelik olarak gösterip tıklamayı kapatıyoruz (Tasarımı görebilmeniz için)
+          // Pro butonu yeşil checkmark ve aktif üyelik durumunu gösterecek şekilde ayarlanır
           proBtn.style.display = 'inline-flex';
           proBtn.style.pointerEvents = 'none';
-          proBtn.style.opacity = '0.75';
-          proBtn.style.setProperty('color', '#ffffff', 'important');
-          proBtn.style.setProperty('background', '#caa365', 'important');
+          proBtn.style.opacity = '1';
+          proBtn.style.setProperty('color', '#22c55e', 'important');
+          proBtn.style.setProperty('background', 'rgba(34, 197, 94, 0.12)', 'important');
+          proBtn.style.setProperty('border', '1px solid rgba(34, 197, 94, 0.35)', 'important');
           proBtn.innerHTML = `
-            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0;"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-right: 4px;"><polyline points="20 6 9 17 4 12"/></svg>
             <span>Pro Üyeliğiniz Aktif</span>
           `;
         } else if (badgeText.includes('plus')) {
-          // Kullanıcı zaten Plus olduğu için Plus'ı gizle, sadece Pro kalsın
+          // Kullanıcı zaten Plus olduğu için Plus gizlenir, Pro'ya Katıl butonu aktif ve tıklanabilir kalır
           plusBtn.style.display = 'none';
           proBtn.style.display = 'inline-flex';
-          proBtn.style.setProperty('color', '#ffffff', 'important');
-          proBtn.style.setProperty('background', '#caa365', 'important');
         } else {
-          // Normal/Free kullanıcı: her iki buton da aktif
+          // Normal/Free kullanıcı: her iki buton da aktif ve tıklanabilir
           plusBtn.style.display = 'inline-flex';
-          plusBtn.style.setProperty('color', '#ffffff', 'important');
-          plusBtn.style.setProperty('background', '#7f4dfd', 'important');
           proBtn.style.display = 'inline-flex';
-          proBtn.style.setProperty('color', '#ffffff', 'important');
-          proBtn.style.setProperty('background', '#caa365', 'important');
         }
       };
 
