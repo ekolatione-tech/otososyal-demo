@@ -5263,6 +5263,65 @@ body {
   color: #fbbf24 !important;
 }
 
+/* Giriş Yap / Login Button Styles */
+.login-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 99px;
+  background: var(--blue);
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.login-btn:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+.login-btn:active {
+  transform: translateY(0);
+}
+
+/* Dark Mode overrides for Login Button and Dropdown arrow */
+[data-theme="dark"] .login-btn {
+  background: var(--blue);
+  color: #ffffff;
+}
+
+[data-theme="dark"] .login-btn:hover {
+  background: #3b82f6;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+/* Fix sort menu list button active/hover background issues in dark mode */
+[data-theme="dark"] .sort-menu-list button:hover,
+[data-theme="dark"] .sort-menu-list button:focus {
+  background: var(--soft-border) !important;
+  color: var(--text) !important;
+  outline: none !important;
+}
+
+[data-theme="dark"] .sort-menu-list button.active {
+  background: var(--border) !important;
+  color: var(--blue) !important;
+}
+
+/* Extra safety for profile trigger hover/tap in dark mode */
+.profile-user-trigger:focus,
+.profile-user-trigger:active,
+.profile-user-container:focus,
+.profile-user-container:active {
+  outline: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
 
 
 
