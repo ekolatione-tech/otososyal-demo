@@ -1588,9 +1588,14 @@
       if (googleLoginBtn) {
         googleLoginBtn.addEventListener('click', (e) => {
           e.preventDefault();
-          // Dynamic Google OAuth sign-in via NextAuth endpoint
-          const redirectUrl = window.location.origin + "/api/auth/signin/google?callbackUrl=" + encodeURIComponent(window.location.href);
-          window.location.href = redirectUrl;
+          // Mock login for demo purposes
+          localStorage.setItem('isLoggedIn', 'true');
+          updateLoginUI();
+          const loginModal = document.getElementById('loginModal');
+          if (loginModal) {
+            loginModal.classList.remove('active');
+          }
+          showCustomModal('success', 'Giriş Yapıldı', 'Google hesabınızla başarıyla giriş yapıldı.');
         });
       }
 
