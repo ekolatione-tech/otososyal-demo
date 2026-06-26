@@ -1159,9 +1159,29 @@
       const bellDot = document.getElementById('bellDot');
       const markAllReadBtn = document.getElementById('markAllReadBtn');
 
-      if (bellDot && localStorage.getItem('notificationsRead') === 'true') {
-        bellDot.style.display = 'none';
-      }
+      // Load notification states
+      const readNotifications = JSON.parse(localStorage.getItem('readNotifications') || '[]');
+      const allNotificationsRead = localStorage.getItem('notificationsRead') === 'true';
+
+      const notificationItems = document.querySelectorAll('.notification-item');
+      notificationItems.forEach((item, index) => {
+        if (allNotificationsRead || readNotifications.includes(index)) {
+          item.classList.remove('unread');
+        }
+      });
+
+      // Update bell dot on load/change
+      const updateBellDotVisibility = () => {
+        const unreadCount = document.querySelectorAll('.notification-item.unread').length;
+        if (bellDot) {
+          if (unreadCount === 0) {
+            bellDot.style.display = 'none';
+          } else {
+            bellDot.style.display = 'block';
+          }
+        }
+      };
+      updateBellDotVisibility();
 
       // Toggle Notification Dropdown
       bellBtn.addEventListener('click', (e) => {
@@ -1197,13 +1217,11 @@
       // Mark all as read
       markAllReadBtn.addEventListener('click', (e) => {
         e.stopPropagation();
-        if (bellDot) {
-          bellDot.style.display = 'none';
-        }
         localStorage.setItem('notificationsRead', 'true');
         document.querySelectorAll('.notification-item.unread').forEach(item => {
           item.classList.remove('unread');
         });
+        updateBellDotVisibility();
       });
 
       // Close dropdowns on outside click
@@ -1222,8 +1240,19 @@
       });
 
       // Scroll to cards when clicking notification items
-      document.querySelectorAll('.notification-item').forEach(item => {
+      notificationItems.forEach((item, index) => {
         item.addEventListener('click', (e) => {
+          // Mark this notification as read
+          if (item.classList.contains('unread')) {
+            item.classList.remove('unread');
+            const currentRead = JSON.parse(localStorage.getItem('readNotifications') || '[]');
+            if (!currentRead.includes(index)) {
+              currentRead.push(index);
+              localStorage.setItem('readNotifications', JSON.stringify(currentRead));
+            }
+            updateBellDotVisibility();
+          }
+
           const targetId = item.getAttribute('data-target');
           if (targetId) {
             const targetElement = document.getElementById(targetId);

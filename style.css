@@ -2413,6 +2413,11 @@ body {
     gap: 9px;
   }
 
+  .sort-menu-list {
+    left: 0;
+    right: auto;
+  }
+
 }
 
 /* Membership and post action refinement */
