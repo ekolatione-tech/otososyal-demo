@@ -5234,5 +5234,35 @@ body {
   color: var(--blue) !important;
 }
 
+/* Koyu Mod Custom Modal Elemanları */
+[data-theme="dark"] .modal-title {
+  color: var(--text) !important;
+}
+
+[data-theme="dark"] .modal-message {
+  color: var(--muted) !important;
+}
+
+[data-theme="dark"] .modal-action-btn {
+  background-color: var(--blue) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25) !important;
+}
+
+[data-theme="dark"] .modal-action-btn:hover {
+  background-color: #1d4ed8 !important;
+}
+
+[data-theme="dark"] .modal-icon-container.success {
+  background-color: rgba(34, 197, 94, 0.15) !important;
+  color: #22c55e !important;
+}
+
+[data-theme="dark"] .modal-icon-container.warning {
+  background-color: rgba(217, 119, 6, 0.15) !important;
+  color: #fbbf24 !important;
+}
+
+
 
 
