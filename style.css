@@ -5439,35 +5439,40 @@ body {
   border: none;
 }
 
-.profile-dropdown-menu .profile-promo-btn {
+.profile-dropdown-menu a.profile-promo-btn,
+[data-theme="dark"] .profile-dropdown-menu a.profile-promo-btn {
   color: #ffffff !important;
 }
 
-.profile-dropdown-menu .profile-promo-btn.btn-plus {
+.profile-dropdown-menu a.profile-promo-btn.btn-plus,
+[data-theme="dark"] .profile-dropdown-menu a.profile-promo-btn.btn-plus {
   background: #7f4dfd !important;
 }
 
-.profile-dropdown-menu .profile-promo-btn.btn-plus:hover {
+.profile-dropdown-menu a.profile-promo-btn.btn-plus:hover,
+[data-theme="dark"] .profile-dropdown-menu a.profile-promo-btn.btn-plus:hover {
   background: #6b3ee3 !important;
   color: #ffffff !important;
   box-shadow: 0 4px 10px rgba(127, 77, 253, 0.25) !important;
 }
 
-.profile-dropdown-menu .profile-promo-btn.btn-pro {
+.profile-dropdown-menu a.profile-promo-btn.btn-pro,
+[data-theme="dark"] .profile-dropdown-menu a.profile-promo-btn.btn-pro {
   background: #caa365 !important;
 }
 
-.profile-dropdown-menu .profile-promo-btn.btn-pro:hover {
+.profile-dropdown-menu a.profile-promo-btn.btn-pro:hover,
+[data-theme="dark"] .profile-dropdown-menu a.profile-promo-btn.btn-pro:hover {
   background: #ba9355 !important;
   color: #ffffff !important;
   box-shadow: 0 4px 10px rgba(202, 163, 101, 0.25) !important;
 }
 
-[data-theme="dark"] .profile-dropdown-menu .profile-promo-btn.btn-plus:hover {
+[data-theme="dark"] .profile-dropdown-menu a.profile-promo-btn.btn-plus:hover {
   box-shadow: 0 4px 10px rgba(127, 77, 253, 0.45) !important;
 }
 
-[data-theme="dark"] .profile-dropdown-menu .profile-promo-btn.btn-pro:hover {
+[data-theme="dark"] .profile-dropdown-menu a.profile-promo-btn.btn-pro:hover {
   box-shadow: 0 4px 10px rgba(202, 163, 101, 0.45) !important;
 }
 
