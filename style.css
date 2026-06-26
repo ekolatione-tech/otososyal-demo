@@ -4863,6 +4863,15 @@ body {
    YENİ BİLDİRİLEN BEYAZ ALANLARIN OVERRIDE EDİLMESİ (SOL/SAĞ SİDEBAR & POST KARTLARI)
    ========================================================================== */
 
+/* Logo */
+[data-theme="dark"] .brand-logo {
+  filter: invert(1) hue-rotate(180deg) brightness(1.5) contrast(1.2);
+}
+[data-theme="dark"] .brand-bg-logo {
+  filter: brightness(0) invert(1);
+  opacity: 0.045 !important;
+}
+
 /* Sol Sidebar Aktif Menü Öğesi */
 [data-theme="dark"] .side-nav a.side-active {
   background: var(--blue-soft) !important;
@@ -4892,7 +4901,7 @@ body {
   color: var(--text) !important;
 }
 
-/* Topluluk Eğilimi Şeridi */
+/* Topluluk Eğilimi Şeridi ve Yüzde Grafiği */
 [data-theme="dark"] .community-trend {
   background-color: var(--bg) !important;
   border-color: var(--border) !important;
@@ -4900,6 +4909,13 @@ body {
 }
 [data-theme="dark"] .community-trend strong {
   color: var(--text) !important;
+}
+[data-theme="dark"] .trend-percentages {
+  background-color: var(--bg) !important;
+  border-top-color: var(--border) !important;
+}
+[data-theme="dark"] .trend-percentages.active {
+  border-bottom-color: var(--border) !important;
 }
 
 /* Hızlı Filtrele Butonu */
@@ -4930,6 +4946,61 @@ body {
 }
 [data-theme="dark"] .recent-topic-card a::before {
   background: var(--blue) !important;
+}
+
+/* Yorumlar Bölümü */
+[data-theme="dark"] .comments-section {
+  background-color: var(--card) !important;
+  border-top-color: var(--border) !important;
+}
+[data-theme="dark"] .comment-content-box {
+  background-color: var(--bg) !important;
+  border-color: var(--border) !important;
+}
+[data-theme="dark"] .comment-user {
+  color: var(--text) !important;
+}
+[data-theme="dark"] .comment-text {
+  color: var(--text) !important;
+}
+[data-theme="dark"] .comment-input-area {
+  background-color: var(--card) !important;
+  border-top-color: var(--border) !important;
+}
+[data-theme="dark"] .comment-input {
+  background-color: var(--bg) !important;
+  border-color: var(--border) !important;
+  color: var(--text) !important;
+}
+[data-theme="dark"] .comment-vote-btn {
+  background-color: var(--bg) !important;
+  border-color: var(--border) !important;
+  color: var(--muted) !important;
+}
+[data-theme="dark"] .comment-vote-btn:hover {
+  background-color: var(--soft-border) !important;
+  color: var(--text) !important;
+}
+[data-theme="dark"] .comment-vote-btn.upvoted {
+  background-color: rgba(22, 163, 74, 0.15) !important;
+  border-color: rgba(22, 163, 74, 0.3) !important;
+  color: #22c55e !important;
+}
+[data-theme="dark"] .comment-vote-btn.downvoted {
+  background-color: rgba(220, 38, 38, 0.15) !important;
+  border-color: rgba(220, 38, 38, 0.3) !important;
+  color: #ef4444 !important;
+}
+
+/* Bildirim Dropdown Alt Linki */
+[data-theme="dark"] .dropdown-footer-link {
+  background-color: var(--card) !important;
+  border-top-color: var(--border) !important;
+  color: var(--muted) !important;
+}
+[data-theme="dark"] .dropdown-footer-link:hover {
+  color: var(--text) !important;
+  background-color: var(--soft-border) !important;
 }
 
 /* Premium Koyu Mod Kaydırma Çubuğu (Scrollbar) Tasarımı */
