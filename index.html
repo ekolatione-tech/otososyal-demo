@@ -1399,6 +1399,63 @@
     </a>
   </nav>
   <script>
+    /**
+     * =========================================================================
+     * CLAUDE ENTEGRASYON VE BACKEND GELİŞTİRİCİ NOTLARI (DEVELOPER GUIDE)
+     * =========================================================================
+     * Bu index.html dosyası, Otososyal topluluk akışı prototipidir. 
+     * Veritabanı durumları ve oturum yetkileri LocalStorage üzerinde simüle edilmiştir.
+     * Bu kodları ilaneksper.com/otososyal sayfasına entegre ederken izlenmesi gereken adımlar:
+     * 
+     * 1. OTURUM YÖNETİMİ & MİSAFİR MODU KISITLAMALARI (Session & Guest Interceptor)
+     *    - Prototipte localStorage'daki 'isLoggedIn' anahtarı kontrol edilir. 
+     *      Çıkış yapıldığında (guest mode), gönderilerdeki etkileşimler engellenir ve modal açılır.
+     *    - ENTEGRASYON ADIMI: 
+     *      [ ] `localStorage.getItem('isLoggedIn') !== 'false'` ifadesini, İlanEksper'in 
+     *          mevcut backend oturum kontrolüyle (JWT, session cookie veya üye objesi) değiştirin.
+     *      [ ] `#googleLoginBtn` tıklama olayını gerçek Google/Sosyal giriş backend callback rotanıza bağlayın.
+     *      [ ] `#logoutLink` tıklama olayını gerçek logout API rotanıza bağlayın.
+     * 
+     * 2. KULLANICI ROL YÖNETİMİ & TEST DÖNGÜSÜ (User Roles & Cycle)
+     *    - Prototipte üyelik rozetine (`.profile-dropdown-badge`) tıklandığında Normal -> Plus -> Pro -> Admin rolleri döner.
+     *    - ENTEGRASYON ADIMI:
+     *      [ ] GERÇEK ÜRETİM (PRODUCTION) ORTAMINDA BU DÖNGÜYÜ KALDIRIN! (Aşağıdaki `profileBadge` click listener'ını silin).
+     *      [ ] Kullanıcı üyelik rolünü (`normal`, `plus`, `pro`, `admin`) sayfa yüklenirken doğrudan backend'den gelen 
+     *          kullanıcı nesnesinden (`user.role` veya `user.membership_type`) okuyarak `applyUserRole(dbRole)` ile tetikleyin.
+     * 
+     * 3. YÖNETİCİ (ADMIN) YETKİLERİ VE EYLEMLERİ
+     *    - Rol "admin" olduğunda, akıştaki TÜM gönderilerin (kullanıcı kendi gönderisi olmasa dahi) 
+     *      sağ üst menüsünde "Düzenle", "Sil" ve "Kullanıcıyı Kısıtla" butonları aktifleşir.
+     *    - ENTEGRASYON ADIMI:
+     *      [ ] "Sil" (.delete-btn) eylemini gerçek gönderi silme backend API endpoint'ine (örn: DELETE /api/posts/:id) bağlayın. 
+     *          Yetki kontrolünü MUTLAKA backend tarafında da yapın!
+     *      [ ] "Düzenle" (.edit-btn) eylemini İlanEksper gönderi düzenleme formuna/sayfasına bağlayın.
+     *      [ ] "Kullanıcıyı Kısıtla" (.restrict-btn) eylemini kullanıcının sisteme erişimini sınırlandıran API rotasına bağlayın.
+     * 
+     * 4. ZAMANLAYICI MOTORU (Relative Time Engine)
+     *    - Gönderilerin `data-created-at` özniteliğindeki Unix epoch milisaniye timestamp bilgisi, `formatRelativeTime` 
+     *      fonksiyonu ve 10s aralıklı `setInterval` ile sürekli relative ("3 dk önce", "2 saat önce") olarak güncellenir.
+     *    - ENTEGRASYON ADIMI:
+     *      [ ] Gönderileri backend veritabanından çekip HTML şablonuna basarken, `data-created-at` alanına gönderinin 
+     *          gerçek oluşturulma zamanını milisaniye cinsinden UTC timestamp olarak yazdırın.
+     * 
+     * 5. VERİ DEPOLARI & API SENKRONİZASYONU (Database Integration)
+     *    - Prototipte `userPosts` (yeni eklenen postlar), `postDb` (post oyları, begenileri, bookmarkları) ve 
+     *      `commentsDb` (yorumlar listesi) LocalStorage'da saklanır ve sayfa açılışında yüklenir.
+     *    - ENTEGRASYON ADIMI:
+     *      [ ] Gönderi paylaşımını (`#composerSubmit`) backend'e POST /api/posts olarak yönlendirin.
+     *      [ ] Beğeni (`.like-btn`), kaydetme (`.save-btn`) ve oylama (`.vote-row button`) durumlarını 
+     *          ilgili post ID'si ile backend veritabanına kaydeden AJAX isteklerine bağlayın.
+     *      [ ] Yorum ekleme ve silme eylemlerini backend yorum servisleri ile ilişkilendirin.
+     *      [ ] Sayfa yüklenirken LocalStorage yerine sunucudan ilk 10-20 gönderiyi çekecek bir GET isteği tasarlayın.
+     * 
+     * 6. FİLTRE VE SIRALAMA SINIFLARI (Client vs Server-side Filter)
+     *    - Prototipte akış filtreleri (`applyFeedFilter()`) tamamen DOM elemanları üzerinde (client-side) çalışır.
+     *    - ENTEGRASYON ADIMI:
+     *      [ ] Eğer gönderi sayısı binleri buluyorsa, bu filtre kriterlerini (marka, model, oy durumları) API istek parametresi 
+     *          (Query Params - örn: ?brand=BMW&sort=newest) olarak backend'e yollayıp akışı sunucu taraflı süzün.
+     * =========================================================================
+     */
     document.addEventListener('DOMContentLoaded', () => {
       // Global guest mode interceptor
       document.addEventListener('click', (e) => {
@@ -1826,7 +1883,12 @@
         e.stopPropagation();
       });
 
-      // Test kolaylığı için üyelik rozetine tıklayarak rol geçiş döngüsü
+      // =======================================================================
+      // ENTEGRASYON NOTU: Aşağıdaki rol geçiş döngüsü tamamen DEMO amaçlıdır!
+      // Gerçek projede (production) bu click listener bloğunu TAMAMEN SİLİNİZ.
+      // Kullanıcı rolünü sayfa yüklenirken doğrudan backend'den alıp applyUserRole()
+      // içerisine veriniz.
+      // =======================================================================
       const profileBadge = document.querySelector('.profile-dropdown-badge');
       if (profileBadge) {
         profileBadge.addEventListener('click', (e) => {
@@ -2220,8 +2282,10 @@
               showCustomModal('warning', 'Hata', 'Bu paylaşımı silme yetkiniz bulunmamaktadır.');
             }
           } else if (menuItem.classList.contains('edit-btn')) {
+            // ENTEGRASYON ADIMI: Gönderiyi düzenlemek için bir arayüz açın veya PUT API'sini tetikleyin
             showCustomModal('success', 'Düzenleme Modu', 'Bu gönderinin detaylarını düzenleme ekranı simüle edildi.');
           } else if (menuItem.classList.contains('restrict-btn')) {
+            // ENTEGRASYON ADIMI: İlgili kullanıcının ID'sini suspansiyon API'sine (POST /api/users/suspend) gönderin
             showCustomModal('success', 'Kullanıcı Kısıtlandı', 'Gönderiyi paylaşan kullanıcının erişimi sınırlandırıldı. Artık yeni gönderi ve yorum paylaşamaz.');
           } else if (menuItem.classList.contains('ignore-btn')) {
             // Smoothly hide ignored card
