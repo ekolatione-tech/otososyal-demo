@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Otososyal | İlanEksper</title>
-  <link rel="stylesheet" href="style.css?v=3.1" />
+  <link rel="stylesheet" href="style.css?v=3.2" />
   <style>
     /* Dark mode color overrides & cache-breaking styles */
     [data-theme="dark"] .post-menu-trigger,
@@ -79,7 +79,7 @@
     }
 
     a.profile-promo-btn {
-      display: inline-flex !important;
+      display: inline-flex;
       align-items: center !important;
       justify-content: center !important;
       gap: 6px !important;
@@ -1394,14 +1394,14 @@
         const badgeText = badge.textContent.trim().toLowerCase();
         
         // Reset defaults
-        plusBtn.style.display = 'inline-flex';
+        plusBtn.style.setProperty('display', 'inline-flex', 'important');
         plusBtn.style.pointerEvents = 'auto';
         plusBtn.style.opacity = '1';
         plusBtn.style.setProperty('color', '#ffffff', 'important');
         plusBtn.style.setProperty('background', '#7f4dfd', 'important');
         plusBtn.style.setProperty('border', 'none', 'important');
         
-        proBtn.style.display = 'inline-flex';
+        proBtn.style.setProperty('display', 'inline-flex', 'important');
         proBtn.style.pointerEvents = 'auto';
         proBtn.style.opacity = '1';
         proBtn.style.setProperty('color', '#ffffff', 'important');
@@ -1412,14 +1412,14 @@
           <span>Pro'ya Katıl</span>
         `;
         
-        if (promoContainer) promoContainer.style.display = 'flex';
-        if (promoDivider) promoDivider.style.display = 'block';
+        if (promoContainer) promoContainer.style.setProperty('display', 'flex', 'important');
+        if (promoDivider) promoDivider.style.setProperty('display', 'block', 'important');
 
         if (badgeText.includes('pro')) {
           // Kullanıcı zaten Pro olduğu için Plus'a geçemez (Plus gizlenir)
-          plusBtn.style.display = 'none';
+          plusBtn.style.setProperty('display', 'none', 'important');
           // Pro butonu yeşil checkmark ve aktif üyelik durumunu gösterecek şekilde ayarlanır
-          proBtn.style.display = 'inline-flex';
+          proBtn.style.setProperty('display', 'inline-flex', 'important');
           proBtn.style.pointerEvents = 'none';
           proBtn.style.opacity = '1';
           proBtn.style.setProperty('color', '#22c55e', 'important');
@@ -1431,12 +1431,12 @@
           `;
         } else if (badgeText.includes('plus')) {
           // Kullanıcı zaten Plus olduğu için Plus gizlenir, Pro'ya Katıl butonu aktif ve tıklanabilir kalır
-          plusBtn.style.display = 'none';
-          proBtn.style.display = 'inline-flex';
+          plusBtn.style.setProperty('display', 'none', 'important');
+          proBtn.style.setProperty('display', 'inline-flex', 'important');
         } else {
           // Normal/Free kullanıcı: her iki buton da aktif ve tıklanabilir
-          plusBtn.style.display = 'inline-flex';
-          proBtn.style.display = 'inline-flex';
+          plusBtn.style.setProperty('display', 'inline-flex', 'important');
+          proBtn.style.setProperty('display', 'inline-flex', 'important');
         }
       };
 
