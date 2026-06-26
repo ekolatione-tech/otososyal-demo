@@ -1639,6 +1639,10 @@
         plusBtn.style.setProperty('color', '#ffffff', 'important');
         plusBtn.style.setProperty('background', '#7f4dfd', 'important');
         plusBtn.style.setProperty('border', 'none', 'important');
+        plusBtn.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0;"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          <span>Plus'a Yükselt</span>
+        `;
         
         proBtn.style.setProperty('display', 'inline-flex', 'important');
         proBtn.style.pointerEvents = 'auto';
