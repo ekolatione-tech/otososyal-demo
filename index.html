@@ -1162,6 +1162,15 @@
       const bellDot = document.getElementById('bellDot');
       const markAllReadBtn = document.getElementById('markAllReadBtn');
 
+      // State for applied quick filters
+      const appliedQuickFilters = {
+        brand: "",
+        model: "",
+        fuel: "",
+        price: "",
+        km: ""
+      };
+
       // Load notification states
       const readNotifications = JSON.parse(localStorage.getItem('readNotifications') || '[]');
       const allNotificationsRead = localStorage.getItem('notificationsRead') === 'true';
@@ -2429,11 +2438,11 @@
             const cardPrice = parseInt(card.getAttribute('data-price')) || 0;
             const cardKm = parseInt(card.getAttribute('data-km')) || 0;
 
-            const selectedBrand = document.getElementById('filterBrand')?.value || "";
-            const selectedModel = document.getElementById('filterModel')?.value || "";
-            const selectedFuel = document.getElementById('filterFuel')?.value || "";
-            const selectedPrice = document.getElementById('filterPrice')?.value || "";
-            const selectedKm = document.getElementById('filterKm')?.value || "";
+            const selectedBrand = appliedQuickFilters.brand;
+            const selectedModel = appliedQuickFilters.model;
+            const selectedFuel = appliedQuickFilters.fuel;
+            const selectedPrice = appliedQuickFilters.price;
+            const selectedKm = appliedQuickFilters.km;
 
             if (selectedBrand && cardBrand !== selectedBrand) {
               show = false;
@@ -3848,6 +3857,11 @@
       const btnApplyFilters = document.getElementById('btnApplyFilters');
       if (btnApplyFilters) {
         btnApplyFilters.addEventListener('click', () => {
+          appliedQuickFilters.brand = filterBrandSelect ? filterBrandSelect.value : "";
+          appliedQuickFilters.model = filterModelSelect ? filterModelSelect.value : "";
+          appliedQuickFilters.fuel = filterFuelSelect ? filterFuelSelect.value : "";
+          appliedQuickFilters.price = filterPriceSelect ? filterPriceSelect.value : "";
+          appliedQuickFilters.km = filterKmSelect ? filterKmSelect.value : "";
           applyFeedFilter(getActiveFilter());
         });
       }
