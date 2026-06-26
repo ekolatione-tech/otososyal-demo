@@ -211,6 +211,17 @@
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="menu-icon"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
                 Ayarlar
               </a>
+              <hr class="dropdown-divider" id="promoDivider">
+              <div class="profile-dropdown-promo" id="profileDropdownPromo">
+                <a href="https://www.ilaneksper.com/odeme?plan=plus" target="_blank" class="profile-promo-btn btn-plus" id="profilePlusBtn">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0;"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                  <span>Plus'a Yükselt</span>
+                </a>
+                <a href="https://www.ilaneksper.com/odeme?plan=pro" target="_blank" class="profile-promo-btn btn-pro" id="profileProBtn">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                  <span>Pro'ya Katıl</span>
+                </a>
+              </div>
               <hr class="dropdown-divider">
               <!-- * Entegrasyon: İlanEksper oturum kapatma (logout) sayfasına yönlendirir -->
               <a href="#" class="logout-link" id="logoutLink">
@@ -1230,11 +1241,41 @@
       const loginBtn = document.getElementById('loginBtn');
       const logoutLink = document.getElementById('logoutLink');
 
+      const updateProfilePromoButtons = () => {
+        const badge = document.querySelector('.profile-dropdown-badge');
+        const plusBtn = document.getElementById('profilePlusBtn');
+        const proBtn = document.getElementById('profileProBtn');
+        const promoContainer = document.getElementById('profileDropdownPromo');
+        const promoDivider = document.getElementById('promoDivider');
+        
+        if (!badge || !plusBtn || !proBtn) return;
+        
+        const badgeText = badge.textContent.trim().toLowerCase();
+        
+        if (badgeText.includes('pro')) {
+          plusBtn.style.display = 'none';
+          proBtn.style.display = 'none';
+          if (promoContainer) promoContainer.style.display = 'none';
+          if (promoDivider) promoDivider.style.display = 'none';
+        } else if (badgeText.includes('plus')) {
+          plusBtn.style.display = 'none';
+          proBtn.style.display = 'inline-flex';
+          if (promoContainer) promoContainer.style.display = 'flex';
+          if (promoDivider) promoDivider.style.display = 'block';
+        } else {
+          plusBtn.style.display = 'inline-flex';
+          proBtn.style.display = 'inline-flex';
+          if (promoContainer) promoContainer.style.display = 'flex';
+          if (promoDivider) promoDivider.style.display = 'block';
+        }
+      };
+
       const updateLoginUI = () => {
         const isLoggedIn = localStorage.getItem('isLoggedIn') !== 'false';
         if (isLoggedIn) {
           if (profileUserContainer) profileUserContainer.style.display = 'block';
           if (loginBtn) loginBtn.style.display = 'none';
+          updateProfilePromoButtons();
         } else {
           if (profileUserContainer) profileUserContainer.style.display = 'none';
           if (loginBtn) loginBtn.style.display = 'inline-flex';
@@ -2523,8 +2564,8 @@
               // Konular: Open bottom sheet with Topics options
               showMobileSheet("Konular", getTopicsOptions());
             } else if (index === 3) {
-              // Filtreler: Open bottom sheet with Time Filters options
-              showMobileSheet("Filtreler", getTimeFilterOptions());
+              // Filtreler: Open bottom sheet with desktop quick filters
+              showMobileQuickFilters();
             }
           });
         });
@@ -2586,9 +2627,68 @@
         mobileSheetOverlay.classList.add('active');
       }
 
+      function showMobileQuickFilters() {
+        if (!mobileSheetOverlay || !mobileSheetTitle || !mobileSheetBody) return;
+        mobileSheetTitle.textContent = "Filtreler";
+        mobileSheetBody.innerHTML = "";
+
+        // Find the desktop filter-card
+        const filterCard = document.querySelector('.filter-card');
+        if (filterCard) {
+          // Append the filter card to mobileSheetBody
+          mobileSheetBody.appendChild(filterCard);
+          // Show it
+          filterCard.style.display = 'block';
+          filterCard.style.margin = '0';
+          filterCard.style.boxShadow = 'none';
+          filterCard.style.padding = '10px 0';
+          filterCard.style.border = 'none';
+          filterCard.style.background = 'transparent';
+        }
+
+        // Add a class to mobileSheetBody to style the selects and button properly in sheet
+        mobileSheetBody.classList.add('mobile-filter-mode');
+
+        // Modify the click on the "Filtrele" button inside the sheet so that it ALSO closes the sheet
+        const btnApplyFilters = document.getElementById('btnApplyFilters');
+        if (btnApplyFilters) {
+          const closeOnFilter = () => {
+            hideMobileSheet();
+            btnApplyFilters.removeEventListener('click', closeOnFilter);
+          };
+          btnApplyFilters.addEventListener('click', closeOnFilter);
+        }
+
+        mobileSheetOverlay.classList.add('active');
+      }
+
       function hideMobileSheet() {
         if (mobileSheetOverlay) mobileSheetOverlay.classList.remove('active');
+        
+        // Put the filter card back to the right sidebar if it was moved
+        const filterCard = document.querySelector('.filter-card');
+        const rightColumn = document.querySelector('.right-column');
+        if (filterCard && rightColumn && filterCard.parentNode === mobileSheetBody) {
+          // Reset styles
+          filterCard.style.display = '';
+          filterCard.style.margin = '';
+          filterCard.style.boxShadow = '';
+          filterCard.style.padding = '';
+          filterCard.style.border = '';
+          filterCard.style.background = '';
+          // Insert at the beginning of right-column
+          rightColumn.insertBefore(filterCard, rightColumn.firstChild);
+        }
+        if (mobileSheetBody) {
+          mobileSheetBody.classList.remove('mobile-filter-mode');
+        }
       }
+
+      window.addEventListener('resize', () => {
+        if (window.innerWidth > 980) {
+          hideMobileSheet();
+        }
+      });
 
       function updateSideNavActiveFilter(filterVal) {
         const sideLinks = document.querySelectorAll('.side-nav a');

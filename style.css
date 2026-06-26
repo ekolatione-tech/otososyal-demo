@@ -5322,6 +5322,151 @@ body {
   -webkit-tap-highlight-color: transparent !important;
 }
 
+/* Koyu Mod 3 Nokta Menüsü (Post Menu) */
+[data-theme="dark"] .post-menu-trigger:hover {
+  background-color: var(--soft-border) !important;
+  color: var(--text) !important;
+}
+
+[data-theme="dark"] .post-menu-dropdown {
+  background-color: var(--card) !important;
+  border-color: var(--border) !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2) !important;
+}
+
+[data-theme="dark"] .post-menu-item {
+  color: var(--muted) !important;
+}
+
+[data-theme="dark"] .post-menu-item:hover {
+  background-color: var(--soft-border) !important;
+  color: var(--text) !important;
+}
+
+[data-theme="dark"] .post-menu-item.delete-btn {
+  color: var(--red) !important;
+}
+
+[data-theme="dark"] .post-menu-item.delete-btn:hover {
+  background-color: var(--red-soft) !important;
+  color: var(--red) !important;
+}
+
+/* Koyu Mod Yorum 3 Nokta Menüsü (Comment Menu) */
+[data-theme="dark"] .comment-menu-trigger:hover {
+  background-color: var(--soft-border) !important;
+  color: var(--text) !important;
+}
+
+[data-theme="dark"] .comment-menu-dropdown {
+  background-color: var(--card) !important;
+  border-color: var(--border) !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.25), 0 2px 4px -1px rgba(0, 0, 0, 0.15) !important;
+}
+
+[data-theme="dark"] .comment-menu-item {
+  color: var(--muted) !important;
+}
+
+[data-theme="dark"] .comment-menu-item:hover {
+  background-color: var(--soft-border) !important;
+  color: var(--text) !important;
+}
+
+[data-theme="dark"] .comment-menu-item.edit-btn:hover {
+  background-color: rgba(37, 99, 235, 0.15) !important;
+  color: var(--blue) !important;
+}
+
+[data-theme="dark"] .comment-menu-item.report-btn:hover {
+  background-color: var(--red-soft) !important;
+  color: var(--red) !important;
+}
+
+/* Koyu Mod Paylaş Tooltip (Share Popover) */
+[data-theme="dark"] .share-popover {
+  background-color: var(--card) !important;
+  border-color: var(--border) !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2) !important;
+}
+
+[data-theme="dark"] .share-popover-item {
+  color: var(--muted) !important;
+}
+
+[data-theme="dark"] .share-popover-item:hover {
+  background-color: var(--soft-border) !important;
+  color: var(--text) !important;
+}
+
+/* Paylaş Tooltip Mobil Sola Taşma Düzeltmesi */
+@media (max-width: 768px) {
+  .share-popover {
+    left: auto !important;
+    right: 0 !important;
+    transform: translateY(5px) !important;
+  }
+  .share-popover.active {
+    transform: translateY(0) !important;
+  }
+}
+
+/* Mobil Bottom Sheet İçinde Başlık Gizleme */
+.mobile-filter-mode .filter-card h3 {
+  display: none !important;
+}
+
+/* Profil Menüsü Plus & Pro Buton Stilleri */
+.profile-dropdown-promo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 4px 6px;
+}
+
+.profile-promo-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  height: 32px;
+  border-radius: 8px;
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.profile-promo-btn.btn-plus {
+  background: #7f4dfd;
+  color: #ffffff;
+}
+
+.profile-promo-btn.btn-plus:hover {
+  background: #6b3ee3;
+  box-shadow: 0 4px 10px rgba(127, 77, 253, 0.25);
+}
+
+.profile-promo-btn.btn-pro {
+  background: #caa365;
+  color: #ffffff;
+}
+
+.profile-promo-btn.btn-pro:hover {
+  background: #ba9355;
+  box-shadow: 0 4px 10px rgba(202, 163, 101, 0.25);
+}
+
+[data-theme="dark"] .profile-promo-btn.btn-plus:hover {
+  box-shadow: 0 4px 10px rgba(127, 77, 253, 0.4);
+}
+
+[data-theme="dark"] .profile-promo-btn.btn-pro:hover {
+  box-shadow: 0 4px 10px rgba(202, 163, 101, 0.4);
+}
+
 
 
 
