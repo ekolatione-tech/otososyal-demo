@@ -3780,30 +3780,7 @@
       const filterKmSelect = document.getElementById('filterKm');
 
       if (filterBrandSelect) {
-        filterBrandSelect.addEventListener('change', () => {
-          updateModelDropdownOptions();
-          applyFeedFilter(getActiveFilter());
-        });
-      }
-      if (filterModelSelect) {
-        filterModelSelect.addEventListener('change', () => {
-          applyFeedFilter(getActiveFilter());
-        });
-      }
-      if (filterFuelSelect) {
-        filterFuelSelect.addEventListener('change', () => {
-          applyFeedFilter(getActiveFilter());
-        });
-      }
-      if (filterPriceSelect) {
-        filterPriceSelect.addEventListener('change', () => {
-          applyFeedFilter(getActiveFilter());
-        });
-      }
-      if (filterKmSelect) {
-        filterKmSelect.addEventListener('change', () => {
-          applyFeedFilter(getActiveFilter());
-        });
+        filterBrandSelect.addEventListener('change', updateModelDropdownOptions);
       }
 
       const btnApplyFilters = document.getElementById('btnApplyFilters');

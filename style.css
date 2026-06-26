@@ -5213,4 +5213,26 @@ body {
   color: var(--blue) !important;
 }
 
+/* Koyu Mod Boş Durum (Empty State) Kartı */
+[data-theme="dark"] #feedEmptyState {
+  background-color: var(--card) !important;
+  border-color: var(--border) !important;
+}
+
+/* Koyu Mod Sıralama Menüsü Butonları ve Hover/Aktif Durumları */
+[data-theme="dark"] .sort-menu-list button {
+  color: var(--muted) !important;
+}
+
+[data-theme="dark"] .sort-menu-list button:hover {
+  background-color: var(--soft-border) !important;
+  color: var(--text) !important;
+}
+
+[data-theme="dark"] .sort-menu-list button.active {
+  background-color: var(--border) !important;
+  color: var(--blue) !important;
+}
+
+
 
