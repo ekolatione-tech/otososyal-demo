@@ -1552,21 +1552,8 @@
             // Close details menu
             sortMenuDetails.removeAttribute('open');
             
-            // Filter post-cards
-            const cards = document.querySelectorAll('.post-card');
-            cards.forEach(card => {
-              const timeVal = parseInt(card.getAttribute('data-time') || '0', 10);
-              if (filterVal === 'all') {
-                card.style.display = 'block';
-              } else {
-                const limit = parseInt(filterVal, 10);
-                if (timeVal <= limit) {
-                  card.style.display = 'block';
-                } else {
-                  card.style.display = 'none';
-                }
-              }
-            });
+            // Run central feed filter pipeline
+            applyFeedFilter(getActiveFilter());
           });
         });
       }
@@ -1694,6 +1681,15 @@
       // Sanitize postDb structure to heal any corrupt or outdated entries
       if (postDb && typeof postDb === 'object') {
         let postDbChanged = false;
+
+        // Ensure default items exist in postDb
+        for (let defaultId in defaultPostDb) {
+          if (!postDb[defaultId] || typeof postDb[defaultId] !== 'object') {
+            postDb[defaultId] = JSON.parse(JSON.stringify(defaultPostDb[defaultId]));
+            postDbChanged = true;
+          }
+        }
+
         for (let postId in postDb) {
           const entry = postDb[postId];
           if (!entry || typeof entry !== 'object') {
@@ -2296,6 +2292,8 @@
         }
 
         // 2. Filtreleme eylemleri
+        const activeTimeFilter = getActiveTimeFilter();
+
         cards.forEach(card => {
           const postId = card.id;
           let show = false;
@@ -2352,6 +2350,15 @@
               show = true;
           }
 
+          // Check time-based filter
+          if (show && activeTimeFilter !== 'all') {
+            const timeVal = parseInt(card.getAttribute('data-time') || '0', 10);
+            const limit = parseInt(activeTimeFilter, 10);
+            if (timeVal > limit) {
+              show = false;
+            }
+          }
+
           if (show) {
             // Check quick filters
             const cardBrand = card.getAttribute('data-brand') || "";
@@ -2406,6 +2413,11 @@
       function getActiveFilter() {
         const activeLink = document.querySelector('.side-nav a.side-active');
         return activeLink ? (activeLink.getAttribute('data-filter') || 'all') : 'all';
+      }
+
+      function getActiveTimeFilter() {
+        const activeBtn = document.querySelector('#sortMenuList button.active');
+        return activeBtn ? (activeBtn.getAttribute('data-filter') || 'all') : 'all';
       }
 
       // Mobile Tabbar Navigation Logic
