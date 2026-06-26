@@ -5478,6 +5478,59 @@ body {
   box-shadow: 0 4px 10px rgba(202, 163, 101, 0.45) !important;
 }
 
+/* Badge Roles (Normal, Plus, Pro, Admin) */
+.profile-dropdown-badge {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+.profile-dropdown-badge:hover {
+  transform: scale(1.03);
+}
+
+.profile-dropdown-badge.normal-badge {
+  color: #64748b !important;
+  background: #f1f5f9 !important;
+  border-color: #cbd5e1 !important;
+}
+.profile-dropdown-badge.plus-badge {
+  color: #7f4dfd !important;
+  background: #f3e8ff !important;
+  border-color: #e9d5ff !important;
+}
+.profile-dropdown-badge.pro-badge {
+  color: #b45309 !important;
+  background: #fffbeb !important;
+  border-color: #fef3c7 !important;
+}
+.profile-dropdown-badge.admin-badge {
+  color: #16a34a !important;
+  background: rgba(34, 197, 94, 0.08) !important;
+  border-color: rgba(34, 197, 94, 0.25) !important;
+}
+
+/* Dark Mode Overrides for Badge Roles */
+[data-theme="dark"] .profile-dropdown-badge.normal-badge {
+  color: #94a3b8 !important;
+  background: rgba(148, 163, 184, 0.1) !important;
+  border-color: rgba(148, 163, 184, 0.2) !important;
+}
+[data-theme="dark"] .profile-dropdown-badge.plus-badge {
+  color: #a855f7 !important;
+  background: rgba(168, 85, 247, 0.1) !important;
+  border-color: rgba(168, 85, 247, 0.2) !important;
+}
+[data-theme="dark"] .profile-dropdown-badge.pro-badge {
+  color: #fbbf24 !important;
+  background: rgba(217, 119, 6, 0.15) !important;
+  border-color: rgba(217, 119, 6, 0.3) !important;
+}
+[data-theme="dark"] .profile-dropdown-badge.admin-badge {
+  color: #4ade80 !important;
+  background: rgba(34, 197, 94, 0.15) !important;
+  border-color: rgba(34, 197, 94, 0.3) !important;
+}
+
 
 
 
