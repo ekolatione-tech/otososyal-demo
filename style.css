@@ -4850,10 +4850,12 @@ body {
   background-color: var(--card) !important;
   color: var(--text) !important;
   border-bottom-color: var(--border) !important;
+  border-left: 3px solid transparent !important;
 }
 
 [data-theme="dark"] .notification-item.unread {
-  background-color: rgba(37, 99, 235, 0.08) !important;
+  background-color: rgba(37, 99, 235, 0.05) !important;
+  border-left: 3px solid var(--blue) !important;
 }
 
 [data-theme="dark"] .notification-item:hover {
