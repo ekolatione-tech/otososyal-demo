@@ -1694,6 +1694,7 @@ body {
 }
 
 .fallback-badge {
+  display: none !important;
   position: absolute;
   bottom: 12px;
   right: 12px;
@@ -2745,6 +2746,7 @@ body {
 }
 
 .fallback-badge {
+  display: none !important;
   z-index: 1;
   color: #64748b;
   background: rgba(255, 255, 255, 0.92);

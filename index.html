@@ -4,7 +4,142 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Otososyal | İlanEksper</title>
-  <link rel="stylesheet" href="style.css?v=2.6" />
+  <link rel="stylesheet" href="style.css?v=3.0" />
+  <style>
+    /* Dark mode color overrides & cache-breaking styles */
+    [data-theme="dark"] .post-menu-trigger,
+    [data-theme="dark"] .comment-menu-trigger {
+      color: #64748b !important;
+      background-color: transparent !important;
+      border: none !important;
+      outline: none !important;
+      box-shadow: none !important;
+    }
+    
+    [data-theme="dark"] .post-menu-trigger:hover,
+    [data-theme="dark"] .comment-menu-trigger:hover,
+    [data-theme="dark"] .post-menu-trigger:focus,
+    [data-theme="dark"] .comment-menu-trigger:focus {
+      background-color: rgba(255, 255, 255, 0.08) !important;
+      color: #f8fafc !important;
+    }
+
+    [data-theme="dark"] .post-menu-dropdown,
+    [data-theme="dark"] .comment-menu-dropdown {
+      background-color: #151b2d !important;
+      border: 1px solid #1e293b !important;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.4) !important;
+    }
+
+    [data-theme="dark"] .post-menu-item,
+    [data-theme="dark"] .comment-menu-item {
+      color: #94a3b8 !important;
+      background-color: transparent !important;
+    }
+
+    [data-theme="dark"] .post-menu-item:hover,
+    [data-theme="dark"] .comment-menu-item:hover {
+      background-color: #1e293b !important;
+      color: #f8fafc !important;
+    }
+
+    [data-theme="dark"] .post-menu-item.delete-btn,
+    [data-theme="dark"] .comment-menu-item.report-btn {
+      color: #ef4444 !important;
+    }
+
+    [data-theme="dark"] .post-menu-item.delete-btn:hover,
+    [data-theme="dark"] .comment-menu-item.report-btn:hover {
+      background-color: rgba(239, 68, 68, 0.15) !important;
+      color: #ef4444 !important;
+    }
+
+    [data-theme="dark"] .share-popover {
+      background-color: #151b2d !important;
+      border: 1px solid #1e293b !important;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.4) !important;
+    }
+
+    [data-theme="dark"] .share-popover-item {
+      color: #94a3b8 !important;
+      background-color: transparent !important;
+    }
+
+    [data-theme="dark"] .share-popover-item:hover {
+      background-color: #1e293b !important;
+      color: #f8fafc !important;
+    }
+
+    /* Profile Promo buttons dark and light mode styling */
+    .profile-dropdown-promo {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 4px 6px;
+    }
+
+    a.profile-promo-btn {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 6px !important;
+      width: 100% !important;
+      height: 32px !important;
+      border-radius: 8px !important;
+      font-size: 11.5px !important;
+      font-weight: 700 !important;
+      cursor: pointer !important;
+      transition: all 0.2s ease !important;
+      border: none !important;
+      text-decoration: none !important;
+    }
+
+    .profile-dropdown-menu a.profile-promo-btn,
+    [data-theme="dark"] .profile-dropdown-menu a.profile-promo-btn {
+      color: #ffffff !important;
+    }
+
+    .profile-dropdown-menu a.profile-promo-btn.btn-plus,
+    [data-theme="dark"] .profile-dropdown-menu a.profile-promo-btn.btn-plus {
+      background: #7f4dfd !important;
+    }
+
+    .profile-dropdown-menu a.profile-promo-btn.btn-plus:hover,
+    [data-theme="dark"] .profile-dropdown-menu a.profile-promo-btn.btn-plus:hover {
+      background: #6b3ee3 !important;
+      color: #ffffff !important;
+      box-shadow: 0 4px 10px rgba(127, 77, 253, 0.35) !important;
+    }
+
+    .profile-dropdown-menu a.profile-promo-btn.btn-pro,
+    [data-theme="dark"] .profile-dropdown-menu a.profile-promo-btn.btn-pro {
+      background: #caa365 !important;
+    }
+
+    .profile-dropdown-menu a.profile-promo-btn.btn-pro:hover,
+    [data-theme="dark"] .profile-dropdown-menu a.profile-promo-btn.btn-pro:hover {
+      background: #ba9355 !important;
+      color: #ffffff !important;
+      box-shadow: 0 4px 10px rgba(202, 163, 101, 0.35) !important;
+    }
+
+    /* Fallback badge hide styling */
+    .fallback-badge {
+      display: none !important;
+    }
+
+    /* Mobile share popover responsiveness */
+    @media (max-width: 768px) {
+      .share-popover {
+        left: auto !important;
+        right: 0 !important;
+        transform: translateY(5px) !important;
+      }
+      .share-popover.active {
+        transform: translateY(0) !important;
+      }
+    }
+  </style>
   <script>
     // Prevent theme flashing on page load
     (function() {
@@ -421,7 +556,6 @@
               <span class="fallback-model">520i 1.6 F10</span>
               <span class="fallback-meta">2015 · Benzin · Otomatik</span>
             </div>
-            <span class="fallback-badge">Ilan gorseli yok</span>
           </div>
 
           <div class="post-main">
@@ -651,7 +785,6 @@
               <span class="fallback-model">Golf 7 1.4 TSI</span>
               <span class="fallback-meta">2016 · Benzin · Otomatik</span>
             </div>
-            <span class="fallback-badge">Ilan gorseli yok</span>
           </div>
 
           <div class="post-main">
@@ -881,7 +1014,6 @@
               <span class="fallback-model">Corolla 1.6 CVT</span>
               <span class="fallback-meta">2018 · Benzin · Otomatik</span>
             </div>
-            <span class="fallback-badge">Ilan gorseli yok</span>
           </div>
 
           <div class="post-main">
@@ -2011,7 +2143,6 @@
                   <span class="fallback-model">${model}</span>
                   <span class="fallback-meta">${specs}</span>
                 </div>
-                <span class="fallback-badge">Ilan gorseli yok</span>
               </div>
  
               <div class="post-main">
