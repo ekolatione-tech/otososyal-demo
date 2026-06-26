@@ -5439,32 +5439,36 @@ body {
   border: none;
 }
 
-.profile-promo-btn.btn-plus {
-  background: #7f4dfd;
-  color: #ffffff;
+.profile-dropdown-menu .profile-promo-btn {
+  color: #ffffff !important;
 }
 
-.profile-promo-btn.btn-plus:hover {
-  background: #6b3ee3;
-  box-shadow: 0 4px 10px rgba(127, 77, 253, 0.25);
+.profile-dropdown-menu .profile-promo-btn.btn-plus {
+  background: #7f4dfd !important;
 }
 
-.profile-promo-btn.btn-pro {
-  background: #caa365;
-  color: #ffffff;
+.profile-dropdown-menu .profile-promo-btn.btn-plus:hover {
+  background: #6b3ee3 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 10px rgba(127, 77, 253, 0.25) !important;
 }
 
-.profile-promo-btn.btn-pro:hover {
-  background: #ba9355;
-  box-shadow: 0 4px 10px rgba(202, 163, 101, 0.25);
+.profile-dropdown-menu .profile-promo-btn.btn-pro {
+  background: #caa365 !important;
 }
 
-[data-theme="dark"] .profile-promo-btn.btn-plus:hover {
-  box-shadow: 0 4px 10px rgba(127, 77, 253, 0.4);
+.profile-dropdown-menu .profile-promo-btn.btn-pro:hover {
+  background: #ba9355 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 10px rgba(202, 163, 101, 0.25) !important;
 }
 
-[data-theme="dark"] .profile-promo-btn.btn-pro:hover {
-  box-shadow: 0 4px 10px rgba(202, 163, 101, 0.4);
+[data-theme="dark"] .profile-dropdown-menu .profile-promo-btn.btn-plus:hover {
+  box-shadow: 0 4px 10px rgba(127, 77, 253, 0.45) !important;
+}
+
+[data-theme="dark"] .profile-dropdown-menu .profile-promo-btn.btn-pro:hover {
+  box-shadow: 0 4px 10px rgba(202, 163, 101, 0.45) !important;
 }
 
 
