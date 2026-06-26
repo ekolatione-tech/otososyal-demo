@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Otososyal | İlanEksper</title>
-  <link rel="stylesheet" href="style.css?v=3.2" />
+  <link rel="stylesheet" href="style.css?v=3.3" />
   <style>
     /* Dark mode color overrides & cache-breaking styles */
     [data-theme="dark"] .post-menu-trigger,
@@ -1430,8 +1430,18 @@
             <span>Pro Üyeliğiniz Aktif</span>
           `;
         } else if (badgeText.includes('plus')) {
-          // Kullanıcı zaten Plus olduğu için Plus gizlenir, Pro'ya Katıl butonu aktif ve tıklanabilir kalır
-          plusBtn.style.setProperty('display', 'none', 'important');
+          // Plus butonu yeşil checkmark ve aktif Plus üyelik durumunu gösterecek şekilde ayarlanır
+          plusBtn.style.setProperty('display', 'inline-flex', 'important');
+          plusBtn.style.pointerEvents = 'none';
+          plusBtn.style.opacity = '1';
+          plusBtn.style.setProperty('color', '#22c55e', 'important');
+          plusBtn.style.setProperty('background', 'rgba(34, 197, 94, 0.12)', 'important');
+          plusBtn.style.setProperty('border', '1px solid rgba(34, 197, 94, 0.35)', 'important');
+          plusBtn.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-right: 4px;"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Plus Üyeliğiniz Aktif</span>
+          `;
+          // Pro'ya Katıl butonu aktif ve tıklanabilir kalır
           proBtn.style.setProperty('display', 'inline-flex', 'important');
         } else {
           // Normal/Free kullanıcı: her iki buton da aktif ve tıklanabilir
