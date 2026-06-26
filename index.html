@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Otososyal | İlanEksper</title>
-  <link rel="stylesheet" href="style.css?v=3.0" />
+  <link rel="stylesheet" href="style.css?v=3.1" />
   <style>
     /* Dark mode color overrides & cache-breaking styles */
     [data-theme="dark"] .post-menu-trigger,
@@ -138,6 +138,15 @@
       .share-popover.active {
         transform: translateY(0) !important;
       }
+    }
+    
+    @keyframes popLike {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.4); }
+      100% { transform: scale(1); }
+    }
+    .action-btn.like-btn.liked.animate-pop .like-icon {
+      animation: popLike 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
     }
   </style>
   <script>
@@ -3126,6 +3135,10 @@
           if (dbEntry.liked) {
             dbEntry.likesCount = (dbEntry.likesCount || 0) + 1;
             likeBtn.classList.add('liked');
+            likeBtn.classList.add('animate-pop');
+            setTimeout(() => {
+              likeBtn.classList.remove('animate-pop');
+            }, 400);
             showToast("Paylaşım beğenildi!");
           } else {
             dbEntry.likesCount = Math.max(0, (dbEntry.likesCount || 0) - 1);

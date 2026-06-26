@@ -2649,7 +2649,7 @@ body {
   100% { transform: scale(1); }
 }
 
-.action-btn.like-btn.liked .like-icon {
+.action-btn.like-btn.liked.animate-pop .like-icon {
   animation: popLike 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
