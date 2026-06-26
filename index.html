@@ -1582,10 +1582,78 @@
           if (profileUserContainer) profileUserContainer.style.display = 'none';
           if (loginBtn) loginBtn.style.display = 'inline-flex';
         }
+
+        // Update composer avatar
+        const composerAvatar = document.querySelector('.composer-avatar');
+        if (composerAvatar) {
+          if (isLoggedIn) {
+            composerAvatar.src = 'assets/erkan-profile.png';
+          } else {
+            composerAvatar.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%2394a3b8"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>';
+          }
+        }
+
+        // Update owner cards (avatar, name, badges)
+        document.querySelectorAll('.post-card[data-owner="true"]').forEach(card => {
+          const authorImg = card.querySelector('.user-line img.profile-avatar-img');
+          const authorName = card.querySelector('.user-line strong');
+          const proBadge = card.querySelector('.user-line .mini-badge.pro');
+          
+          if (isLoggedIn) {
+            if (authorImg) authorImg.src = 'assets/erkan-profile.png';
+            if (authorName) authorName.textContent = 'Erkan Ö.';
+            if (proBadge) proBadge.style.display = 'inline-block';
+          } else {
+            if (authorImg) authorImg.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%2394a3b8"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>';
+            if (authorName) authorName.textContent = 'Misafir';
+            if (proBadge) proBadge.style.display = 'none';
+          }
+        });
+
+        // Update owner comments
+        document.querySelectorAll('.comment-item[data-owner="true"]').forEach(comment => {
+          const avatar = comment.querySelector('.comment-avatar');
+          const userSpan = comment.querySelector('.comment-user');
+          
+          if (isLoggedIn) {
+            if (avatar) avatar.src = 'assets/erkan-profile.png';
+            if (userSpan) userSpan.textContent = 'Erkan Ö.';
+          } else {
+            if (avatar) avatar.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%2394a3b8"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>';
+            if (userSpan) userSpan.textContent = 'Misafir';
+          }
+        });
+
+        // Update all posts states (likes, bookmarks, votes) based on new login status
+        document.querySelectorAll('.post-card').forEach(card => {
+          const id = card.id;
+          const dbEntry = typeof postDb !== 'undefined' ? postDb[id] : null;
+          if (dbEntry) {
+            restorePostStates(card, dbEntry);
+          } else {
+            if (!isLoggedIn) {
+              const saveBtn = card.querySelector('.action-btn.save-btn');
+              if (saveBtn) saveBtn.classList.remove('saved-btn');
+              const likeBtn = card.querySelector('.action-btn.like-btn');
+              if (likeBtn) likeBtn.classList.remove('liked');
+              const allVoteBtns = card.querySelectorAll('.vote-row button');
+              allVoteBtns.forEach(btn => btn.classList.remove('selected-vote'));
+              const percentagesBlock = card.querySelector('.trend-percentages');
+              if (percentagesBlock) percentagesBlock.classList.remove('active');
+            }
+          }
+        });
+
+        // Refresh feed visual filtering and right sidebar dynamically
+        if (typeof applyFeedFilter === 'function' && typeof getActiveFilter === 'function') {
+          applyFeedFilter(getActiveFilter());
+        }
+        if (typeof refreshRightSidebar === 'function') {
+          refreshRightSidebar();
+        }
       };
 
-      // İlk yüklemede durumu kontrol et
-      updateLoginUI();
+      // İlk yüklemede durum kontrolü restoreSavedState sonrasında yapılacaktır.
 
       if (loginBtn) {
         loginBtn.addEventListener('click', (e) => {
@@ -2224,6 +2292,46 @@
         muted: "Uzak dur"
       };
 
+      // Gönderi Zamanı Formatlama (Göreli Zaman)
+      function formatRelativeTime(timestamp) {
+        if (!timestamp) return "Şimdi";
+        const diff = Date.now() - timestamp;
+        if (diff < 60000) return "Şimdi";
+        const mins = Math.floor(diff / 60000);
+        if (mins < 60) return `${mins} dk önce`;
+        const hours = Math.floor(mins / 60);
+        if (hours < 24) return `${hours} saat önce`;
+        const days = Math.floor(hours / 24);
+        return `${days} gün önce`;
+      }
+
+      // Statik Gönderiler için data-created-at Tanımlama
+      function initStaticPostsTimestamps() {
+        document.querySelectorAll('.post-card').forEach(card => {
+          if (!card.getAttribute('data-created-at')) {
+            const timeHrs = parseFloat(card.getAttribute('data-time') || '0');
+            const createdAt = Date.now() - (timeHrs * 60 * 60 * 1000);
+            card.setAttribute('data-created-at', createdAt);
+          }
+        });
+      }
+
+      // Tüm Gönderilerin Zaman Alanlarını Güncelleme
+      function updateRelativeTimes() {
+        document.querySelectorAll('.post-card').forEach(card => {
+          const createdAtStr = card.getAttribute('data-created-at');
+          if (!createdAtStr) return;
+          const createdAt = parseInt(createdAtStr);
+          const postTimeSpan = card.querySelector('.post-time');
+          if (postTimeSpan) {
+            postTimeSpan.textContent = formatRelativeTime(createdAt);
+          }
+        });
+        
+        // Sağ taraftaki "Yeni Paylaşılan Konular" kısmını güncelle
+        updateRecentTopics();
+      }
+
       // Dinamik Gönderi HTML Üretici
       function createPostHTML(post) {
         if (!post) return "";
@@ -2238,7 +2346,9 @@
         const questionText = post.questionText || "";
         const reportPrivacyState = post.reportPrivacyState || "public";
         const id = post.id || ("post-user-" + Math.floor(Math.random() * 10000));
-        const timeText = post.timeText || "Şimdi";
+        
+        const createdAt = post.createdAt || Date.now();
+        const timeText = formatRelativeTime(createdAt);
 
         // Parse meta values for quick filters
         const fuel = post.fuel || (specs.includes("Dizel") ? "Dizel" : (specs.includes("LPG") ? "LPG" : "Benzin"));
@@ -2273,13 +2383,18 @@
         const brandSlug = brandLogoMap[brand.toLowerCase()] || brand.toLowerCase() || 'default';
         const logoUrl = `https://unpkg.com/simple-icons@v9/icons/${brandSlug}.svg`;
 
+        const isLoggedIn = localStorage.getItem('isLoggedIn') !== 'false';
+        const ownerAvatar = isLoggedIn ? 'assets/erkan-profile.png' : 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%2394a3b8"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>';
+        const ownerName = isLoggedIn ? 'Erkan Ö.' : 'Misafir';
+        const proBadgeStyle = isLoggedIn ? 'inline-block' : 'none';
+
         return `
-          <article class="post-card" id="${id}" data-time="0" data-owner="true" data-brand="${brand}" data-model="${model}" data-fuel="${fuel}" data-price="${priceNumeric}" data-km="${kmNumeric}">
+          <article class="post-card" id="${id}" data-created-at="${createdAt}" data-time="0" data-owner="true" data-brand="${brand}" data-model="${model}" data-fuel="${fuel}" data-price="${priceNumeric}" data-km="${kmNumeric}">
             <div class="post-top">
               <div class="user-line">
-                <img class="profile-avatar-img" src="assets/erkan-profile.png" alt="Erkan" style="width:34px; height:34px; margin-right:4px;" />
-                <strong>Erkan Ö.</strong>
-                <span class="mini-badge pro">Pro</span>
+                <img class="profile-avatar-img" src="${ownerAvatar}" alt="${ownerName}" style="width:34px; height:34px; margin-right:4px;" />
+                <strong>${ownerName}</strong>
+                <span class="mini-badge pro" style="display: ${proBadgeStyle};">Pro</span>
                 <span class="source-badge">${type}</span>
               </div>
  
@@ -2502,19 +2617,28 @@
       function restorePostStates(card, dbEntry) {
         if (!card || !dbEntry) return;
 
+        const isLoggedIn = localStorage.getItem('isLoggedIn') !== 'false';
+
         // Bookmark durumu
-        if (dbEntry.bookmarked) {
-          const saveBtn = card.querySelector('.action-btn.save-btn');
-          if (saveBtn) {
+        const saveBtn = card.querySelector('.action-btn.save-btn');
+        if (saveBtn) {
+          if (isLoggedIn && dbEntry.bookmarked) {
             saveBtn.classList.add('saved-btn');
+          } else {
+            saveBtn.classList.remove('saved-btn');
           }
         }
 
         // Oy verme durumu
-        if (dbEntry.voted) {
+        const allVoteBtns = card.querySelectorAll('.vote-row button');
+        const percentagesBlock = card.querySelector('.trend-percentages');
+        
+        // Temizle
+        allVoteBtns.forEach(btn => btn.classList.remove('selected-vote'));
+        
+        if (isLoggedIn && dbEntry.voted) {
           const option = dbEntry.selectedOption;
           if (option) {
-            const allVoteBtns = card.querySelectorAll('.vote-row button');
             allVoteBtns.forEach(btn => {
               let btnOpt = "";
               if (btn.classList.contains('vote-good')) btnOpt = "good";
@@ -2531,42 +2655,47 @@
 
           // Grafik yüzdelerini güncelle ve aktif et
           updatePercentagesUI(card, dbEntry.votes, dbEntry.totalVotes);
-          const percentagesBlock = card.querySelector('.trend-percentages');
           if (percentagesBlock) {
             percentagesBlock.classList.add('active');
           }
-
-          // Topluluk eğilimi metinlerini güncelle
-          let maxVotes = -1;
-          let leadingOption = "";
-          for (let key in dbEntry.votes) {
-            if (dbEntry.votes[key] > maxVotes) {
-              maxVotes = dbEntry.votes[key];
-              leadingOption = key;
-            }
-          }
-
-          const trendStrong = card.querySelector('.community-trend strong');
-          const trendSmall = card.querySelector('.community-trend small');
-          if (trendStrong) {
-            trendStrong.textContent = optionNames[leadingOption] || "Henüz oy yok";
-          }
-          if (trendSmall) {
-            trendSmall.textContent = `${dbEntry.totalVotes} oy içinden öne çıkıyor`;
-          }
-
-          // Aksiyon butonlarındaki toplam oy sayısını güncelle
-          const voteCountBtn = card.querySelector('.vote-count-btn .count-text');
-          if (voteCountBtn) {
-            voteCountBtn.textContent = dbEntry.totalVotes;
+        } else {
+          if (percentagesBlock) {
+            percentagesBlock.classList.remove('active');
           }
         }
 
+        // Topluluk eğilimi metinlerini güncelle (Her zaman veritabanına göre gösterilir)
+        let maxVotes = -1;
+        let leadingOption = "";
+        for (let key in dbEntry.votes) {
+          if (dbEntry.votes[key] > maxVotes) {
+            maxVotes = dbEntry.votes[key];
+            leadingOption = key;
+          }
+        }
+
+        const trendStrong = card.querySelector('.community-trend strong');
+        const trendSmall = card.querySelector('.community-trend small');
+        if (trendStrong) {
+          trendStrong.textContent = optionNames[leadingOption] || "Henüz oy yok";
+        }
+        if (trendSmall) {
+          trendSmall.textContent = `${dbEntry.totalVotes} oy içinden öne çıkıyor`;
+        }
+
+        // Aksiyon butonlarındaki toplam oy sayısını güncelle
+        const voteCountBtn = card.querySelector('.vote-count-btn .count-text');
+        if (voteCountBtn) {
+          voteCountBtn.textContent = dbEntry.totalVotes;
+        }
+
         // Beğeni durumunu geri yükle
-        if (dbEntry.liked) {
-          const likeBtn = card.querySelector('.action-btn.like-btn');
-          if (likeBtn) {
+        const likeBtn = card.querySelector('.action-btn.like-btn');
+        if (likeBtn) {
+          if (isLoggedIn && dbEntry.liked) {
             likeBtn.classList.add('liked');
+          } else {
+            likeBtn.classList.remove('liked');
           }
         }
         const likeCountText = card.querySelector('.like-btn .count-text');
@@ -2633,6 +2762,10 @@
       // Restorasyon işlemini başlat
       try {
         restoreSavedState();
+        initStaticPostsTimestamps();
+        updateRelativeTimes();
+        updateLoginUI();
+        setInterval(updateRelativeTimes, 10000);
       } catch (err) {
         console.error("Failed to run restoreSavedState:", err);
       }
@@ -3625,10 +3758,11 @@
         const commentId = "c-" + Math.floor(Math.random() * 100000);
         const postId = card.id;
 
+        const isLoggedIn = localStorage.getItem('isLoggedIn') !== 'false';
         const newComment = {
           id: commentId,
-          user: "Erkan Ö.",
-          avatar: "assets/erkan-profile.png",
+          user: isLoggedIn ? "Erkan Ö." : "Misafir",
+          avatar: isLoggedIn ? "assets/erkan-profile.png" : 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%2394a3b8"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>',
           time: "Şimdi",
           text: text,
           owner: true,
@@ -3967,8 +4101,7 @@
           type: type,
           risks: risks,
           reportPrivacyState: reportPrivacyState,
-          questionText: questionText,
-          timeText: "Şimdi"
+          createdAt: Date.now()
         };
         userPosts.push(postData);
         localStorage.setItem('userPosts', JSON.stringify(userPosts));
@@ -4120,38 +4253,22 @@
         if (!recentTopicsCard) return;
 
         const allPosts = [];
-        
-        // 1. Get static posts
-        const staticCards = document.querySelectorAll('.post-card:not([data-owner="true"])');
-        staticCards.forEach(card => {
+        const cards = document.querySelectorAll('.post-card');
+        cards.forEach(card => {
           const id = card.id;
-          const timeVal = parseFloat(card.getAttribute('data-time') || '999');
-
+          const brand = card.getAttribute('data-brand') || (id === 'post-bmw' ? 'BMW' : id === 'post-golf' ? 'Volkswagen' : 'Toyota');
+          const model = card.getAttribute('data-model') || (id === 'post-bmw' ? '520i 1.6 F10' : id === 'post-golf' ? 'Golf 7 1.4 TSI' : 'Corolla 1.6 CVT');
+          const questionText = card.querySelector('.question-box')?.textContent?.trim() || "";
+          const timeText = card.querySelector('.post-time')?.textContent?.trim() || "Şimdi";
+          
           allPosts.push({
             id: id,
-            brand: card.getAttribute('data-brand') || (id === 'post-bmw' ? 'BMW' : id === 'post-golf' ? 'Volkswagen' : 'Toyota'),
-            model: card.getAttribute('data-model') || (id === 'post-bmw' ? '520i 1.6 F10' : id === 'post-golf' ? 'Golf 7 1.4 TSI' : 'Corolla 1.6 CVT'),
-            questionText: card.querySelector('.question-box')?.textContent?.trim() || "",
-            timeText: id === 'post-bmw' ? '2 saat önce' : id === 'post-golf' ? '5 saat önce' : '7 saat önce',
-            timeSortVal: timeVal * 60
+            brand: brand,
+            model: model,
+            questionText: questionText,
+            timeText: timeText
           });
         });
-
-        // 2. Get dynamic user posts
-        if (Array.isArray(userPosts)) {
-          userPosts.forEach((post, idx) => {
-            allPosts.push({
-              id: post.id,
-              brand: post.brand,
-              model: post.model,
-              questionText: post.questionText,
-              timeText: post.timeText || "Şimdi",
-              timeSortVal: -idx - 1
-            });
-          });
-        }
-
-        allPosts.sort((a, b) => a.timeSortVal - b.timeSortVal);
 
         let html = '<h3>Yeni Paylaşılan Konular</h3>';
         if (allPosts.length === 0) {
