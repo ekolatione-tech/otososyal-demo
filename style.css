@@ -5904,6 +5904,8 @@ body {
   font-size: 12.5px;
   line-height: 1.5;
   margin: 0;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .story-card-btn {
