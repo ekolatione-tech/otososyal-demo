@@ -4769,11 +4769,23 @@
         }
         
         // Tüm hikayeleri birleştirelim
+        const pinnedStories = storiesData.filter(s => s.id === 'story-guide' || s.id === 'story-marketing');
+        const exampleStories = storiesData.filter(s => s.id !== 'story-guide' && s.id !== 'story-marketing');
+        
         let allStories = [];
+        
+        // 1. Resmi rehber ve reklam hikayeleri en başta
+        pinnedStories.forEach(s => {
+          allStories.push({ ...s, isUser: false });
+        });
+        
+        // 2. Kullanıcının satın aldığı aktif hikayeler hemen ardından
         activeUserStories.forEach(s => {
           allStories.push({ ...s, isUser: true });
         });
-        storiesData.forEach(s => {
+        
+        // 3. Mock örnek ilanlar en sonda
+        exampleStories.forEach(s => {
           allStories.push({ ...s, isUser: false });
         });
 
@@ -4785,7 +4797,7 @@
           html += `
             <div class="story-circle" data-index="${index}">
               <div class="story-ring ${ringClass}">
-                <img class="story-avatar" src="${story.avatar}" alt="${story.username}" />
+                <img class="story-avatar" src="${story.avatar}" onerror="this.onerror=null; this.src='assets/icon-car-official.jpg';" alt="${story.username}" />
               </div>
               <span class="story-username">${story.modelName}</span>
             </div>
@@ -5713,7 +5725,7 @@
             </div>
             <div class="story-card-body" style="padding: 14px; gap: 8px; text-align: left;">
               <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 2px;">
-                <img id="previewStoryLogo" src="" style="width: 20px; height: 20px; border-radius: 50%; object-fit: contain; background: #fff;" />
+                <img id="previewStoryLogo" src="" onerror="this.onerror=null; this.src='assets/icon-car-official.jpg';" style="width: 20px; height: 20px; border-radius: 50%; object-fit: contain; background: #fff;" />
                 <span style="font-size: 11px; font-weight: 700; color: #fff;" id="previewStoryBrandName">MARKALAN</span>
                 <span class="story-card-badge" style="margin-left: auto; font-size: 8px; padding: 2px 6px; background: #22c55e;">Öne Çıkan İlan</span>
               </div>
@@ -5826,7 +5838,7 @@
       <!-- Story Header -->
       <div class="story-header">
         <div class="story-user-info">
-          <img class="story-user-avatar" id="storyUserAvatar" src="" alt="" />
+          <img class="story-user-avatar" id="storyUserAvatar" src="" onerror="this.onerror=null; this.src='assets/icon-car-official.jpg';" alt="" />
           <div>
             <span class="story-user-name" id="storyUserName"></span>
             <span class="story-time" id="storyTime"></span>
