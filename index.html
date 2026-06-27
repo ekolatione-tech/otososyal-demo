@@ -4829,6 +4829,10 @@
               if (loginModal) loginModal.classList.add('active');
               return;
             }
+            // Sihirbaz formunu ilk adımına sıfırla
+            if (typeof resetStoryWizardForm === 'function') {
+              resetStoryWizardForm();
+            }
             const promoModal = document.getElementById('storyPromoModal');
             if (promoModal) promoModal.classList.add('active');
           });
@@ -5001,62 +5005,295 @@
         }
       }
 
-      // Simüle İlan Satın Alma ve Hikayeye Ekleme
-      function simulateStoryPurchase() {
-        let brand = "Honda";
-        let model = "Civic 1.5 VTEC";
-        let specs = "2018 • 85.000 km • Benzin";
-        let price = "950.000 TL";
-        let desc = "Sahibinden acil satılık hatasız, boyasız Civic. Tüm bakımları yetkili serviste yapılmıştır.";
-        let imageUrl = "https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?w=500&auto=format&fit=crop&q=80";
+      // Global Wizard State
+      let uploadedStoryImageBase64 = "";
+      let activeWizardStep = 1;
+
+      // Wizard adımları arasında geçişi kontrol eden fonksiyon
+      function setWizardStep(step) {
+        activeWizardStep = step;
         
-        if (currentSelectedVehicle) {
-          brand = currentSelectedVehicle.brand;
-          model = currentSelectedVehicle.model;
-          specs = currentSelectedVehicle.specs;
-          price = currentSelectedVehicle.price;
-          desc = "Kullanıcı tarafından öne çıkarılmış test ilanı. Analiz skoru: " + currentSelectedVehicle.score + ".";
-        } else if (userPosts && userPosts.length > 0) {
-          const latest = userPosts[userPosts.length - 1];
-          brand = latest.brand;
-          model = latest.model;
-          specs = latest.specs;
-          price = latest.price;
-          desc = latest.questionText || "Satılık temiz araç.";
-        }
+        // Adımları gizle/göster
+        document.getElementById('storyStep1').style.display = (step === 1) ? 'block' : 'none';
+        document.getElementById('storyStep2').style.display = (step === 2) ? 'block' : 'none';
+        document.getElementById('storyStep3').style.display = (step === 3) ? 'block' : 'none';
 
-        const newStory = {
-          id: "story-user-" + Math.floor(Math.random() * 100000),
-          username: "Sen",
-          modelName: model.split(' ')[0] || brand,
-          avatar: "assets/erkan-profile.png",
-          time: "Şimdi",
-          type: "image",
-          imageUrl: imageUrl,
-          title: brand + " " + model,
-          price: price,
-          meta: specs,
-          desc: desc,
-          link: "https://www.ilaneksper.com/analiz/detay"
-        };
-
-        let userStories = JSON.parse(localStorage.getItem('userPaidStories') || '[]');
-        userStories.push(newStory);
-        localStorage.setItem('userPaidStories', JSON.stringify(userStories));
-
-        renderStoriesBar();
-
-        const promoModal = document.getElementById('storyPromoModal');
-        if (promoModal) promoModal.classList.remove('active');
-
-        showCustomModal(
-          'success', 
-          'Ödeme Başarılı', 
-          'İlanınız başarıyla satın alındı ve Hikaye İlan Vitrini\'ne eklendi! 24 saat boyunca tüm kullanıcılara en üstte gösterilecektir.'
-        );
+        // Step indicator güncelle
+        const stepIndicators = document.querySelectorAll('#storyPromoModal .wizard-step');
+        stepIndicators.forEach(indicator => {
+          const s = parseInt(indicator.getAttribute('data-step'), 10);
+          indicator.classList.remove('active', 'completed');
+          if (s === step) {
+            indicator.classList.add('active');
+          } else if (s < step) {
+            indicator.classList.add('completed');
+          }
+        });
       }
 
-      // Story event dinleyicilerini bağla
+      // Soru/Açıklama karakter sayacı
+      const storyFormDesc = document.getElementById('storyFormDesc');
+      const storyFormDescCounter = document.getElementById('storyFormDescCounter');
+      if (storyFormDesc && storyFormDescCounter) {
+        storyFormDesc.addEventListener('input', () => {
+          const len = storyFormDesc.value.length;
+          storyFormDescCounter.textContent = `${len} / 150`;
+        });
+      }
+
+      // Dosya yükleme ve okuma işlemleri
+      const storyFileUploadBox = document.getElementById('storyFileUploadBox');
+      const storyFormFile = document.getElementById('storyFormFile');
+      const uploadStatusText = document.getElementById('uploadStatusText');
+
+      if (storyFileUploadBox && storyFormFile) {
+        storyFileUploadBox.addEventListener('click', () => {
+          storyFormFile.click();
+        });
+
+        storyFormFile.addEventListener('change', (e) => {
+          const file = e.target.files[0];
+          if (file) {
+            if (!file.type.startsWith('image/')) {
+              showToast("Lütfen geçerli bir görsel dosyası seçin!");
+              return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = (event) => {
+              uploadedStoryImageBase64 = event.target.result;
+              storyFileUploadBox.classList.add('uploaded');
+              uploadStatusText.textContent = file.name.length > 25 ? file.name.substring(0, 25) + '...' : file.name;
+              showToast("Görsel başarıyla yüklendi!");
+            };
+            reader.readAsDataURL(file);
+          }
+        });
+      }
+
+      // Adım 1 -> Adım 2 (Bilgilerden Önizlemeye Geçiş)
+      const storyBtnNext1 = document.getElementById('storyBtnNext1');
+      if (storyBtnNext1) {
+        storyBtnNext1.addEventListener('click', () => {
+          const brand = document.getElementById('storyFormBrand').value;
+          const title = document.getElementById('storyFormTitle').value.trim();
+          const price = document.getElementById('storyFormPrice').value.trim();
+          const meta = document.getElementById('storyFormMeta').value.trim();
+          const desc = document.getElementById('storyFormDesc').value.trim();
+          const phone = document.getElementById('storyFormPhone').value.trim();
+          const link = document.getElementById('storyFormLink').value.trim();
+
+          if (!brand || !title || !price || !meta || !desc || !phone || !link) {
+            showToast("Lütfen tüm alanları doldurun!");
+            return;
+          }
+
+          // Önizleme kartı değerlerini eşitleme
+          document.getElementById('previewStoryTitle').textContent = title;
+          document.getElementById('previewStoryPrice').textContent = price;
+          document.getElementById('previewStoryMeta').textContent = meta;
+          document.getElementById('previewStoryDesc').textContent = desc;
+
+          // Marka Logosunun Çekilmesi (Simple Icons)
+          const brandSlug = brandLogoMap[brand.toLowerCase()] || brand.toLowerCase().replace(/[\s.]+/g, '-');
+          const logoUrl = `https://unpkg.com/simple-icons@v9/icons/${brandSlug}.svg`;
+          document.getElementById('previewStoryLogo').src = logoUrl;
+          document.getElementById('previewStoryBrandName').textContent = brand.toUpperCase();
+
+          // Önizleme Görseli
+          if (uploadedStoryImageBase64) {
+            document.getElementById('previewStoryImg').src = uploadedStoryImageBase64;
+          } else {
+            document.getElementById('previewStoryImg').src = "https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?w=500&auto=format&fit=crop&q=80";
+          }
+
+          setWizardStep(2);
+        });
+      }
+
+      // Adım 2 Buton Olayları (Geri ve İleri)
+      const storyBtnBack2 = document.getElementById('storyBtnBack2');
+      if (storyBtnBack2) {
+        storyBtnBack2.addEventListener('click', () => {
+          setWizardStep(1);
+        });
+      }
+
+      const storyBtnNext2 = document.getElementById('storyBtnNext2');
+      if (storyBtnNext2) {
+        storyBtnNext2.addEventListener('click', () => {
+          setWizardStep(3);
+        });
+      }
+
+      // Adım 3 Buton Olayları (Geri ve Ödeme)
+      const storyBtnBack3 = document.getElementById('storyBtnBack3');
+      if (storyBtnBack3) {
+        storyBtnBack3.addEventListener('click', () => {
+          setWizardStep(2);
+        });
+      }
+
+      // Kredi Kartı Olayları ve Canlı Senkronizasyon
+      const payCardHolder = document.getElementById('payCardHolder');
+      const payCardNumber = document.getElementById('payCardNumber');
+      const payCardExpiry = document.getElementById('payCardExpiry');
+      const payCardCvc = document.getElementById('payCardCvc');
+
+      if (payCardHolder && payCardNumber && payCardExpiry && payCardCvc) {
+        payCardHolder.addEventListener('input', (e) => {
+          const val = e.target.value;
+          document.getElementById('mockCardHolder').textContent = val ? val.toUpperCase() : "AD SOYAD";
+        });
+
+        payCardNumber.addEventListener('input', (e) => {
+          let val = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+          let matches = val.match(/\d{4,16}/g);
+          let match = matches && matches[0] || '';
+          let parts = [];
+
+          for (let i=0, len=match.length; i<len; i+=4) {
+            parts.push(match.substring(i, i+4));
+          }
+
+          if (parts.length > 0) {
+            e.target.value = parts.join(' ');
+          } else {
+            e.target.value = val;
+          }
+
+          document.getElementById('mockCardNumber').textContent = e.target.value ? e.target.value : "•••• •••• •••• ••••";
+        });
+
+        payCardExpiry.addEventListener('input', (e) => {
+          let val = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+          if (val.length >= 2) {
+            e.target.value = val.substring(0, 2) + '/' + val.substring(2, 4);
+          } else {
+            e.target.value = val;
+          }
+          document.getElementById('mockCardExpiry').textContent = e.target.value ? e.target.value : "AA/YY";
+        });
+      }
+
+      // Simüle İlan Satın Alma ve Hikayeye Ekleme
+      function simulateStoryPurchase() {
+        const brand = document.getElementById('storyFormBrand').value;
+        const title = document.getElementById('storyFormTitle').value.trim();
+        const price = document.getElementById('storyFormPrice').value.trim();
+        const meta = document.getElementById('storyFormMeta').value.trim();
+        const desc = document.getElementById('storyFormDesc').value.trim();
+        const link = document.getElementById('storyFormLink').value.trim();
+        
+        // Ödeme Alanı Kontrolü
+        const holder = document.getElementById('payCardHolder').value.trim();
+        const number = document.getElementById('payCardNumber').value.trim();
+        const expiry = document.getElementById('payCardExpiry').value.trim();
+        const cvc = document.getElementById('payCardCvc').value.trim();
+
+        if (!holder || !number || !expiry || !cvc) {
+          showToast("Lütfen kart bilgilerinizi eksiksiz doldurun!");
+          return;
+        }
+
+        // Ödeme Butonuna Spinner Ekleme
+        const btnText = document.getElementById('payBtnText');
+        const spinner = document.getElementById('payBtnSpinner');
+        const payBtn = document.getElementById('storyBtnPay');
+
+        if (btnText && spinner && payBtn) {
+          btnText.textContent = "Ödeniyor...";
+          spinner.style.display = "inline-block";
+          payBtn.disabled = true;
+        }
+
+        setTimeout(() => {
+          // Butonu geri yükleme
+          if (btnText && spinner && payBtn) {
+            btnText.textContent = "Ödemeyi Tamamla";
+            spinner.style.display = "none";
+            payBtn.disabled = false;
+          }
+
+          // Marka Logosunun SVG'si
+          const brandSlug = brandLogoMap[brand.toLowerCase()] || brand.toLowerCase().replace(/[\s.]+/g, '-');
+          const logoUrl = `https://unpkg.com/simple-icons@v9/icons/${brandSlug}.svg`;
+
+          const newStory = {
+            id: "story-user-" + Math.floor(Math.random() * 100000),
+            username: brand, // Profil ismi yerine marka adı
+            modelName: title.split(' ')[0] || brand,
+            avatar: logoUrl, // Profil resmi yerine marka logosu
+            time: "Şimdi",
+            type: "image",
+            imageUrl: uploadedStoryImageBase64 || "https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?w=500&auto=format&fit=crop&q=80",
+            title: title,
+            price: price,
+            meta: meta,
+            desc: desc,
+            link: link
+          };
+
+          let userStories = JSON.parse(localStorage.getItem('userPaidStories') || '[]');
+          userStories.push(newStory);
+          localStorage.setItem('userPaidStories', JSON.stringify(userStories));
+
+          // Vitrini yeniden çiz
+          renderStoriesBar();
+
+          // Formu sıfırla
+          resetStoryWizardForm();
+
+          // Modalı kapat
+          const promoModal = document.getElementById('storyPromoModal');
+          if (promoModal) promoModal.classList.remove('active');
+
+          showCustomModal(
+            'success', 
+            'İlan Vitrinde!', 
+            'Ödemeniz başarıyla alındı. Aracınız 24 saat boyunca hikaye ilan vitrininde markanızın logosuyla öne çıkarılacaktır!'
+          );
+        }, 2000); // 2 saniye ödeme simülasyonu
+      }
+
+      // Formu ilk haline getiren temizleme fonksiyonu
+      function resetStoryWizardForm() {
+        setWizardStep(1);
+        
+        // Alanları temizleme
+        document.getElementById('storyFormBrand').value = "";
+        document.getElementById('storyFormTitle').value = "";
+        document.getElementById('storyFormPrice').value = "";
+        document.getElementById('storyFormMeta').value = "";
+        document.getElementById('storyFormDesc').value = "";
+        document.getElementById('storyFormPhone').value = "";
+        document.getElementById('storyFormLink').value = "";
+        
+        const counter = document.getElementById('storyFormDescCounter');
+        if (counter) counter.textContent = "0 / 150";
+
+        const fileInput = document.getElementById('storyFormFile');
+        if (fileInput) fileInput.value = "";
+        uploadedStoryImageBase64 = "";
+        
+        const uploadBox = document.getElementById('storyFileUploadBox');
+        if (uploadBox) uploadBox.classList.remove('uploaded');
+        
+        const uploadTxt = document.getElementById('uploadStatusText');
+        if (uploadTxt) uploadTxt.textContent = "Ekran Görüntüsü Seçin";
+
+        // Ödeme alanları temizleme
+        document.getElementById('payCardHolder').value = "";
+        document.getElementById('payCardNumber').value = "";
+        document.getElementById('payCardExpiry').value = "";
+        document.getElementById('payCardCvc').value = "";
+        
+        document.getElementById('mockCardHolder').textContent = "AD SOYAD";
+        document.getElementById('mockCardNumber').textContent = "•••• •••• •••• ••••";
+        document.getElementById('mockCardExpiry').textContent = "AA/YY";
+      }
+
+      // Story Close
       const closeViewerBtn = document.getElementById('storyCloseBtn');
       if (closeViewerBtn) {
         closeViewerBtn.addEventListener('click', (e) => {
@@ -5081,7 +5318,7 @@
         });
       }
 
-      // Klavye kontrolleri
+      // Klavye yön tuşları
       document.addEventListener('keydown', (e) => {
         const modal = document.getElementById('storyViewerModal');
         if (modal && modal.style.display === 'flex') {
@@ -5096,12 +5333,14 @@
       });
 
       // Promosyon modal kapatma olayları
-      const promoCancel = document.getElementById('storyPromoCancelBtn');
       const promoModal = document.getElementById('storyPromoModal');
-      if (promoCancel && promoModal) {
-        promoCancel.addEventListener('click', () => {
-          promoModal.classList.remove('active');
-        });
+      const promoCancel = document.getElementById('storyPromoCancelBtn');
+      if (promoModal) {
+        if (promoCancel) {
+          promoCancel.addEventListener('click', () => {
+            promoModal.classList.remove('active');
+          });
+        }
         promoModal.addEventListener('click', (e) => {
           if (e.target === promoModal) {
             promoModal.classList.remove('active');
@@ -5109,10 +5348,10 @@
         });
       }
 
-      // Promosyon modal ödeme olayı
-      const promoPay = document.getElementById('storyPromoPayBtn');
-      if (promoPay) {
-        promoPay.addEventListener('click', () => {
+      // Ödeme tamamlama eylemi
+      const btnPaySubmit = document.getElementById('storyBtnPay');
+      if (btnPaySubmit) {
+        btnPaySubmit.addEventListener('click', () => {
           simulateStoryPurchase();
         });
       }
@@ -5177,30 +5416,183 @@
     </div>
   </div>
 
-  <!-- Story İlan Vitrini Promosyon Modalı -->
+  <!-- Story İlan Vitrini Promosyon Modalı (Sihirbaz Akışı) -->
   <div class="custom-modal-overlay" id="storyPromoModal">
-    <div class="custom-modal-content" style="max-width: 440px;">
-      <div class="modal-icon-container warning" style="background: rgba(37, 99, 235, 0.1); color: var(--blue);">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" style="width: 28px; height: 28px;">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
-        </svg>
+    <div class="custom-modal-content" style="max-width: 440px; padding: 24px 20px;">
+      
+      <!-- Step Indicator -->
+      <div class="story-wizard-steps">
+        <div class="wizard-step active" data-step="1">1<span>Bilgiler</span></div>
+        <div class="wizard-step" data-step="2">2<span>Önizleme</span></div>
+        <div class="wizard-step" data-step="3">3<span>Ödeme</span></div>
       </div>
-      <h3 class="modal-title" style="margin-top: 16px;">İlanını Hikayelerde Öne Çıkar!</h3>
-      <p class="modal-message" style="font-size: 13px; color: var(--muted); margin-bottom: 20px; line-height: 1.5; text-align: left;">
-        Aracının ilan detaylarını ve görsellerini Hikaye İlan Vitrini'nde paylaşarak 24 saat boyunca akışın en üstünde sergileyebilir, binlerce alıcıya anında ulaştırabilirsin.<br/><br/>
-        <strong>🔥 Vitrin Avantajları:</strong><br/>
-        • En üst sırada sabit görünüm<br/>
-        • Doğrudan ilana yönlendiren "İlanı Gör" butonu<br/>
-        • Klasik akış ilanlarına göre 5 kat daha yüksek erişim
-      </p>
-      <div style="background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 12px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center;">
-        <span style="font-size: 13px; font-weight: 500; color: var(--text);">Gösterim Süresi: 1 Gün</span>
-        <span style="font-size: 16px; font-weight: 700; color: var(--blue);">149 TL</span>
+
+      <!-- Step 1: İlan Bilgileri (Giriş Formu) -->
+      <div class="story-wizard-content" id="storyStep1">
+        <h3 class="modal-title" style="margin-top: 0; margin-bottom: 16px; font-size: 16px; text-align: left;">İlan Detaylarını Girin</h3>
+        
+        <div class="form-group">
+          <label>Marka Seçimi</label>
+          <select id="storyFormBrand" required>
+            <option value="" disabled selected>Marka Seçin</option>
+            <option value="BMW">BMW</option>
+            <option value="Mercedes-Benz">Mercedes-Benz</option>
+            <option value="Audi">Audi</option>
+            <option value="Volkswagen">Volkswagen</option>
+            <option value="Toyota">Toyota</option>
+            <option value="Honda">Honda</option>
+            <option value="Peugeot">Peugeot</option>
+            <option value="Ford">Ford</option>
+            <option value="Renault">Renault</option>
+            <option value="Fiat">Fiat</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>İlan Başlığı</label>
+          <input type="text" id="storyFormTitle" placeholder="Örn: BMW 3 Serisi 320i M Sport" required />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Fiyat</label>
+            <input type="text" id="storyFormPrice" placeholder="Örn: 1.450.000 TL" required />
+          </div>
+          <div class="form-group">
+            <label>Yıl/KM/Yakıt</label>
+            <input type="text" id="storyFormMeta" placeholder="Örn: 2018 • 85.000 km • Benzin" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Açıklama (Maks. 150 Karakter)</label>
+          <textarea id="storyFormDesc" maxlength="150" placeholder="İlanınız hakkında kısa bir açıklama yazın..." required style="height: 60px; resize: none;"></textarea>
+          <div class="char-counter" id="storyFormDescCounter" style="text-align: right; font-size: 11px; color: var(--muted); margin-top: 4px;">0 / 150</div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Telefon Numarası</label>
+            <input type="tel" id="storyFormPhone" placeholder="Örn: 0555 123 4567" required />
+          </div>
+          <div class="form-group">
+            <label>İlan Linki</label>
+            <input type="url" id="storyFormLink" placeholder="Örn: https://sahibinden.com/ilan..." required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>İlan Görseli Yükle</label>
+          <div class="file-upload-wrapper">
+            <input type="file" id="storyFormFile" accept="image/*" style="display: none;" />
+            <div class="file-upload-box" id="storyFileUploadBox">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color: var(--muted); margin-bottom: 6px;">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+              </svg>
+              <span id="uploadStatusText" style="font-size: 12px; color: var(--muted); font-weight: 500;">Ekran Görüntüsü Seçin</span>
+            </div>
+          </div>
+        </div>
+        <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 20px;">
+          <button class="custom-modal-btn cancel-btn" id="storyPromoCancelBtn" style="margin: 0; background: transparent; color: var(--muted); border: 1px solid var(--border);">Vazgeç</button>
+          <button class="custom-modal-btn" id="storyBtnNext1" style="margin: 0; background: var(--blue); color: white;">İleri (Önizleme)</button>
+        </div>
       </div>
-      <div style="display: flex; gap: 12px; justify-content: flex-end;">
-        <button class="custom-modal-btn cancel-btn" id="storyPromoCancelBtn" style="background: transparent; color: var(--muted); border: 1px solid var(--border); margin: 0;">Vazgeç</button>
-        <button class="custom-modal-btn" id="storyPromoPayBtn" style="margin: 0; background: var(--blue); color: white;">Ödemeye Git</button>
+
+      <!-- Step 2: İlan Önizleme (Preview Area) -->
+      <div class="story-wizard-content" id="storyStep2" style="display: none;">
+        <h3 class="modal-title" style="margin-top: 0; margin-bottom: 12px; font-size: 16px; text-align: left;">İlan Önizleme</h3>
+        <p style="font-size: 11px; color: var(--muted); margin-top: 0; margin-bottom: 16px; text-align: left; line-height: 1.4;">
+          İlanınız hikaye vitrininde bu şekilde görünecektir. Marka logosu profil resminiz yerine dairede ve başlıkta kullanılacaktır.
+        </p>
+        
+        <!-- Mini Story Mockup Container -->
+        <div class="story-preview-mockup-wrapper" style="display: flex; justify-content: center; margin-bottom: 20px;">
+          <div class="story-card" style="width: 100%; max-width: 270px; transform: scale(1); animation: none; background: #1c1c1e; box-shadow: 0 10px 25px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08);">
+            <div class="story-card-img-wrapper" style="padding-bottom: 65%;">
+              <img class="story-card-img" id="previewStoryImg" src="https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?w=500&auto=format&fit=crop&q=80" alt="Önizleme" />
+            </div>
+            <div class="story-card-body" style="padding: 14px; gap: 8px; text-align: left;">
+              <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 2px;">
+                <img id="previewStoryLogo" src="" style="width: 20px; height: 20px; border-radius: 50%; object-fit: contain; background: #fff;" />
+                <span style="font-size: 11px; font-weight: 700; color: #fff;" id="previewStoryBrandName">MARKALAN</span>
+                <span class="story-card-badge" style="margin-left: auto; font-size: 8px; padding: 2px 6px; background: #22c55e;">Öne Çıkan İlan</span>
+              </div>
+              <h4 class="story-card-title" id="previewStoryTitle" style="font-size: 13.5px; font-weight: 700; color: #fff; margin: 0; line-height: 1.3;">BMW 3 Serisi 320i</h4>
+              <p class="story-card-price" id="previewStoryPrice" style="font-size: 17px; font-weight: 800; color: #3b82f6; margin: 0;">1.450.000 TL</p>
+              <div class="story-card-meta" style="font-size: 10px; color: rgba(255,255,255,0.6); display: flex; gap: 12px; margin: -2px 0;">
+                <span id="previewStoryMeta">2018 • 85.000 km • Benzin</span>
+              </div>
+              <p class="story-card-desc" id="previewStoryDesc" style="font-size: 11px; color: rgba(255,255,255,0.8); line-height: 1.4; margin: 0; word-break: break-word;">Açıklama alanı.</p>
+              <a href="#" class="story-card-btn" style="margin-top: 4px; padding: 8px; font-size: 11.5px; pointer-events: none; text-align: center; display: block; border-radius: 6px;">İlanı Gör</a>
+            </div>
+          </div>
+        </div>
+        
+        <div style="display: flex; gap: 12px; justify-content: flex-end;">
+          <button class="custom-modal-btn cancel-btn" id="storyBtnBack2" style="margin: 0; background: transparent; color: var(--muted); border: 1px solid var(--border);">Geri</button>
+          <button class="custom-modal-btn" id="storyBtnNext2" style="margin: 0; background: var(--blue); color: white;">Ödemeye Git</button>
+        </div>
       </div>
+
+      <!-- Step 3: Ödeme Sayfası (Payment) -->
+      <div class="story-wizard-content" id="storyStep3" style="display: none;">
+        <h3 class="modal-title" style="margin-top: 0; margin-bottom: 16px; font-size: 16px; text-align: left;">Güvenli Ödeme</h3>
+
+        <!-- Credit Card Mockup -->
+        <div class="payment-card-mockup" style="background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%); color: white; border-radius: 12px; padding: 18px 20px; margin-bottom: 20px; box-shadow: 0 8px 16px rgba(30,58,138,0.2); position: relative; overflow: hidden; height: 140px; display: flex; flex-direction: column; justify-content: space-between; box-sizing: border-box;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 11px; font-weight: 600; letter-spacing: 1px; opacity: 0.8;">İlanEksper Premium</span>
+            <div style="display: flex; align-items: center; gap: 4px;">
+              <circle cx="8" cy="8" r="8" fill="#EB001B" style="opacity: 0.8; width: 14px; height: 14px; background:#EB001B; border-radius:50%; display:inline-block;"></circle>
+              <circle cx="8" cy="8" r="8" fill="#F79E1B" style="opacity: 0.8; width: 14px; height: 14px; background:#F79E1B; border-radius:50%; display:inline-block; margin-left:-6px;"></circle>
+            </div>
+          </div>
+          <div style="font-size: 16px; font-weight: 700; letter-spacing: 2px; text-shadow: 0 1px 2px rgba(0,0,0,0.3); text-align: left;" id="mockCardNumber">•••• •••• •••• ••••</div>
+          <div style="display: flex; justify-content: space-between; align-items: flex-end; text-align: left;">
+            <div>
+              <span style="font-size: 7px; text-transform: uppercase; opacity: 0.6; display: block; margin-bottom: 1px;">Kart Sahibi</span>
+              <span style="font-size: 10px; font-weight: 600; text-transform: uppercase; display: block; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" id="mockCardHolder">AD SOYAD</span>
+            </div>
+            <div style="text-align: right;">
+              <span style="font-size: 7px; text-transform: uppercase; opacity: 0.6; display: block; margin-bottom: 1px;">Geçerlilik</span>
+              <span style="font-size: 10px; font-weight: 600;" id="mockCardExpiry">AA/YY</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Credit Card Fields -->
+        <div style="display: flex; flex-direction: column; gap: 12px; text-align: left; margin-bottom: 20px;">
+          <div class="form-group">
+            <label style="font-size: 11px; font-weight: 600; color: var(--muted); margin-bottom: 4px; display: block;">Kart Sahibi</label>
+            <input type="text" id="payCardHolder" placeholder="Kartın Üzerindeki İsim" required />
+          </div>
+          <div class="form-group">
+            <label style="font-size: 11px; font-weight: 600; color: var(--muted); margin-bottom: 4px; display: block;">Kart Numarası</label>
+            <input type="text" id="payCardNumber" placeholder="0000 0000 0000 0000" maxlength="19" required />
+          </div>
+          <div style="display: flex; gap: 12px;">
+            <div class="form-group" style="flex: 1.2;">
+              <label style="font-size: 11px; font-weight: 600; color: var(--muted); margin-bottom: 4px; display: block;">Son Kullanma</label>
+              <input type="text" id="payCardExpiry" placeholder="AA/YY" maxlength="5" required style="text-align: center;" />
+            </div>
+            <div class="form-group" style="flex: 0.8;">
+              <label style="font-size: 11px; font-weight: 600; color: var(--muted); margin-bottom: 4px; display: block;">CVC</label>
+              <input type="text" id="payCardCvc" placeholder="000" maxlength="3" required style="text-align: center;" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Summary Box -->
+        <div style="background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 12px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 12px; font-weight: 500; color: var(--text);">Vitrin Süresi: 1 Gün (149 TL)</span>
+          <span style="font-size: 15px; font-weight: 700; color: var(--blue);">149 TL</span>
+        </div>
+
+        <div style="display: flex; gap: 12px; justify-content: flex-end;">
+          <button class="custom-modal-btn cancel-btn" id="storyBtnBack3" style="margin: 0; background: transparent; color: var(--muted); border: 1px solid var(--border);">Geri</button>
+          <button class="custom-modal-btn" id="storyBtnPay" style="margin: 0; background: var(--blue); color: white; display: flex; align-items: center; gap: 8px; justify-content: center; min-width: 140px;">
+            <span id="payBtnText">Ödemeyi Tamamla</span>
+            <div class="spinner" id="payBtnSpinner" style="display: none; border: 2.5px solid rgba(255,255,255,0.3); border-top: 2.5px solid white; border-radius: 50%; width: 14px; height: 14px; animation: spin 0.8s linear infinite;"></div>
+          </button>
+        </div>
+      </div>
+
     </div>
   </div>
 

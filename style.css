@@ -5926,6 +5926,142 @@ body {
   transform: translateY(-1px);
 }
 
+/* ==========================================================================
+   STORY WIZARD SYSTEM STİLLERİ
+   ========================================================================== */
+.story-wizard-steps {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  margin-bottom: 28px;
+  padding: 0 10px;
+}
+.story-wizard-steps::before {
+  content: '';
+  position: absolute;
+  top: 14px;
+  left: 30px;
+  right: 30px;
+  height: 2px;
+  background: var(--soft-border);
+  z-index: 1;
+}
+.wizard-step {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 2px solid var(--soft-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+  position: relative;
+  z-index: 2;
+  transition: all 0.3s ease;
+}
+.wizard-step span {
+  position: absolute;
+  top: 34px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--muted);
+  transition: all 0.3s ease;
+}
+.wizard-step.active {
+  border-color: var(--blue);
+  background: var(--blue);
+  color: white;
+}
+.wizard-step.active span {
+  color: var(--blue);
+  font-weight: 600;
+}
+.wizard-step.completed {
+  border-color: var(--blue);
+  background: var(--bg);
+  color: var(--blue);
+}
+.wizard-step.completed span {
+  color: var(--text);
+}
+
+/* Wizard Form Elements */
+.story-wizard-content .form-group {
+  margin-bottom: 14px;
+  text-align: left;
+}
+.story-wizard-content label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 5px;
+  display: block;
+  text-align: left;
+}
+.story-wizard-content input[type="text"],
+.story-wizard-content input[type="tel"],
+.story-wizard-content input[type="url"],
+.story-wizard-content select,
+.story-wizard-content textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 13px;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+.story-wizard-content input:focus,
+.story-wizard-content select:focus,
+.story-wizard-content textarea:focus {
+  border-color: var(--blue);
+  outline: none;
+}
+.story-wizard-content .form-row {
+  display: flex;
+  gap: 12px;
+}
+.story-wizard-content .form-row .form-group {
+  flex: 1;
+}
+
+/* File Upload Area styling */
+.file-upload-box {
+  border: 2px dashed var(--soft-border);
+  border-radius: 10px;
+  padding: 16px;
+  text-align: center;
+  cursor: pointer;
+  background: var(--bg);
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.file-upload-box:hover {
+  border-color: var(--blue);
+  background: rgba(37, 99, 235, 0.03);
+}
+.file-upload-box.uploaded {
+  border-style: solid;
+  border-color: #22c55e;
+  background: rgba(34, 197, 94, 0.02);
+}
+
+/* Spinner and Spin Keyframes */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 
 
 
