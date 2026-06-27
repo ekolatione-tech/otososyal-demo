@@ -5536,8 +5536,9 @@ body {
    ========================================================================== */
 .stories-bar {
   display: flex;
-  gap: 16px;
-  padding: 16px 8px;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 12px 10px;
   overflow-x: auto;
   scrollbar-width: none; /* Firefox */
   background: var(--card);
@@ -5549,12 +5550,22 @@ body {
   display: none; /* Chrome, Safari, Opera */
 }
 
+/* Desktop layout constraint to fit exactly 11 circles (1 add button + 10 sample stories) */
+@media (min-width: 980px) {
+  .stories-bar {
+    justify-content: space-between;
+    overflow-x: hidden; /* Prevent scroll on desktop */
+  }
+}
+
 .story-circle {
   display: flex;
   flex-direction: column;
   align-items: center;
   cursor: pointer;
-  min-width: 72px;
+  flex: 1;
+  min-width: 50px;
+  max-width: 68px;
   text-align: center;
   transition: transform 0.2s ease;
   user-select: none;
@@ -5564,8 +5575,8 @@ body {
 }
 
 .story-ring {
-  width: 60px;
-  height: 60px;
+  width: 46px;
+  height: 46px;
   border-radius: 50%;
   display: flex;
   align-items: center;
