@@ -4751,11 +4751,26 @@
         `;
 
         // Kullanıcının kendi eklediği (satın aldığı) hikayeler
-        const userStories = JSON.parse(localStorage.getItem('userPaidStories') || '[]');
+        const now = Date.now();
+        const rawUserStories = JSON.parse(localStorage.getItem('userPaidStories') || '[]');
+        
+        // 24 saatlik süre aşımı kontrolü (son kullanma tarihi)
+        const activeUserStories = rawUserStories.filter(s => {
+          if (!s.createdAt) {
+            s.createdAt = now; // Eğer eski bir kayıt ise şimdi oluşturulmuş say
+          }
+          const ageMs = now - s.createdAt;
+          return ageMs < 24 * 60 * 60 * 1000; // 24 saatten küçükse aktif kalır
+        });
+
+        // Eğer silinen süre aşımı ilan varsa localStorage güncelle
+        if (activeUserStories.length !== rawUserStories.length) {
+          localStorage.setItem('userPaidStories', JSON.stringify(activeUserStories));
+        }
         
         // Tüm hikayeleri birleştirelim
         let allStories = [];
-        userStories.forEach(s => {
+        activeUserStories.forEach(s => {
           allStories.push({ ...s, isUser: true });
         });
         storiesData.forEach(s => {
@@ -4830,6 +4845,21 @@
         currentStoryIndex = index;
         const story = activeStoriesList[index];
 
+        // Eğer kullanıcı hikayesiyse, görüntülenme istatistiğini artır
+        if (story.isUser) {
+          let userStories = JSON.parse(localStorage.getItem('userPaidStories') || '[]');
+          const uStoryIndex = userStories.findIndex(s => s.id === story.id);
+          if (uStoryIndex !== -1) {
+            if (!userStories[uStoryIndex].stats) {
+              userStories[uStoryIndex].stats = { views: 0, clicks: 0 };
+            }
+            userStories[uStoryIndex].stats.views += 1;
+            localStorage.setItem('userPaidStories', JSON.stringify(userStories));
+            // Bellekteki nesneyi de güncelle
+            story.stats = userStories[uStoryIndex].stats;
+          }
+        }
+
         // İzlenen hikayeyi veri tabanına kaydet (Halkasını grileştir)
         if (!viewedStoriesDb.includes(story.id)) {
           viewedStoriesDb.push(story.id);
@@ -4887,6 +4917,27 @@
                 </div>
 
                 <p class="story-card-desc">${escapeHTML(story.desc)}</p>
+
+                <!-- İstatistikler Paneli (Sadece reklam sahibi kullanıcı için) -->
+                ${story.isUser ? `
+                  <div class="story-stats-section" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 10px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 6px; font-size: 11px; text-align: left; font-family: inherit;">
+                    <div style="font-weight: 700; color: #a1a1aa; text-transform: uppercase; font-size: 9px; letter-spacing: 0.5px; display: flex; align-items: center; gap: 4px;">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 20V10M18 20V4M6 20v-4"/></svg>
+                      Hikaye İstatistikleri (Sadece Siz)
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; color: #fff;">
+                      <span style="display: flex; align-items: center; gap: 4px;">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                        <strong>${story.stats?.views || 0}</strong> Görülme
+                      </span>
+                      <span style="display: flex; align-items: center; gap: 4px;">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                        <strong>${story.stats?.clicks || 0}</strong> Buton Tıklaması
+                      </span>
+                    </div>
+                  </div>
+                ` : ''}
+
                 <a href="${story.link}" target="_blank" class="story-card-btn" id="storyActionBtn">İlanı Gör</a>
               </div>
             </div>
@@ -4917,6 +4968,22 @@
         if (btn) {
           btn.addEventListener('click', (e) => {
             e.stopPropagation();
+
+            // Eğer kullanıcı hikayesiyse, buton tıklama istatistiğini artır
+            if (story.isUser) {
+              let userStories = JSON.parse(localStorage.getItem('userPaidStories') || '[]');
+              const uStoryIndex = userStories.findIndex(s => s.id === story.id);
+              if (uStoryIndex !== -1) {
+                if (!userStories[uStoryIndex].stats) {
+                  userStories[uStoryIndex].stats = { views: 0, clicks: 0 };
+                }
+                userStories[uStoryIndex].stats.clicks += 1;
+                localStorage.setItem('userPaidStories', JSON.stringify(userStories));
+                // Bellekteki nesneyi de güncelle
+                story.stats = userStories[uStoryIndex].stats;
+              }
+            }
+
             if (story.action === "open_wizard") {
               e.preventDefault();
               closeStoryViewer();
@@ -5262,10 +5329,12 @@
         const btnText = document.getElementById('payBtnText');
         const spinner = document.getElementById('payBtnSpinner');
         const payBtn = document.getElementById('storyBtnPay');
+        const payIcon = document.getElementById('payBtnIcon');
 
         if (btnText && spinner && payBtn) {
           btnText.textContent = "Ödeniyor...";
           spinner.style.display = "inline-block";
+          if (payIcon) payIcon.style.display = "none";
           payBtn.disabled = true;
         }
 
@@ -5274,6 +5343,7 @@
           if (btnText && spinner && payBtn) {
             btnText.textContent = "Ödemeyi Tamamla";
             spinner.style.display = "none";
+            if (payIcon) payIcon.style.display = "inline-block";
             payBtn.disabled = false;
           }
 
@@ -5302,7 +5372,9 @@
             tramer: tramer,
             phone: phone,
             desc: desc,
-            link: link
+            link: link,
+            createdAt: Date.now(),
+            stats: { views: 0, clicks: 0 }
           };
 
           let userStories = JSON.parse(localStorage.getItem('userPaidStories') || '[]');
@@ -5657,9 +5729,15 @@
           </div>
         </div>
         
-        <div style="display: flex; gap: 12px; justify-content: flex-end;">
-          <button class="custom-modal-btn cancel-btn" id="storyBtnBack2" style="margin: 0; background: transparent; color: var(--muted); border: 1px solid var(--border);">Geri</button>
-          <button class="custom-modal-btn" id="storyBtnNext2" style="margin: 0; background: var(--blue); color: white;">Ödemeye Git</button>
+        <div style="display: flex; gap: 12px; margin-top: 24px; width: 100%; box-sizing: border-box;">
+          <button class="custom-modal-btn cancel-btn" id="storyBtnBack2" style="flex: 1; margin: 0; padding: 12px; font-size: 13px; font-weight: 600; background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 8px; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; transition: all 0.2s;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+            Geri
+          </button>
+          <button class="custom-modal-btn" id="storyBtnNext2" style="flex: 1.5; margin: 0; padding: 12px; font-size: 13px; font-weight: 600; background: var(--blue); color: white; border: none; border-radius: 8px; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; transition: all 0.2s;">
+            Ödemeye Git
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </button>
         </div>
       </div>
 
@@ -5717,11 +5795,15 @@
           <span style="font-size: 15px; font-weight: 700; color: var(--blue);">149 TL</span>
         </div>
 
-        <div style="display: flex; gap: 12px; justify-content: flex-end;">
-          <button class="custom-modal-btn cancel-btn" id="storyBtnBack3" style="margin: 0; background: transparent; color: var(--muted); border: 1px solid var(--border);">Geri</button>
-          <button class="custom-modal-btn" id="storyBtnPay" style="margin: 0; background: var(--blue); color: white; display: flex; align-items: center; gap: 8px; justify-content: center; min-width: 140px;">
+        <div style="display: flex; gap: 12px; margin-top: 24px; width: 100%; box-sizing: border-box;">
+          <button class="custom-modal-btn cancel-btn" id="storyBtnBack3" style="flex: 1; margin: 0; padding: 12px; font-size: 13px; font-weight: 600; background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 8px; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; transition: all 0.2s;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+            Geri
+          </button>
+          <button class="custom-modal-btn" id="storyBtnPay" style="flex: 1.5; margin: 0; padding: 12px; font-size: 13px; font-weight: 600; background: var(--blue); color: white; border: none; border-radius: 8px; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; transition: all 0.2s;">
             <span id="payBtnText">Ödemeyi Tamamla</span>
             <div class="spinner" id="payBtnSpinner" style="display: none; border: 2.5px solid rgba(255,255,255,0.3); border-top: 2.5px solid white; border-radius: 50%; width: 14px; height: 14px; animation: spin 0.8s linear infinite;"></div>
+            <svg id="payBtnIcon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
           </button>
         </div>
       </div>
