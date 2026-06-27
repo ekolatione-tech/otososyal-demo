@@ -4636,9 +4636,8 @@
           modelName: "Rehber",
           avatar: "assets/ilaneksper-logo.jpg",
           time: "Şimdi",
-          type: "text",
-          bgGrad: "blue-grad",
-          desc: "📢 OtoStory Vitrin Rehberi\n\nİlanEksper güvencesiyle aracınızı vitrinin en tepesine taşıyın, satışınızı hızlandırın!\n\n🛠️ Nasıl OtoStory Paylaşılır?\n\n1️⃣ Sol baştaki '+ İlan Öne Çıkar' çemberine tıklayın.\n2️⃣ Aracınızın fiyat, yıl, km, vites, tramer gibi detaylarını ve vitrin görselini girin.\n3️⃣ Önizleme adımında ilan kartınızın canlı görünümünü kontrol edin.\n4️⃣ Güvenli ödeme adımını tamamlayın.\n\n✨ İlanınız 24 saat boyunca en üst vitrinde markanızın kurumsal logosuyla sergilenir.",
+          type: "full-image",
+          imageUrl: "assets/otostory-guide.png",
           action: "open_wizard",
           link: "#"
         },
@@ -4648,27 +4647,10 @@
           modelName: "Reklam",
           avatar: "https://unpkg.com/simple-icons@v9/icons/sparkfun.svg",
           time: "Şimdi",
-          type: "text",
-          bgGrad: "orange-grad",
-          desc: "🚀 İlanınızı OtoStory ile Öne Çıkarın!\n\nAracınızı binlerce potansiyel alıcıyla buluşturmanın en etkili yolu:\n\n🔥 24 Saat Sabit Konum: Akışın en üstünde, tüm kullanıcıların ilk gördüğü alanda sabitlenirsiniz.\n📈 5 Kat Daha Fazla Erişim: Klasik ilanlara göre 5 kat daha fazla görüntülenme elde edersiniz.\n🏢 Kurumsal Görünüm: Profil resmi yerine doğrudan aracınızın marka logosu sergilenir.\n🔗 Doğrudan Yönlendirme: 'İlanı Gör' butonu sayesinde alıcılar doğrudan ilan detay sayfanıza ulaşır.",
+          type: "full-image",
+          imageUrl: "assets/otostory-marketing.png",
           action: "open_wizard",
           link: "#"
-        },
-        {
-          id: "story-kia",
-          username: "Kia",
-          modelName: "Kia Stonic",
-          avatar: "https://unpkg.com/simple-icons@v9/icons/kia.svg",
-          time: "20 dk önce",
-          type: "image",
-          imageUrl: "https://upload.wikimedia.org/wikipedia/commons/4/4c/Kia_Stonic_1.4_LX_2023.jpg",
-          title: "Kia Stonic 1.4 MPI Elegance",
-          price: "1.300.000 TL",
-          meta: "2020 • 93.000 km • Benzin • Otomatik",
-          tramer: "Hasarsız",
-          phone: "0555 333 1122",
-          desc: "Kazasız, boyasız, hasar kaydı bulunmayan tertemiz Kia Stonic. Tüm periyodik bakımları Kia yetkili servisinde zamanında yapılmıştır. Aile aracı olarak özenle kullanılmıştır.",
-          link: "https://www.ilaneksper.com/ilan/kia-stonic"
         },
         {
           id: "story-volkswagen",
@@ -4999,6 +4981,14 @@
                 <p class="story-card-desc">${escapeHTML(story.desc)}</p>
                 <a href="${story.link}" target="_blank" class="story-card-btn" id="storyActionBtn">İlanı Gör</a>
               </div>
+            </div>
+          `;
+        } else if (story.type === "full-image") {
+          cardHTML = `
+            <div class="story-card full-image-story" style="position: relative; width: 100%; height: auto; max-height: calc(100% - 20px); overflow: hidden; border-radius: 20px; background: #000; border: none; box-shadow: none;">
+              <img class="story-card-img-full" src="${story.imageUrl}" alt="OtoStory Guide" style="width: 100%; height: 100%; object-fit: contain; display: block;" />
+              <!-- Clickable transparent overlay covering the drawn "Hemen Dene" button -->
+              <div id="storyActionBtn" style="position: absolute; bottom: 15px; left: 16px; right: 16px; height: 50px; cursor: pointer; z-index: 10;"></div>
             </div>
           `;
         } else {
