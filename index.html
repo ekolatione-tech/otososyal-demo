@@ -606,6 +606,11 @@
         </div>
       </section>
 
+      <!-- Story İlan Vitrini (Stories Bar) -->
+      <div class="stories-bar" id="storiesBar">
+        <!-- Dynamically rendered in JS -->
+      </div>
+
       <div class="feed-toolbar">
         <details class="sort-menu" id="sortMenuDetails">
           <summary id="sortMenuSummary">En yeni</summary>
@@ -4607,8 +4612,418 @@
         });
       }
 
+      // ==========================================================================
+      // STORY İLAN VİTRİNİ (STORIES SYSTEM) MANTIĞI
+      // ==========================================================================
+
+      // Story ilan vitrini veri modeli
+      let storiesData = [
+        {
+          id: "story-mehmet",
+          username: "Mehmet K.",
+          modelName: "Golf 7",
+          avatar: "assets/mehmet-profile.png",
+          time: "1 saat önce",
+          type: "image",
+          imageUrl: "https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?w=500&auto=format&fit=crop&q=80",
+          title: "Volkswagen Golf 1.4 TSI Allstar",
+          price: "840.000 TL",
+          meta: "2016 • 120.000 km • Benzin",
+          desc: "Sahibinden satılık çok temiz Golf 7. Değişensiz, boyasız, tüm bakımları zamanında ilaneksper güvencesiyle yapılmıştır.",
+          link: "https://www.ilaneksper.com/ilan/volkswagen-golf"
+        },
+        {
+          id: "story-ayse",
+          username: "Ayşe Y.",
+          modelName: "Corolla",
+          avatar: "assets/ayse-profile.png",
+          time: "3 saat önce",
+          type: "image",
+          imageUrl: "https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=500&auto=format&fit=crop&q=80",
+          title: "Toyota Corolla 1.6 Touch CVT",
+          price: "920.000 TL",
+          meta: "2019 • 78.000 km • Benzin",
+          desc: "İlk sahibinden, yetkili servis bakımlı Corolla. İçinde sigara içilmemiştir. Masrafsız, lastikleri yeni.",
+          link: "https://www.ilaneksper.com/ilan/toyota-corolla"
+        },
+        {
+          id: "story-melih",
+          username: "Melih A.",
+          modelName: "BMW 520i",
+          avatar: "assets/melih-profile.png",
+          time: "5 saat önce",
+          type: "image",
+          imageUrl: "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=500&auto=format&fit=crop&q=80",
+          title: "BMW 5 Serisi 520i Executive",
+          price: "1.540.000 TL",
+          meta: "2015 • 178.000 km • Benzin",
+          desc: "LCI Farlar, Vakumlu Kapılar, Hayalet Gösterge. Hatasız, boyasız, tramer kaydı yoktur. Takas düşünülür.",
+          link: "https://www.ilaneksper.com/ilan/bmw-520i"
+        }
+      ];
+
+      // İzlenen hikayelerin veritabanını local storage'dan al veya oluştur
+      let viewedStoriesDb = JSON.parse(localStorage.getItem('viewedStoriesDb') || '[]');
+
+      // Global Story State
+      let activeStoriesList = [];
+      let currentStoryIndex = 0;
+      let storyProgressInterval = null;
+      let storyTimeout = null;
+      const storyDuration = 5000; // 5 saniye
+
+      // Story Bar çemberlerini çizen fonksiyon
+      function renderStoriesBar() {
+        const storiesBar = document.getElementById('storiesBar');
+        if (!storiesBar) return;
+
+        let html = "";
+        
+        // 1. "+ İlan Ver" butonu (Her zaman ilk sırada)
+        html += `
+          <div class="story-circle" id="addStoryBtn">
+            <div class="story-ring add-story">
+              <img class="story-avatar" src="assets/erkan-profile.png" alt="İlan Ver" />
+              <div class="add-plus-badge">+</div>
+            </div>
+            <span class="story-username">İlan Öne Çıkar</span>
+          </div>
+        `;
+
+        // Kullanıcının kendi eklediği (satın aldığı) hikayeler
+        const userStories = JSON.parse(localStorage.getItem('userPaidStories') || '[]');
+        
+        // Tüm hikayeleri birleştirelim
+        let allStories = [];
+        userStories.forEach(s => {
+          allStories.push({ ...s, isUser: true });
+        });
+        storiesData.forEach(s => {
+          allStories.push({ ...s, isUser: false });
+        });
+
+        // Çemberleri oluştur
+        allStories.forEach((story, index) => {
+          const isViewed = viewedStoriesDb.includes(story.id);
+          const ringClass = isViewed ? "viewed" : "unviewed";
+          
+          html += `
+            <div class="story-circle" data-index="${index}">
+              <div class="story-ring ${ringClass}">
+                <img class="story-avatar" src="${story.avatar}" alt="${story.username}" />
+              </div>
+              <span class="story-username">${story.modelName}</span>
+            </div>
+          `;
+        });
+
+        storiesBar.innerHTML = html;
+
+        // Tıklama olayları
+        const addBtn = document.getElementById('addStoryBtn');
+        if (addBtn) {
+          addBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isLoggedIn = localStorage.getItem('isLoggedIn') !== 'false';
+            if (!isLoggedIn) {
+              showToast("İlan öne çıkarmak için giriş yapmalısınız!");
+              const loginModal = document.getElementById('loginModal');
+              if (loginModal) loginModal.classList.add('active');
+              return;
+            }
+            const promoModal = document.getElementById('storyPromoModal');
+            if (promoModal) promoModal.classList.add('active');
+          });
+        }
+
+        storiesBar.querySelectorAll('.story-circle[data-index]').forEach(elem => {
+          elem.addEventListener('click', () => {
+            const index = parseInt(elem.getAttribute('data-index'), 10);
+            openStoryViewer(allStories, index);
+          });
+        });
+      }
+
+      // Hikaye İzleyiciyi açma fonksiyonu
+      function openStoryViewer(stories, startIndex) {
+        activeStoriesList = stories;
+        currentStoryIndex = startIndex;
+        
+        const modal = document.getElementById('storyViewerModal');
+        if (!modal) return;
+        
+        modal.style.display = 'flex';
+        loadStory(currentStoryIndex);
+      }
+
+      // Belirli bir hikayeyi yükleme fonksiyonu
+      function loadStory(index) {
+        if (index < 0 || index >= activeStoriesList.length) {
+          closeStoryViewer();
+          return;
+        }
+
+        currentStoryIndex = index;
+        const story = activeStoriesList[index];
+
+        // İzlenen hikayeyi veri tabanına kaydet (Halkasını grileştir)
+        if (!viewedStoriesDb.includes(story.id)) {
+          viewedStoriesDb.push(story.id);
+          localStorage.setItem('viewedStoriesDb', JSON.stringify(viewedStoriesDb));
+          renderStoriesBar();
+        }
+
+        // Başlık ve kullanıcı bilgileri güncelleme
+        document.getElementById('storyUserAvatar').src = story.avatar;
+        document.getElementById('storyUserName').textContent = story.username;
+        document.getElementById('storyTime').textContent = story.time;
+
+        // Progress bar çizgisini oluşturma
+        const progressContainer = document.getElementById('storyProgressContainer');
+        progressContainer.innerHTML = "";
+        activeStoriesList.forEach((_, i) => {
+          const pbBg = document.createElement('div');
+          pbBg.className = "story-progress-bg";
+          const pbFill = document.createElement('div');
+          pbFill.className = "story-progress-fill";
+          
+          if (i < index) {
+            pbFill.style.width = "100%";
+          } else {
+            pbFill.style.width = "0%";
+          }
+          
+          pbBg.appendChild(pbFill);
+          progressContainer.appendChild(pbBg);
+        });
+
+        // Hikaye kartının içeriğini çizme
+        const contentArea = document.getElementById('storyContent');
+        contentArea.innerHTML = "";
+
+        let cardHTML = "";
+        if (story.type === "image") {
+          cardHTML = `
+            <div class="story-card">
+              <div class="story-card-img-wrapper">
+                <img class="story-card-img" src="${story.imageUrl}" alt="${story.title}" />
+              </div>
+              <div class="story-card-body">
+                <span class="story-card-badge">Öne Çıkan İlan</span>
+                <h4 class="story-card-title">${escapeHTML(story.title)}</h4>
+                <p class="story-card-price">${escapeHTML(story.price)}</p>
+                <div class="story-card-meta">
+                  <span>${escapeHTML(story.meta)}</span>
+                </div>
+                <p class="story-card-desc">${escapeHTML(story.desc)}</p>
+                <a href="${story.link}" target="_blank" class="story-card-btn" id="storyActionBtn">İlanı Gör</a>
+              </div>
+            </div>
+          `;
+        } else {
+          const gradClass = story.bgGrad || "purple-grad";
+          cardHTML = `
+            <div class="story-card text-only-story ${gradClass}">
+              <p>${escapeHTML(story.desc)}</p>
+              <a href="${story.link}" target="_blank" class="story-card-btn" style="margin-top:20px; width:100%;" id="storyActionBtn">Detayları Gör</a>
+            </div>
+          `;
+        }
+
+        contentArea.innerHTML = cardHTML;
+
+        // Buton tıklaması modal geçişini engellesin
+        const btn = document.getElementById('storyActionBtn');
+        if (btn) {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+          });
+        }
+
+        // İlerleme çubuğu animasyonunu başlat
+        startStoryProgress(index);
+      }
+
+      // Hikaye ilerleme çubuğu ve zamanlayıcı yönetimi
+      function startStoryProgress(index) {
+        clearInterval(storyProgressInterval);
+        clearTimeout(storyTimeout);
+
+        const fills = document.querySelectorAll('#storyProgressContainer .story-progress-fill');
+        if (fills.length === 0 || !fills[index]) return;
+
+        const activeFill = fills[index];
+        let progress = 0;
+        const step = 2; // 2% her 100ms = 5sn
+        const intervalTime = 100;
+
+        storyProgressInterval = setInterval(() => {
+          progress += step;
+          if (progress >= 100) {
+            progress = 100;
+            clearInterval(storyProgressInterval);
+          }
+          activeFill.style.width = progress + "%";
+        }, intervalTime);
+
+        storyTimeout = setTimeout(() => {
+          nextStory();
+        }, storyDuration);
+      }
+
+      function nextStory() {
+        clearInterval(storyProgressInterval);
+        clearTimeout(storyTimeout);
+        
+        if (currentStoryIndex + 1 < activeStoriesList.length) {
+          loadStory(currentStoryIndex + 1);
+        } else {
+          closeStoryViewer();
+        }
+      }
+
+      function prevStory() {
+        clearInterval(storyProgressInterval);
+        clearTimeout(storyTimeout);
+        
+        if (currentStoryIndex - 1 >= 0) {
+          loadStory(currentStoryIndex - 1);
+        } else {
+          loadStory(currentStoryIndex);
+        }
+      }
+
+      function closeStoryViewer() {
+        clearInterval(storyProgressInterval);
+        clearTimeout(storyTimeout);
+        
+        const modal = document.getElementById('storyViewerModal');
+        if (modal) {
+          modal.style.display = 'none';
+        }
+      }
+
+      // Simüle İlan Satın Alma ve Hikayeye Ekleme
+      function simulateStoryPurchase() {
+        let brand = "Honda";
+        let model = "Civic 1.5 VTEC";
+        let specs = "2018 • 85.000 km • Benzin";
+        let price = "950.000 TL";
+        let desc = "Sahibinden acil satılık hatasız, boyasız Civic. Tüm bakımları yetkili serviste yapılmıştır.";
+        let imageUrl = "https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?w=500&auto=format&fit=crop&q=80";
+        
+        if (currentSelectedVehicle) {
+          brand = currentSelectedVehicle.brand;
+          model = currentSelectedVehicle.model;
+          specs = currentSelectedVehicle.specs;
+          price = currentSelectedVehicle.price;
+          desc = "Kullanıcı tarafından öne çıkarılmış test ilanı. Analiz skoru: " + currentSelectedVehicle.score + ".";
+        } else if (userPosts && userPosts.length > 0) {
+          const latest = userPosts[userPosts.length - 1];
+          brand = latest.brand;
+          model = latest.model;
+          specs = latest.specs;
+          price = latest.price;
+          desc = latest.questionText || "Satılık temiz araç.";
+        }
+
+        const newStory = {
+          id: "story-user-" + Math.floor(Math.random() * 100000),
+          username: "Sen",
+          modelName: model.split(' ')[0] || brand,
+          avatar: "assets/erkan-profile.png",
+          time: "Şimdi",
+          type: "image",
+          imageUrl: imageUrl,
+          title: brand + " " + model,
+          price: price,
+          meta: specs,
+          desc: desc,
+          link: "https://www.ilaneksper.com/analiz/detay"
+        };
+
+        let userStories = JSON.parse(localStorage.getItem('userPaidStories') || '[]');
+        userStories.push(newStory);
+        localStorage.setItem('userPaidStories', JSON.stringify(userStories));
+
+        renderStoriesBar();
+
+        const promoModal = document.getElementById('storyPromoModal');
+        if (promoModal) promoModal.classList.remove('active');
+
+        showCustomModal(
+          'success', 
+          'Ödeme Başarılı', 
+          'İlanınız başarıyla satın alındı ve Hikaye İlan Vitrini\'ne eklendi! 24 saat boyunca tüm kullanıcılara en üstte gösterilecektir.'
+        );
+      }
+
+      // Story event dinleyicilerini bağla
+      const closeViewerBtn = document.getElementById('storyCloseBtn');
+      if (closeViewerBtn) {
+        closeViewerBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          closeStoryViewer();
+        });
+      }
+
+      const touchL = document.getElementById('storyTouchLeft');
+      if (touchL) {
+        touchL.addEventListener('click', (e) => {
+          e.stopPropagation();
+          prevStory();
+        });
+      }
+
+      const touchR = document.getElementById('storyTouchRight');
+      if (touchR) {
+        touchR.addEventListener('click', (e) => {
+          e.stopPropagation();
+          nextStory();
+        });
+      }
+
+      // Klavye kontrolleri
+      document.addEventListener('keydown', (e) => {
+        const modal = document.getElementById('storyViewerModal');
+        if (modal && modal.style.display === 'flex') {
+          if (e.key === 'ArrowRight') {
+            nextStory();
+          } else if (e.key === 'ArrowLeft') {
+            prevStory();
+          } else if (e.key === 'Escape') {
+            closeStoryViewer();
+          }
+        }
+      });
+
+      // Promosyon modal kapatma olayları
+      const promoCancel = document.getElementById('storyPromoCancelBtn');
+      const promoModal = document.getElementById('storyPromoModal');
+      if (promoCancel && promoModal) {
+        promoCancel.addEventListener('click', () => {
+          promoModal.classList.remove('active');
+        });
+        promoModal.addEventListener('click', (e) => {
+          if (e.target === promoModal) {
+            promoModal.classList.remove('active');
+          }
+        });
+      }
+
+      // Promosyon modal ödeme olayı
+      const promoPay = document.getElementById('storyPromoPayBtn');
+      if (promoPay) {
+        promoPay.addEventListener('click', () => {
+          simulateStoryPurchase();
+        });
+      }
+
       // Initialize right sidebar components
       refreshRightSidebar();
+
+      // Initialize Story Showcase Vitrini
+      renderStoriesBar();
     });
   </script>
 
@@ -4663,6 +5078,63 @@
       <button class="modal-action-btn" id="modalActionBtn">Tamam</button>
     </div>
   </div>
+
+  <!-- Story İlan Vitrini Promosyon Modalı -->
+  <div class="custom-modal-overlay" id="storyPromoModal">
+    <div class="custom-modal-content" style="max-width: 440px;">
+      <div class="modal-icon-container warning" style="background: rgba(37, 99, 235, 0.1); color: var(--blue);">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" style="width: 28px; height: 28px;">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
+        </svg>
+      </div>
+      <h3 class="modal-title" style="margin-top: 16px;">İlanını Hikayelerde Öne Çıkar!</h3>
+      <p class="modal-message" style="font-size: 13px; color: var(--muted); margin-bottom: 20px; line-height: 1.5; text-align: left;">
+        Aracının ilan detaylarını ve görsellerini Hikaye İlan Vitrini'nde paylaşarak 24 saat boyunca akışın en üstünde sergileyebilir, binlerce alıcıya anında ulaştırabilirsin.<br/><br/>
+        <strong>🔥 Vitrin Avantajları:</strong><br/>
+        • En üst sırada sabit görünüm<br/>
+        • Doğrudan ilana yönlendiren "İlanı Gör" butonu<br/>
+        • Klasik akış ilanlarına göre 5 kat daha yüksek erişim
+      </p>
+      <div style="background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 12px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-size: 13px; font-weight: 500; color: var(--text);">Gösterim Süresi: 1 Gün</span>
+        <span style="font-size: 16px; font-weight: 700; color: var(--blue);">149 TL</span>
+      </div>
+      <div style="display: flex; gap: 12px; justify-content: flex-end;">
+        <button class="custom-modal-btn cancel-btn" id="storyPromoCancelBtn" style="background: transparent; color: var(--muted); border: 1px solid var(--border); margin: 0;">Vazgeç</button>
+        <button class="custom-modal-btn" id="storyPromoPayBtn" style="margin: 0; background: var(--blue); color: white;">Ödemeye Git</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Story Viewer Modal -->
+  <div class="story-viewer-modal" id="storyViewerModal">
+    <div class="story-viewer-container">
+      <!-- Progress Bar Container -->
+      <div class="story-progress-container" id="storyProgressContainer"></div>
+      
+      <!-- Story Header -->
+      <div class="story-header">
+        <div class="story-user-info">
+          <img class="story-user-avatar" id="storyUserAvatar" src="" alt="" />
+          <div>
+            <span class="story-user-name" id="storyUserName"></span>
+            <span class="story-time" id="storyTime"></span>
+          </div>
+        </div>
+        <button class="story-close-btn" id="storyCloseBtn" aria-label="Kapat">&times;</button>
+      </div>
+
+      <!-- Left/Right Click Areas for Navigation -->
+      <div class="story-touch-left" id="storyTouchLeft"></div>
+      <div class="story-touch-right" id="storyTouchRight"></div>
+
+      <!-- Main Story Content -->
+      <div class="story-content" id="storyContent">
+        <!-- Injected dynamically in JS -->
+      </div>
+    </div>
+  </div>
+
   <div class="toast-container" id="toastContainer"></div>
 </body>
 </html>
