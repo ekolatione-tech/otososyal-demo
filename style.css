@@ -5770,6 +5770,7 @@ body {
   bottom: 0;
   z-index: 101;
   cursor: pointer;
+  pointer-events: none; /* Allow clicking through to underlying elements */
 }
 .story-touch-left {
   left: 0;
@@ -5792,8 +5793,9 @@ body {
 }
 
 .story-card {
-  width: 100%;
-  max-width: 340px;
+  width: 94%;
+  height: calc(100% - 20px);
+  max-height: 680px;
   background: #1c1c1e;
   border-radius: 20px;
   overflow: hidden;
@@ -5862,6 +5864,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  flex: 1;
 }
 
 .story-card-badge {
@@ -5909,7 +5912,7 @@ body {
 }
 
 .story-card-btn {
-  margin-top: 8px;
+  margin-top: auto;
   background: #3b82f6;
   color: #ffffff;
   border: none;

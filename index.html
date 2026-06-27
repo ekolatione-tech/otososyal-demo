@@ -5300,10 +5300,17 @@
           const brandSlug = brandLogoMap[brand.toLowerCase()] || brand.toLowerCase().replace(/[\s.]+/g, '-');
           const logoUrl = `https://unpkg.com/simple-icons@v9/icons/${brandSlug}.svg`;
 
+          // Marka adı ve model adının ilk kelimesini birleştirerek hikaye çemberi altına yazma (örn: Kia Stonic)
+          let modelName = title;
+          const words = title.split(' ');
+          if (words.length > 1) {
+            modelName = words[0] + " " + words[1];
+          }
+
           const newStory = {
             id: "story-user-" + Math.floor(Math.random() * 100000),
             username: brand, // Profil ismi yerine marka adı
-            modelName: title.split(' ')[0] || brand,
+            modelName: modelName,
             avatar: logoUrl, // Profil resmi yerine marka logosu
             time: "Şimdi",
             type: "image",
@@ -5376,28 +5383,34 @@
         document.getElementById('mockCardExpiry').textContent = "AA/YY";
       }
 
-      // Story Close
+      // Story click navigation delegation on the container (preventing overlays from blocking card links)
+      const viewerContainer = document.querySelector('.story-viewer-container');
+      if (viewerContainer) {
+        viewerContainer.addEventListener('click', (e) => {
+          // Close button veya Eylem butonu tıklandıysa işlemi tarayıcıya/kendi dinleyicilerine bırak
+          if (e.target.closest('#storyCloseBtn') || e.target.closest('#storyActionBtn')) {
+            return;
+          }
+          
+          const rect = viewerContainer.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const width = rect.width;
+          
+          // Sol %35 -> Geri, Sağ %65 -> İleri
+          if (x < width * 0.35) {
+            prevStory();
+          } else {
+            nextStory();
+          }
+        });
+      }
+
+      // Close button close action
       const closeViewerBtn = document.getElementById('storyCloseBtn');
       if (closeViewerBtn) {
         closeViewerBtn.addEventListener('click', (e) => {
           e.stopPropagation();
           closeStoryViewer();
-        });
-      }
-
-      const touchL = document.getElementById('storyTouchLeft');
-      if (touchL) {
-        touchL.addEventListener('click', (e) => {
-          e.stopPropagation();
-          prevStory();
-        });
-      }
-
-      const touchR = document.getElementById('storyTouchRight');
-      if (touchR) {
-        touchR.addEventListener('click', (e) => {
-          e.stopPropagation();
-          nextStory();
         });
       }
 
@@ -5569,6 +5582,7 @@
               <option value="" disabled selected>Seçin</option>
               <option value="Benzin">Benzin</option>
               <option value="Dizel">Dizel</option>
+              <option value="Benzin + LPG">Benzin + LPG</option>
               <option value="Hibrit">Hibrit</option>
               <option value="Elektrik">Elektrik</option>
               <option value="LPG">LPG</option>
