@@ -4641,6 +4641,8 @@
           title: "Volkswagen Golf 1.4 TSI Allstar",
           price: "840.000 TL",
           meta: "2016 • 120.000 km • Benzin",
+          tramer: "Hasarsız",
+          phone: "0532 111 2233",
           desc: "Sahibinden satılık çok temiz Golf 7. Değişensiz, boyasız, tüm bakımları zamanında ilaneksper güvencesiyle yapılmıştır.",
           link: "https://www.ilaneksper.com/ilan/volkswagen-golf"
         },
@@ -4655,6 +4657,8 @@
           title: "Toyota Corolla 1.6 Touch CVT",
           price: "920.000 TL",
           meta: "2019 • 78.000 km • Benzin",
+          tramer: "1.200 TL",
+          phone: "0533 444 5566",
           desc: "İlk sahibinden, yetkili servis bakımlı Corolla. İçinde sigara içilmemiştir. Masrafsız, lastikleri yeni.",
           link: "https://www.ilaneksper.com/ilan/toyota-corolla"
         },
@@ -4669,6 +4673,8 @@
           title: "BMW 5 Serisi 520i Executive",
           price: "1.540.000 TL",
           meta: "2015 • 178.000 km • Benzin",
+          tramer: "Hasarsız",
+          phone: "0544 777 8899",
           desc: "LCI Farlar, Vakumlu Kapılar, Hayalet Gösterge. Hatasız, boyasız, tramer kaydı yoktur. Takas düşünülür.",
           link: "https://www.ilaneksper.com/ilan/bmw-520i"
         },
@@ -4683,6 +4689,8 @@
           title: "Honda Civic 1.5 VTEC Turbo Sport",
           price: "980.000 TL",
           meta: "2018 • 85.000 km • Benzin",
+          tramer: "Hasarsız",
+          phone: "0532 999 8877",
           desc: "Hatasız boyasız Civic Sport. Tüm bakımları yetkili servis Honda Cem'de yapılmıştır. Lastikler sıfır ayarında.",
           link: "https://www.ilaneksper.com/ilan/honda-civic"
         },
@@ -4697,6 +4705,8 @@
           title: "Mercedes-Benz C200d AMG",
           price: "1.890.000 TL",
           meta: "2017 • 140.000 km • Dizel",
+          tramer: "4.500 TL",
+          phone: "0535 666 5544",
           desc: "İmza serisi, cam tavanlı, kırmızı deri koltuk AMG C200d. Sadece sağ ön çamurluk boyalı, tramer 4.500 TL.",
           link: "https://www.ilaneksper.com/ilan/mercedes-c200"
         },
@@ -4711,6 +4721,8 @@
           title: "Audi A4 Sedan 2.0 TDI Design",
           price: "1.420.000 TL",
           meta: "2016 • 165.000 km • Dizel",
+          tramer: "Hasarsız",
+          phone: "0536 222 3344",
           desc: "Kayıtlı hasarı yoktur. Sol arka kapı boyalı. İçi bej deri döşeme, son derece temiz kullanılmış prestij arabası.",
           link: "https://www.ilaneksper.com/ilan/audi-a4"
         },
@@ -4725,6 +4737,8 @@
           title: "Renault Megane 1.5 dCi Icon EDC",
           price: "895.000 TL",
           meta: "2018 • 112.000 km • Dizel",
+          tramer: "2.300 TL",
+          phone: "0539 333 4455",
           desc: "Büyük ekran (R-Link), masajlı koltuk, 5 farklı sürüş modu. Değişen parçası yok. Sol iki kapı lokal boyalı.",
           link: "https://www.ilaneksper.com/ilan/renault-megane"
         },
@@ -4739,6 +4753,8 @@
           title: "Ford Focus 1.5 Ti-VCT Trend X",
           price: "760.000 TL",
           meta: "2017 • 98.000 km • Benzin",
+          tramer: "Hasarsız",
+          phone: "0542 444 5566",
           desc: "İlk sahibiyim. Kitapçıkları ve yedek anahtarı mevcut. LPG hiç takılmamıştır. Tertemiz aile arabası.",
           link: "https://www.ilaneksper.com/ilan/ford-focus"
         },
@@ -4753,6 +4769,8 @@
           title: "Peugeot 3008 1.6 BlueHedi Allure",
           price: "1.280.000 TL",
           meta: "2018 • 105.000 km • Dizel",
+          tramer: "Hasarsız",
+          phone: "0543 555 6677",
           desc: "Hayalet ekran, şerit takip, kör nokta uyarı sistemleri aktif. Hatasız boyasız SUV arayanlara özel fırsat.",
           link: "https://www.ilaneksper.com/ilan/peugeot-3008"
         },
@@ -4767,6 +4785,8 @@
           title: "Fiat Egea 1.3 Multijet Easy",
           price: "630.000 TL",
           meta: "2020 • 89.000 km • Dizel",
+          tramer: "Hasarsız",
+          phone: "0532 666 7788",
           desc: "Yakıt cimrisi Egea. Şirket veya taksi çıkması değildir, şahsi aracım. Bakımları aksatılmadan Fiat servisinde yapıldı.",
           link: "https://www.ilaneksper.com/ilan/fiat-egea"
         }
@@ -4929,6 +4949,13 @@
                 <div class="story-card-meta">
                   <span>${escapeHTML(story.meta)}</span>
                 </div>
+                
+                <!-- Tramer & İletişim Bilgileri Grid -->
+                <div class="story-card-details-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 11px; color: rgba(255,255,255,0.7); border-top: 1px solid rgba(255,255,255,0.1); border-bottom: 1px solid rgba(255,255,255,0.1); padding: 8px 0; margin: 4px 0;">
+                  <div><strong>Tramer:</strong> ${escapeHTML(story.tramer || 'Hasarsız')}</div>
+                  <div><strong>İletişim:</strong> ${escapeHTML(story.phone || '-')}</div>
+                </div>
+
                 <p class="story-card-desc">${escapeHTML(story.desc)}</p>
                 <a href="${story.link}" target="_blank" class="story-card-btn" id="storyActionBtn">İlanı Gör</a>
               </div>
@@ -5049,7 +5076,7 @@
       if (storyFormDesc && storyFormDescCounter) {
         storyFormDesc.addEventListener('input', () => {
           const len = storyFormDesc.value.length;
-          storyFormDescCounter.textContent = `${len} / 150`;
+          storyFormDescCounter.textContent = `${len} / 250`;
         });
       }
 
@@ -5126,11 +5153,12 @@
           const year = document.getElementById('storyFormYear').value.trim();
           let km = document.getElementById('storyFormKM').value.trim();
           const fuel = document.getElementById('storyFormFuel').value;
+          const tramer = document.getElementById('storyFormTramer').value.trim();
           const desc = document.getElementById('storyFormDesc').value.trim();
           const phone = document.getElementById('storyFormPhone').value.trim();
           const link = document.getElementById('storyFormLink').value.trim();
 
-          if (!brand || !title || !price || !year || !km || !fuel || !desc || !phone || !link) {
+          if (!brand || !title || !price || !year || !km || !fuel || !tramer || !desc || !phone || !link) {
             showToast("Lütfen tüm alanları doldurun!");
             return;
           }
@@ -5157,6 +5185,8 @@
           document.getElementById('previewStoryTitle').textContent = title;
           document.getElementById('previewStoryPrice').textContent = price;
           document.getElementById('previewStoryMeta').textContent = meta;
+          document.getElementById('previewStoryTramer').textContent = tramer;
+          document.getElementById('previewStoryPhone').textContent = phone;
           document.getElementById('previewStoryDesc').textContent = desc;
 
           // Marka Logosunun Çekilmesi (Simple Icons)
@@ -5249,7 +5279,9 @@
         const year = document.getElementById('storyFormYear').value.trim();
         let km = document.getElementById('storyFormKM').value.trim();
         const fuel = document.getElementById('storyFormFuel').value;
+        const tramer = document.getElementById('storyFormTramer').value.trim();
         const desc = document.getElementById('storyFormDesc').value.trim();
+        const phone = document.getElementById('storyFormPhone').value.trim();
         const link = document.getElementById('storyFormLink').value.trim();
         
         // Ödeme Alanı Kontrolü
@@ -5318,6 +5350,8 @@
             title: title,
             price: price,
             meta: meta,
+            tramer: tramer,
+            phone: phone,
             desc: desc,
             link: link
           };
@@ -5355,12 +5389,13 @@
         document.getElementById('storyFormYear').value = "";
         document.getElementById('storyFormKM').value = "";
         document.getElementById('storyFormFuel').value = "";
+        document.getElementById('storyFormTramer').value = "";
         document.getElementById('storyFormDesc').value = "";
         document.getElementById('storyFormPhone').value = "";
         document.getElementById('storyFormLink').value = "";
         
         const counter = document.getElementById('storyFormDescCounter');
-        if (counter) counter.textContent = "0 / 150";
+        if (counter) counter.textContent = "0 / 250";
 
         const fileInput = document.getElementById('storyFormFile');
         if (fileInput) fileInput.value = "";
@@ -5589,20 +5624,24 @@
             </select>
           </div>
         </div>
-        <div class="form-group">
-          <label>Açıklama (Maks. 150 Karakter)</label>
-          <textarea id="storyFormDesc" maxlength="150" placeholder="İlanınız hakkında kısa bir açıklama yazın..." required style="height: 60px; resize: none;"></textarea>
-          <div class="char-counter" id="storyFormDescCounter" style="text-align: right; font-size: 11px; color: var(--muted); margin-top: 4px;">0 / 150</div>
-        </div>
         <div class="form-row">
+          <div class="form-group">
+            <label>Tramer Kaydı (TL veya Hasarsız)</label>
+            <input type="text" id="storyFormTramer" placeholder="Örn: Hasarsız veya 3.500 TL" required />
+          </div>
           <div class="form-group">
             <label>Telefon Numarası</label>
             <input type="tel" id="storyFormPhone" placeholder="Örn: 0555 123 4567" required />
           </div>
-          <div class="form-group">
-            <label>İlan Linki</label>
-            <input type="url" id="storyFormLink" placeholder="Örn: https://sahibinden.com/ilan..." required />
-          </div>
+        </div>
+        <div class="form-group">
+          <label>Açıklama (Maks. 250 Karakter)</label>
+          <textarea id="storyFormDesc" maxlength="250" placeholder="İlanınız hakkında kısa bir açıklama yazın..." required style="height: 60px; resize: none;"></textarea>
+          <div class="char-counter" id="storyFormDescCounter" style="text-align: right; font-size: 11px; color: var(--muted); margin-top: 4px;">0 / 250</div>
+        </div>
+        <div class="form-group">
+          <label>İlan Linki</label>
+          <input type="url" id="storyFormLink" placeholder="Örn: https://sahibinden.com/ilan..." required />
         </div>
         <div class="form-group">
           <label>İlan Görseli Yükle (Aracınızın önden çekilmiş vitrin görseli)</label>
@@ -5646,8 +5685,15 @@
               <div class="story-card-meta" style="font-size: 10px; color: rgba(255,255,255,0.6); display: flex; gap: 12px; margin: -2px 0;">
                 <span id="previewStoryMeta">2018 • 85.000 km • Benzin</span>
               </div>
-              <p class="story-card-desc" id="previewStoryDesc" style="font-size: 11px; color: rgba(255,255,255,0.8); line-height: 1.4; margin: 0; word-break: break-word;">Açıklama alanı.</p>
-              <a href="#" class="story-card-btn" style="margin-top: 4px; padding: 8px; font-size: 11.5px; pointer-events: none; text-align: center; display: block; border-radius: 6px;">İlanı Gör</a>
+              
+              <!-- Tramer & İletişim Önizleme Satırı -->
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 10px; color: rgba(255,255,255,0.7); border-top: 1px solid rgba(255,255,255,0.1); border-bottom: 1px solid rgba(255,255,255,0.1); padding: 6px 0; margin: 4px 0; font-family: inherit;">
+                <div><strong>Tramer:</strong> <span id="previewStoryTramer">Hasarsız</span></div>
+                <div><strong>İletişim:</strong> <span id="previewStoryPhone">-</span></div>
+              </div>
+
+              <p class="story-card-desc" id="previewStoryDesc" style="font-size: 11px; color: rgba(255,255,255,0.8); line-height: 1.4; margin: 0; word-break: break-word; overflow-wrap: anywhere;">Açıklama alanı.</p>
+              <a href="#" class="story-card-btn" style="margin-top: auto; padding: 8px; font-size: 11.5px; pointer-events: none; text-align: center; display: block; border-radius: 6px;">İlanı Gör</a>
             </div>
           </div>
         </div>

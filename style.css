@@ -5794,8 +5794,8 @@ body {
 
 .story-card {
   width: 94%;
-  height: calc(100% - 20px);
-  max-height: 680px;
+  height: auto;
+  max-height: calc(100% - 20px);
   background: #1c1c1e;
   border-radius: 20px;
   overflow: hidden;
