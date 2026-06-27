@@ -5567,10 +5567,20 @@ body {
 
 @media (min-width: 980px) {
   .story-circle {
-    /* Desktop: fit exactly 11 items in the stories-bar container */
-    flex: 0 0 calc((100% - 80px) / 11);
-    min-width: calc((100% - 80px) / 11);
-    max-width: calc((100% - 80px) / 11);
+    /* Desktop: fit exactly 12 items in the stories-bar container */
+    flex: 0 0 calc((100% - 88px) / 12);
+    min-width: calc((100% - 88px) / 12);
+    max-width: calc((100% - 88px) / 12);
+  }
+  .story-ring {
+    width: 44px;
+    height: 44px;
+  }
+  .story-ring.add-story .add-plus-badge {
+    width: 14px;
+    height: 14px;
+    font-size: 10px;
+    border-width: 1.5px;
   }
 }
 
