@@ -5536,7 +5536,6 @@ body {
    ========================================================================== */
 .stories-bar {
   display: flex;
-  justify-content: space-between;
   gap: 8px;
   padding: 12px 10px;
   overflow-x: auto;
@@ -5550,22 +5549,13 @@ body {
   display: none; /* Chrome, Safari, Opera */
 }
 
-/* Desktop layout constraint to fit exactly 11 circles (1 add button + 10 sample stories) */
-@media (min-width: 980px) {
-  .stories-bar {
-    justify-content: space-between;
-    overflow-x: hidden; /* Prevent scroll on desktop */
-  }
-}
-
 .story-circle {
   display: flex;
   flex-direction: column;
   align-items: center;
   cursor: pointer;
-  flex: 1;
-  min-width: 50px;
-  max-width: 68px;
+  min-width: 58px;
+  max-width: 58px;
   text-align: center;
   transition: transform 0.2s ease;
   user-select: none;
@@ -5575,8 +5565,8 @@ body {
 }
 
 .story-ring {
-  width: 46px;
-  height: 46px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -5588,19 +5578,19 @@ body {
 /* Unviewed Story Ring with Premium gradient border */
 .story-ring.unviewed {
   background: linear-gradient(45deg, #2563eb 0%, #3b82f6 50%, #f59e0b 100%);
-  padding: 2.5px;
+  padding: 2px;
 }
 
 /* Viewed Story Ring with muted border */
 .story-ring.viewed {
   border: 1.5px solid var(--soft-border);
-  padding: 2px;
+  padding: 1.5px;
 }
 
 /* Special styling for Add Story ring */
 .story-ring.add-story {
   border: 1.5px dashed var(--blue);
-  padding: 2px;
+  padding: 1.5px;
 }
 
 .story-ring.add-story .add-plus-badge {
