@@ -5567,10 +5567,10 @@ body {
 
 @media (min-width: 980px) {
   .story-circle {
-    /* Desktop: fit exactly 10 items in the stories-bar container */
-    flex: 0 0 calc((100% - 72px) / 10);
-    min-width: calc((100% - 72px) / 10);
-    max-width: calc((100% - 72px) / 10);
+    /* Desktop: fit exactly 11 items in the stories-bar container */
+    flex: 0 0 calc((100% - 80px) / 11);
+    min-width: calc((100% - 80px) / 11);
+    max-width: calc((100% - 80px) / 11);
   }
 }
 
