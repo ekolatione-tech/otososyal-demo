@@ -4879,6 +4879,7 @@
           return;
         }
 
+        const isLoggedIn = localStorage.getItem('isLoggedIn') !== 'false';
         currentStoryIndex = index;
         const story = activeStoriesList[index];
 
@@ -4968,7 +4969,7 @@
                 <p class="story-card-desc">${escapeHTML(story.desc)}</p>
 
                 <!-- İstatistikler Paneli (Sadece reklam sahibi kullanıcı için) -->
-                ${story.isUser ? `
+                ${story.isUser && isLoggedIn ? `
                   <div class="story-stats-section" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 10px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 6px; font-size: 11px; text-align: left; font-family: inherit;">
                     <div style="font-weight: 700; color: #a1a1aa; text-transform: uppercase; font-size: 9px; letter-spacing: 0.5px; display: flex; align-items: center; gap: 4px;">
                       <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 20V10M18 20V4M6 20v-4"/></svg>
