@@ -1482,6 +1482,39 @@
      *    - ENTEGRASYON ADIMI:
      *      [ ] Eğer gönderi sayısı binleri buluyorsa, bu filtre kriterlerini (marka, model, oy durumları) API istek parametresi 
      *          (Query Params - örn: ?brand=BMW&sort=newest) olarak backend'e yollayıp akışı sunucu taraflı süzün.
+     *
+     * 7. İLANEKSPER'E TAŞIMA NOTU: OTOSOSYAL BAŞLI BAŞINA SAYFA OLMALI
+     *    - Bu prototip tek dosyada çalışıyor; gerçek üründe Otososyal ayrı bir rota/sayfa olarak ele alınmalı.
+     *      Önerilen rota: `/otososyal`. Header, profil menüsü, üyelik rozetleri ve auth durumu İlanEksper ortak
+     *      layout/session sisteminden beslenmeli.
+     *    - Profil alanı yalnızca dekorasyon değil: profil menüsündeki "Otososyal Paylaşımlarım", yorumladıklarım,
+     *      oy verdiklerim ve kaydettiklerim filtreleri `postDb`, `commentsDb` ve gönderi sahibi bilgisine bağlı çalışır.
+     *      Entegrasyonda bu alanlar kullanıcının gerçek ID'si ile ilişkilendirilmeli.
+     *    - Paylaşım composer'ı analizlerden araç seçmeye bağlıdır. `currentSelectedVehicle` burada prototip veriden gelir;
+     *      İlanEksper'de araç kartları tamamlanınca bu nesne analiz/garaj/rapor kartlarından doldurulmalıdır.
+     *      Gerekli sözleşme: brand, model, specs, price, score, risk, type, risks.
+     *    - Akış kartları filtre ve sidebar için `data-brand`, `data-model`, `data-fuel`, `data-price`, `data-km`
+     *      özniteliklerini taşır. Backend render ya da API response bu alanları eksiksiz sağlamalı.
+     *
+     * 8. OTOSTORY ENTEGRASYON NOTU
+     *    - OtoStory, Otososyal akışının üstündeki story vitrini ve "İlanı Öne Çıkar" wizard/modal akışıdır.
+     *    - Prototipte satın alınan story'ler `userPaidStories` LocalStorage anahtarına yazılır ve 24 saat sonra
+     *      `renderStoriesBar()` içinde gizlenir. Gerçekte bu veri İlanEksper reklam/öne çıkarma tablosunda tutulmalı.
+     *    - `simulateStoryPurchase()` şu an demo ödeme akışıdır. Üretimde burası İlanEksper ödeme servisine bağlanmalı;
+     *      ödeme başarıyla döndükten sonra promoted story/listing kaydı oluşturulmalı.
+     *    - Son mobil düzeltmede yüklenen görsel tarayıcıda sıkıştırılıyor ve LocalStorage kotası aşılırsa story kaybolmasın
+     *      diye varsayılan görselle kalıcı kayıt deneniyor. Üretimde base64 saklamayın: görseli medya servisine yükleyip
+     *      URL'yi story kaydında tutun.
+     *    - Marka logosu `getBrandLogo()` ve `assets/icons/custom/unknown-brand.svg` fallback sistemiyle çalışır.
+     *      BMW, Volkswagen, Toyota, Honda gibi çalışan logolara dokunmadan, bilinmeyen markalarda fallback ikon gösterilir.
+     *
+     * 9. DOKUNULMAMASI GEREKEN UI SÖZLEŞMELERİ
+     *    - Aşağıdaki ID/class isimleri JS tarafından doğrudan kullanılıyor; entegrasyonda isimleri değişirse ilgili
+     *      event/listener tarafı da güncellenmelidir: `#composerSubmit`, `#storiesBar`, `#storyPromoModal`,
+     *      `#storyBtnPay`, `.post-card`, `.like-btn`, `.save-btn`, `.vote-row button`, `.profile-menu-filter`.
+     *    - Sağ sidebar "Hızlı Filtreler", "Popüler Konular" ve "Yeni Paylaşılan Konular" mevcut akış kartlarından
+     *      beslenir. Server-side sayfalama gelirse bu kartlar sadece DOM'daki görünen postları değil API sonucunu
+     *      referans alacak şekilde yeniden bağlanmalıdır.
      * =========================================================================
      */
     document.addEventListener('DOMContentLoaded', () => {
@@ -4281,6 +4314,13 @@
         }
       });
 
+      // İlanEksper entegrasyon notu:
+      // Bu paylaşım akışı, kullanıcının analiz edilmiş bir aracı topluluğa soru olarak açmasıdır.
+      // `currentSelectedVehicle` ileride İlanEksper araç kartı/analiz raporu seçiminden gelmelidir.
+      // `postData` backend'e gönderilecek minimum sözleşmedir; post kaydı, oy/beğeni/kaydetme
+      // istatistikleri ve yorumlar aynı post ID üzerinden ilişkilendirilmelidir.
+      // Prototipte `userPosts` ve `postDb` LocalStorage kullanır; üretimde POST /api/otososyal/posts
+      // benzeri bir endpoint ve gerçek kullanıcı ID'si kullanılmalıdır.
       // Publish click listener
       composerSubmit.addEventListener('click', () => {
         const questionText = textareaSoru.value.trim();
@@ -5582,6 +5622,14 @@
         });
       }
 
+      // İlanEksper entegrasyon notu:
+      // Bu fonksiyon OtoStory "İlanı Öne Çıkar" wizard'ının demo ödeme ve story oluşturma akışıdır.
+      // Üretimde `simulateStoryPurchase()` doğrudan ödeme almayacak; İlanEksper ödeme servisine istek atacak,
+      // başarılı ödeme callback'inden sonra promoted story/advert kaydı oluşturacaktır.
+      // `newStory` nesnesi story vitrini için gereken minimum sözleşmedir: marka, kısa model adı,
+      // logo/avatar, görsel URL, fiyat, meta, tramer, telefon, ilan linki, createdAt ve stats.
+      // Son mobil düzeltmede LocalStorage kotası aşılırsa story kaybolmasın diye görsel sıkıştırma
+      // ve varsayılan görselle kalıcı kayıt fallback'i eklendi. Üretimde base64 yerine medya URL'si saklanmalıdır.
       // Simüle İlan Satın Alma ve Hikayeye Ekleme
       function simulateStoryPurchase() {
         const brand = document.getElementById('storyFormBrand').value;
