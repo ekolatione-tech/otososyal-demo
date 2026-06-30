@@ -4815,6 +4815,7 @@
 
       // İzlenen hikayelerin veritabanını local storage'dan al veya oluştur
       let viewedStoriesDb = JSON.parse(localStorage.getItem('viewedStoriesDb') || '[]');
+      let sessionPaidStories = [];
 
       // Global Story State
       let activeStoriesList = [];
@@ -4860,7 +4861,13 @@
 
         // Kullanıcının kendi eklediği (satın aldığı) hikayeler
         const now = Date.now();
-        const rawUserStories = JSON.parse(localStorage.getItem('userPaidStories') || '[]');
+        let rawUserStories = [];
+        try {
+          rawUserStories = JSON.parse(localStorage.getItem('userPaidStories') || '[]');
+        } catch (error) {
+          rawUserStories = [];
+        }
+        rawUserStories = [...rawUserStories, ...sessionPaidStories];
         
         // 24 saatlik süre aşımı kontrolü (son kullanma tarihi)
         const activeUserStories = rawUserStories.filter(s => {
@@ -4873,7 +4880,11 @@
 
         // Eğer silinen süre aşımı ilan varsa localStorage güncelle
         if (activeUserStories.length !== rawUserStories.length) {
-          localStorage.setItem('userPaidStories', JSON.stringify(activeUserStories));
+          try {
+            localStorage.setItem('userPaidStories', JSON.stringify(activeUserStories));
+          } catch (error) {
+            sessionPaidStories = activeUserStories;
+          }
         }
         
         // Tüm hikayeleri birleştirelim
@@ -5578,63 +5589,72 @@
         }
 
         setTimeout(() => {
-          // Butonu geri yükleme
-          if (btnText && spinner && payBtn) {
-            btnText.textContent = "Ödemeyi Tamamla";
-            spinner.style.display = "none";
-            if (payIcon) payIcon.style.display = "inline-block";
-            payBtn.disabled = false;
+          try {
+            // Marka Logosunun SVG'si
+            const logoUrl = getBrandLogo(brand);
+
+            // Marka adı ve model adının ilk kelimesini birleştirerek hikaye çemberi altına yazma (örn: Kia Stonic)
+            let modelName = title;
+            const words = title.split(' ');
+            if (words.length > 1) {
+              modelName = words[0] + " " + words[1];
+            }
+
+            const newStory = {
+              id: "story-user-" + Math.floor(Math.random() * 100000),
+              username: brand, // Profil ismi yerine marka adı
+              modelName: modelName,
+              avatar: logoUrl, // Profil resmi yerine marka logosu
+              time: "Şimdi",
+              type: "image",
+              imageUrl: uploadedStoryImageBase64 || "https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?w=500&auto=format&fit=crop&q=80",
+              title: title,
+              price: price,
+              meta: meta,
+              tramer: tramer,
+              phone: phone,
+              desc: desc,
+              link: link,
+              createdAt: Date.now(),
+              stats: { views: 0, clicks: 0 }
+            };
+
+            let userStories = [];
+            try {
+              userStories = JSON.parse(localStorage.getItem('userPaidStories') || '[]');
+              userStories.push(newStory);
+              localStorage.setItem('userPaidStories', JSON.stringify(userStories));
+            } catch (error) {
+              sessionPaidStories.push(newStory);
+            }
+
+            // Vitrini yeniden çiz
+            renderStoriesBar();
+
+            // Formu sıfırla
+            resetStoryWizardForm();
+
+            // Modalı kapat
+            const promoModal = document.getElementById('storyPromoModal');
+            if (promoModal) promoModal.classList.remove('active');
+
+            showCustomModal(
+              'success',
+              'İlan Vitrinde!',
+              'Ödemeniz başarıyla alındı. Aracınız 24 saat boyunca hikaye ilan vitrininde markanızın logosuyla öne çıkarılacaktır!'
+            );
+          } catch (error) {
+            showToast("İlan öne çıkarılırken bir sorun oluştu. Lütfen tekrar deneyin.");
+          } finally {
+            // Butonu her durumda geri yükle
+            if (btnText && spinner && payBtn) {
+              btnText.textContent = "Ödemeyi Tamamla";
+              spinner.style.display = "none";
+              if (payIcon) payIcon.style.display = "inline-block";
+              payBtn.disabled = false;
+            }
           }
-
-          // Marka Logosunun SVG'si
-          const logoUrl = getBrandLogo(brand);
-
-          // Marka adı ve model adının ilk kelimesini birleştirerek hikaye çemberi altına yazma (örn: Kia Stonic)
-          let modelName = title;
-          const words = title.split(' ');
-          if (words.length > 1) {
-            modelName = words[0] + " " + words[1];
-          }
-
-          const newStory = {
-            id: "story-user-" + Math.floor(Math.random() * 100000),
-            username: brand, // Profil ismi yerine marka adı
-            modelName: modelName,
-            avatar: logoUrl, // Profil resmi yerine marka logosu
-            time: "Şimdi",
-            type: "image",
-            imageUrl: uploadedStoryImageBase64 || "https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?w=500&auto=format&fit=crop&q=80",
-            title: title,
-            price: price,
-            meta: meta,
-            tramer: tramer,
-            phone: phone,
-            desc: desc,
-            link: link,
-            createdAt: Date.now(),
-            stats: { views: 0, clicks: 0 }
-          };
-
-          let userStories = JSON.parse(localStorage.getItem('userPaidStories') || '[]');
-          userStories.push(newStory);
-          localStorage.setItem('userPaidStories', JSON.stringify(userStories));
-
-          // Vitrini yeniden çiz
-          renderStoriesBar();
-
-          // Formu sıfırla
-          resetStoryWizardForm();
-
-          // Modalı kapat
-          const promoModal = document.getElementById('storyPromoModal');
-          if (promoModal) promoModal.classList.remove('active');
-
-          showCustomModal(
-            'success', 
-            'İlan Vitrinde!', 
-            'Ödemeniz başarıyla alındı. Aracınız 24 saat boyunca hikaye ilan vitrininde markanızın logosuyla öne çıkarılacaktır!'
-          );
-        }, 2000); // 2 saniye ödeme simülasyonu
+        }, 1200); // ödeme simülasyonu
       }
 
       // Formu ilk haline getiren temizleme fonksiyonu
