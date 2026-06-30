@@ -4861,12 +4861,7 @@
 
         // Kullanıcının kendi eklediği (satın aldığı) hikayeler
         const now = Date.now();
-        let rawUserStories = [];
-        try {
-          rawUserStories = JSON.parse(localStorage.getItem('userPaidStories') || '[]');
-        } catch (error) {
-          rawUserStories = [];
-        }
+        let rawUserStories = readUserPaidStories();
         rawUserStories = [...rawUserStories, ...sessionPaidStories];
         
         // 24 saatlik süre aşımı kontrolü (son kullanma tarihi)
@@ -5273,6 +5268,75 @@
       // Global Wizard State
       let uploadedStoryImageBase64 = "";
       let activeWizardStep = 1;
+      const defaultStoryImageUrl = "https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?w=500&auto=format&fit=crop&q=80";
+      const maxStoredStoryImageChars = 750000;
+
+      function isInlineStoryImage(imageUrl) {
+        return typeof imageUrl === "string" && imageUrl.startsWith("data:image/");
+      }
+
+      function compactStoryForStorage(story, forceCompactImage = false) {
+        const compactStory = { ...story };
+        if (forceCompactImage || (isInlineStoryImage(compactStory.imageUrl) && compactStory.imageUrl.length > maxStoredStoryImageChars)) {
+          compactStory.imageUrl = defaultStoryImageUrl;
+        }
+        return compactStory;
+      }
+
+      function saveUserPaidStories(userStories) {
+        try {
+          localStorage.setItem('userPaidStories', JSON.stringify(userStories));
+          return { saved: true, stories: userStories };
+        } catch (error) {
+          const compactStories = userStories.map(story => compactStoryForStorage(story, true));
+          try {
+            localStorage.setItem('userPaidStories', JSON.stringify(compactStories));
+            return { saved: true, stories: compactStories };
+          } catch (compactError) {
+            return { saved: false, stories: userStories };
+          }
+        }
+      }
+
+      function readUserPaidStories() {
+        try {
+          const parsedStories = JSON.parse(localStorage.getItem('userPaidStories') || '[]');
+          return Array.isArray(parsedStories) ? parsedStories : [];
+        } catch (error) {
+          return [];
+        }
+      }
+
+      function prepareStoryImageForStorage(file) {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            const rawDataUrl = event.target.result;
+            const img = new Image();
+            img.onload = () => {
+              const maxSize = 900;
+              const ratio = Math.min(1, maxSize / Math.max(img.width, img.height));
+              const width = Math.max(1, Math.round(img.width * ratio));
+              const height = Math.max(1, Math.round(img.height * ratio));
+              const canvas = document.createElement('canvas');
+              canvas.width = width;
+              canvas.height = height;
+              const ctx = canvas.getContext('2d');
+              if (!ctx) {
+                resolve(rawDataUrl);
+                return;
+              }
+              ctx.drawImage(img, 0, 0, width, height);
+              const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.72);
+              resolve(compressedDataUrl.length < rawDataUrl.length ? compressedDataUrl : rawDataUrl);
+            };
+            img.onerror = () => resolve(rawDataUrl);
+            img.src = rawDataUrl;
+          };
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
+      }
 
       // Wizard adımları arasında geçişi kontrol eden fonksiyon
       function setWizardStep(step) {
@@ -5324,14 +5388,19 @@
               return;
             }
             
-            const reader = new FileReader();
-            reader.onload = (event) => {
-              uploadedStoryImageBase64 = event.target.result;
+            uploadStatusText.textContent = "Görsel hazırlanıyor...";
+            prepareStoryImageForStorage(file)
+            .then((imageDataUrl) => {
+              uploadedStoryImageBase64 = imageDataUrl;
               storyFileUploadBox.classList.add('uploaded');
               uploadStatusText.textContent = file.name.length > 25 ? file.name.substring(0, 25) + '...' : file.name;
               showToast("Görsel başarıyla yüklendi!");
-            };
-            reader.readAsDataURL(file);
+            })
+            .catch(() => {
+              uploadedStoryImageBase64 = "";
+              uploadStatusText.textContent = "Görsel Seçin";
+              showToast("Görsel hazırlanırken sorun oluştu. Lütfen tekrar seçin.");
+            });
           }
         });
       }
@@ -5441,7 +5510,7 @@
           if (uploadedStoryImageBase64) {
             document.getElementById('previewStoryImg').src = uploadedStoryImageBase64;
           } else {
-            document.getElementById('previewStoryImg').src = "https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?w=500&auto=format&fit=crop&q=80";
+            document.getElementById('previewStoryImg').src = defaultStoryImageUrl;
           }
 
           setWizardStep(2);
@@ -5607,7 +5676,7 @@
               avatar: logoUrl, // Profil resmi yerine marka logosu
               time: "Şimdi",
               type: "image",
-              imageUrl: uploadedStoryImageBase64 || "https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?w=500&auto=format&fit=crop&q=80",
+              imageUrl: uploadedStoryImageBase64 || defaultStoryImageUrl,
               title: title,
               price: price,
               meta: meta,
@@ -5620,12 +5689,29 @@
             };
 
             let userStories = [];
+            let storyForRender = newStory;
             try {
-              userStories = JSON.parse(localStorage.getItem('userPaidStories') || '[]');
+              userStories = readUserPaidStories();
               userStories.push(newStory);
-              localStorage.setItem('userPaidStories', JSON.stringify(userStories));
+              const saveResult = saveUserPaidStories(userStories);
+              if (!saveResult.saved) {
+                throw new Error('userPaidStories storage failed');
+              }
+              storyForRender = saveResult.stories.find(story => story.id === newStory.id) || newStory;
             } catch (error) {
-              sessionPaidStories.push(newStory);
+              const fallbackStory = compactStoryForStorage(newStory, true);
+              const compactExistingStories = readUserPaidStories().map(story => compactStoryForStorage(story, true));
+              const saveResult = saveUserPaidStories([...compactExistingStories, fallbackStory]);
+              if (saveResult.saved) {
+                storyForRender = fallbackStory;
+              } else {
+                sessionPaidStories.push(fallbackStory);
+                storyForRender = fallbackStory;
+              }
+            }
+            const sessionIndex = sessionPaidStories.findIndex(story => story.id === storyForRender.id);
+            if (sessionIndex >= 0) {
+              sessionPaidStories[sessionIndex] = storyForRender;
             }
 
             // Vitrini yeniden çiz
