@@ -5,6 +5,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Otososyal | İlanEksper</title>
   <link rel="stylesheet" href="style.css?v=3.4" />
+  <script>
+    window.__unknownBrandLogoUrl = "assets/icons/custom/unknown-brand.svg";
+    window.handleBrandLogoError = function(img) {
+      if (!img) return;
+      const fallbackUrl = window.__unknownBrandLogoUrl;
+      const currentSrc = img.currentSrc || img.src || "";
+      if (!currentSrc.includes(fallbackUrl)) {
+        img.dataset.logoState = "unknown";
+        img.style.opacity = "1";
+        img.style.padding = "3px";
+        img.style.background = "#ffffff";
+        img.style.objectFit = "contain";
+        if (img.parentElement) {
+          img.parentElement.style.backgroundColor = "transparent";
+        }
+        img.src = fallbackUrl;
+        return;
+      }
+      img.dataset.logoState = "initial";
+      img.style.opacity = "0";
+    };
+  </script>
   <style>
     /* Dark mode color overrides & cache-breaking styles */
     [data-theme="dark"] .post-menu-trigger,
@@ -586,6 +608,7 @@
               <option value="c180_amg">Mercedes C180 AMG · Skor 69</option>
               <option value="a3_tdi">Audi A3 1.6 TDI · Skor 75</option>
               <option value="3008_blue">Peugeot 3008 1.5 BlueHDi · Skor 82</option>
+              <option value="cupra_formentor">Cupra Formentor 1.5 TSI · Skor 78</option>
             </select>
 
             <select id="selectBegenilen" aria-label="Beğendiğim araçtan seç">
@@ -659,7 +682,7 @@
 
         <div class="post-body">
           <div class="car-visual">
-            <img class="brand-bg-logo" src="https://unpkg.com/simple-icons@v9/icons/bmw.svg" alt="BMW" />
+            <img class="brand-bg-logo" src="https://unpkg.com/simple-icons@v9/icons/bmw.svg" alt="BMW" onerror="window.handleBrandLogoError ? window.handleBrandLogoError(this) : this.style.opacity='0';" />
             <div class="car-fallback-info">
               <span class="fallback-brand">BMW</span>
               <span class="fallback-model">520i 1.6 F10</span>
@@ -888,7 +911,7 @@
 
         <div class="post-body">
           <div class="car-visual">
-            <img class="brand-bg-logo" src="https://unpkg.com/simple-icons@v9/icons/volkswagen.svg" alt="Volkswagen" />
+            <img class="brand-bg-logo" src="https://unpkg.com/simple-icons@v9/icons/volkswagen.svg" alt="Volkswagen" onerror="window.handleBrandLogoError ? window.handleBrandLogoError(this) : this.style.opacity='0';" />
             <div class="car-fallback-info">
               <span class="fallback-brand">Volkswagen</span>
               <span class="fallback-model">Golf 7 1.4 TSI</span>
@@ -1117,7 +1140,7 @@
 
         <div class="post-body">
           <div class="car-visual">
-            <img class="brand-bg-logo" src="https://unpkg.com/simple-icons@v9/icons/toyota.svg" alt="Toyota" />
+            <img class="brand-bg-logo" src="https://unpkg.com/simple-icons@v9/icons/toyota.svg" alt="Toyota" onerror="window.handleBrandLogoError ? window.handleBrandLogoError(this) : this.style.opacity='0';" />
             <div class="car-fallback-info">
               <span class="fallback-brand">Toyota</span>
               <span class="fallback-model">Corolla 1.6 CVT</span>
@@ -1496,6 +1519,7 @@
       const profileUserContainer = document.querySelector('.profile-user-container');
       const bellDot = document.getElementById('bellDot');
       const markAllReadBtn = document.getElementById('markAllReadBtn');
+      var storySystemReady = false;
 
       // State for applied quick filters
       const appliedQuickFilters = {
@@ -1808,7 +1832,7 @@
         if (typeof refreshRightSidebar === 'function') {
           refreshRightSidebar();
         }
-        if (typeof renderStoriesBar === 'function') {
+        if (storySystemReady && typeof renderStoriesBar === 'function') {
           renderStoriesBar();
         }
       };
@@ -1965,7 +1989,6 @@
         "fiat": "fiat",
         "alfa romeo": "alfaromeo",
         "citroen": "citroen",
-        "cupra": "cupra",
         "dacia": "dacia",
         "kia": "kia",
         "land rover": "landrover",
@@ -1975,6 +1998,41 @@
         "suzuki": "suzuki",
         "volvo": "volvo"
       };
+
+      const simpleIconsBaseUrl = "https://unpkg.com/simple-icons@v9/icons/";
+      const unknownBrandLogoUrl = "assets/icons/custom/unknown-brand.svg";
+
+      function normalizeBrandName(brand) {
+        return (brand || "").toString().trim().toLowerCase();
+      }
+
+      function getBrandLogo(brand) {
+        const brandKey = normalizeBrandName(brand);
+        const simpleIconSlug = brandLogoMap[brandKey];
+        return simpleIconSlug ? `${simpleIconsBaseUrl}${simpleIconSlug}.svg` : unknownBrandLogoUrl;
+      }
+
+      function handleBrandLogoError(img) {
+        if (!img) return;
+        const currentSrc = img.currentSrc || img.src || "";
+        if (!currentSrc.includes(unknownBrandLogoUrl)) {
+          img.dataset.logoState = "unknown";
+          img.style.opacity = "1";
+          img.style.padding = "3px";
+          img.style.background = "#ffffff";
+          img.style.objectFit = "contain";
+          if (img.parentElement) {
+            img.parentElement.style.backgroundColor = "transparent";
+          }
+          img.src = unknownBrandLogoUrl;
+          return;
+        }
+        img.dataset.logoState = "initial";
+        img.style.opacity = "0";
+      }
+
+      window.getBrandLogo = getBrandLogo;
+      window.handleBrandLogoError = handleBrandLogoError;
 
       const vehicleData = {
         bmw_520: {
@@ -2076,6 +2134,16 @@
           type: "Analizden seçildi",
           price: "1.340.000 TL",
           risks: ["AdBlue deposu ve enjektörü kontrol edilmeli", "EAT8 şanzıman vites geçişleri test edilmeli"]
+        },
+        cupra_formentor: {
+          brand: "Cupra",
+          model: "Formentor 1.5 TSI",
+          specs: "2021 · 74.000 km · Benzin · Otomatik",
+          score: "78/100",
+          risk: "Orta",
+          type: "Analizden seçildi",
+          price: "1.475.000 TL",
+          risks: ["DSG kavrama ve mekatronik davranışı test edilmeli", "Elektronik donanım ve multimedya kontrolleri yapılmalı", "Servis bakım geçmişi ve yazılım güncellemeleri doğrulanmalı"]
         },
         bmw_320: {
           brand: "BMW",
@@ -2590,8 +2658,7 @@
         if (risk.toLowerCase() === "düşük") riskClass = "low";
         if (risk.toLowerCase() === "yüksek") riskClass = "high";
 
-        const brandSlug = brandLogoMap[brand.toLowerCase()] || brand.toLowerCase() || 'default';
-        const logoUrl = `https://unpkg.com/simple-icons@v9/icons/${brandSlug}.svg`;
+        const logoUrl = getBrandLogo(brand);
 
         const ownerAvatar = 'assets/erkan-profile.png';
         const ownerName = 'Erkan Ö.';
@@ -2618,7 +2685,7 @@
  
             <div class="post-body">
               <div class="car-visual">
-                <img class="brand-bg-logo" src="${logoUrl}" alt="${brand}" />
+                <img class="brand-bg-logo" src="${logoUrl}" alt="${brand}" onerror="window.handleBrandLogoError ? window.handleBrandLogoError(this) : this.style.opacity='0';" />
                 <div class="car-fallback-info">
                   <span class="fallback-brand">${brand}</span>
                   <span class="fallback-model">${model}</span>
@@ -4266,9 +4333,6 @@
         if (risk.toLowerCase() === "düşük") riskClass = "low";
         if (risk.toLowerCase() === "yüksek") riskClass = "high";
 
-        const brandSlug = brandLogoMap[brand.toLowerCase()] || brand.toLowerCase();
-        const logoUrl = `https://unpkg.com/simple-icons@v9/icons/${brandSlug}.svg`;
-
         // Generate a random post ID
         const randomPostId = "post-user-" + Math.floor(Math.random() * 10000);
 
@@ -4636,30 +4700,54 @@
         {
           id: "story-guide",
           username: "OtoStory",
-          modelName: "Rehber",
-          avatar: "assets/avatar-guide.jpg",
+          modelName: "OtoStory",
+          avatar: "",
           time: "Şimdi",
-          type: "full-image",
-          imageUrl: "assets/otostory-guide.png",
+          type: "onboarding",
           action: "open_wizard",
-          link: "#"
-        },
-        {
-          id: "story-marketing",
-          username: "Öne Çıkar",
-          modelName: "Reklam",
-          avatar: "assets/avatar-marketing.jpg",
-          time: "Şimdi",
-          type: "full-image",
-          imageUrl: "assets/otostory-marketing.png",
-          action: "open_wizard",
-          link: "#"
+          link: "#",
+          slides: [
+            {
+              id: "story-guide-what",
+              username: "OtoStory nedir?",
+              time: "Bilgilendirme",
+              type: "onboarding-slide",
+              stepLabel: "OtoStory nedir?",
+              desc: "OtoStory, araç ilanını Otososyal akışının en üstündeki story vitrininde öne çıkarır. Böylece ilan, akışta aşağı kaybolmadan araç bakan kullanıcıların ilk gördüğü alanlardan birinde yer alır ve daha fazla potansiyel alıcıya ulaşır."
+            },
+            {
+              id: "story-guide-how",
+              username: "OtoStory nedir?",
+              time: "Bilgilendirme",
+              type: "onboarding-slide",
+              stepLabel: "Nasıl kullanılır?",
+              desc: "Marka, model, fiyat, kilometre, yakıt tipi, tramer ve iletişim bilgilerini girersin. Araç görselini yüklersin, story önizlemesini kontrol edersin ve ödeme adımından sonra ilan 24 saatlik vitrinde yayınlanır."
+            },
+            {
+              id: "story-guide-who",
+              username: "OtoStory nedir?",
+              time: "Bilgilendirme",
+              type: "onboarding-slide",
+              stepLabel: "Kimler görür?",
+              desc: "Otososyal'de araç analizi inceleyen, alım kararı vermeye çalışan ve benzer modelleri takip eden kullanıcılar story halkasından ilanına ulaşabilir. İlgilenen kişi tek dokunuşla ilan detayına yönlenir."
+            },
+            {
+              id: "story-guide-try",
+              username: "OtoStory nedir?",
+              time: "Hazır",
+              type: "onboarding-slide",
+              stepLabel: "Hemen dene",
+              desc: "Satmak istediğin aracı daha görünür yapmak için OtoStory vitrini kullan. Kısa, net ve görsel odaklı bir sunumla ilanını akışın üstünde öne çıkar.",
+              action: "open_wizard",
+              link: "#"
+            }
+          ]
         },
         {
           id: "story-volkswagen",
           username: "Volkswagen",
           modelName: "VW Golf 7",
-          avatar: "https://unpkg.com/simple-icons@v9/icons/volkswagen.svg",
+          avatar: getBrandLogo("Volkswagen"),
           time: "1 saat önce",
           type: "image",
           imageUrl: "https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?w=500&auto=format&fit=crop&q=80",
@@ -4676,7 +4764,7 @@
           id: "story-toyota",
           username: "Toyota",
           modelName: "Corolla",
-          avatar: "https://unpkg.com/simple-icons@v9/icons/toyota.svg",
+          avatar: getBrandLogo("Toyota"),
           time: "3 saat önce",
           type: "image",
           imageUrl: "https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=500&auto=format&fit=crop&q=80",
@@ -4693,7 +4781,7 @@
           id: "story-bmw",
           username: "BMW",
           modelName: "BMW 520i",
-          avatar: "https://unpkg.com/simple-icons@v9/icons/bmw.svg",
+          avatar: getBrandLogo("BMW"),
           time: "5 saat önce",
           type: "image",
           imageUrl: "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=500&auto=format&fit=crop&q=80",
@@ -4710,7 +4798,7 @@
           id: "story-honda",
           username: "Honda",
           modelName: "Honda Civic",
-          avatar: "https://unpkg.com/simple-icons@v9/icons/honda.svg",
+          avatar: getBrandLogo("Honda"),
           time: "6 saat önce",
           type: "image",
           imageUrl: "https://images.unsplash.com/photo-1609521263047-f8f205293f24?w=500&auto=format&fit=crop&q=80",
@@ -4789,8 +4877,8 @@
         }
         
         // Tüm hikayeleri birleştirelim
-        const pinnedStories = storiesData.filter(s => s.id === 'story-guide' || s.id === 'story-marketing');
-        const exampleStories = storiesData.filter(s => s.id !== 'story-guide' && s.id !== 'story-marketing');
+        const pinnedStories = storiesData.filter(s => s.id === 'story-guide');
+        const exampleStories = storiesData.filter(s => s.id !== 'story-guide');
         
         let allStories = [];
         
@@ -4814,15 +4902,26 @@
           const isViewed = viewedStoriesDb.includes(story.id);
           const ringClass = isViewed ? "viewed" : "unviewed";
           const initialLetter = (story.username || "C").charAt(0).toUpperCase();
-          const bgBrandColor = getBrandColor(story.username || "C");
+          const storyAvatarUrl = story.avatar || getBrandLogo(story.username);
+          const isUnknownBrandAvatar = storyAvatarUrl.includes(unknownBrandLogoUrl);
+          const bgBrandColor = "#ffffff";
+          const avatarMarkup = story.type === "onboarding"
+            ? `
+              <div class="otostory-avatar-icon" aria-hidden="true">
+                <img src="assets/otostory-icon.png" alt="OtoStory" />
+              </div>
+            `
+            : `
+              <div class="story-avatar-container" style="width: 100%; height: 100%; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: ${bgBrandColor}; color: #ffffff; font-weight: 800; font-size: 14px; position: relative; overflow: hidden;">
+                <span style="font-family: inherit; font-size: 15px; font-weight: 800; line-height: 1; text-transform: uppercase;">${initialLetter}</span>
+                <img class="story-avatar-img" src="${storyAvatarUrl}" onerror="window.handleBrandLogoError ? window.handleBrandLogoError(this) : this.style.opacity='0';" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; background: #ffffff; padding: 3px; box-sizing: border-box; transition: opacity 0.2s;" alt="${story.username}" />
+              </div>
+            `;
           
           html += `
             <div class="story-circle" data-index="${index}">
               <div class="story-ring ${ringClass}">
-                <div class="story-avatar-container" style="width: 100%; height: 100%; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: ${bgBrandColor}; color: #ffffff; font-weight: 800; font-size: 14px; position: relative; overflow: hidden;">
-                  <span style="font-family: inherit; font-size: 15px; font-weight: 800; line-height: 1; text-transform: uppercase;">${initialLetter}</span>
-                  <img class="story-avatar-img" src="${story.avatar}" onerror="this.style.opacity='0';" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; background: #ffffff; padding: 3px; box-sizing: border-box; transition: opacity 0.2s;" alt="${story.username}" />
-                </div>
+                ${avatarMarkup}
               </div>
               <span class="story-username">${story.modelName}</span>
             </div>
@@ -4855,6 +4954,16 @@
         storiesBar.querySelectorAll('.story-circle[data-index]').forEach(elem => {
           elem.addEventListener('click', () => {
             const index = parseInt(elem.getAttribute('data-index'), 10);
+            const story = allStories[index];
+            if (story && story.type === "onboarding" && Array.isArray(story.slides)) {
+              if (!viewedStoriesDb.includes(story.id)) {
+                viewedStoriesDb.push(story.id);
+                localStorage.setItem('viewedStoriesDb', JSON.stringify(viewedStoriesDb));
+                renderStoriesBar();
+              }
+              openStoryViewer(story.slides, 0);
+              return;
+            }
             openStoryViewer(allStories, index);
           });
         });
@@ -4883,6 +4992,17 @@
         currentStoryIndex = index;
         const story = activeStoriesList[index];
 
+        if (story && story.type === "onboarding" && Array.isArray(story.slides)) {
+          if (!viewedStoriesDb.includes(story.id)) {
+            viewedStoriesDb.push(story.id);
+            localStorage.setItem('viewedStoriesDb', JSON.stringify(viewedStoriesDb));
+            renderStoriesBar();
+          }
+          activeStoriesList = story.slides;
+          loadStory(0);
+          return;
+        }
+
         // Eğer kullanıcı hikayesiyse, görüntülenme istatistiğini artır
         if (story.isUser) {
           let userStories = JSON.parse(localStorage.getItem('userPaidStories') || '[]');
@@ -4908,18 +5028,31 @@
         // Başlık ve kullanıcı bilgileri güncelleme
         const avatarImg = document.getElementById('storyUserAvatar');
         if (avatarImg) {
-          avatarImg.style.opacity = '1'; // Reset opacity in case previous failed
-          avatarImg.src = story.avatar;
+          if (story.type === "onboarding-slide") {
+            avatarImg.style.opacity = '1';
+            avatarImg.src = 'assets/otostory-icon.png';
+            avatarImg.style.objectFit = 'cover';
+            avatarImg.style.background = '#061b3d';
+            avatarImg.style.padding = '0';
+          } else {
+            const storyAvatarUrl = story.avatar || getBrandLogo(story.username);
+            const isUnknownBrandAvatar = storyAvatarUrl.includes(unknownBrandLogoUrl);
+            avatarImg.style.opacity = '1'; // Reset opacity in case previous failed
+            avatarImg.src = storyAvatarUrl;
+            avatarImg.style.objectFit = 'contain';
+            avatarImg.style.background = '#ffffff';
+            avatarImg.style.padding = isUnknownBrandAvatar ? '3px' : '2px';
+          }
         }
         const avatarContainer = document.querySelector('.story-header-avatar-container');
         if (avatarContainer) {
-          avatarContainer.style.backgroundColor = getBrandColor(story.username || "C");
+          avatarContainer.style.backgroundColor = story.type === "onboarding-slide" ? "#2563eb" : "#ffffff";
         }
         const initialSpan = document.getElementById('storyUserInitial');
         if (initialSpan) {
-          initialSpan.textContent = (story.username || "C").charAt(0).toUpperCase();
+          initialSpan.textContent = story.type === "onboarding-slide" ? "" : (story.username || "C").charAt(0).toUpperCase();
         }
-        document.getElementById('storyUserName').textContent = story.username;
+        document.getElementById('storyUserName').textContent = story.type === "onboarding-slide" ? (story.stepLabel || story.username) : story.username;
         document.getElementById('storyTime').textContent = story.time;
 
         // Progress bar çizgisini oluşturma
@@ -4992,6 +5125,19 @@
               </div>
             </div>
           `;
+        } else if (story.type === "onboarding-slide") {
+          const isFinalSlide = story.action === "open_wizard";
+          cardHTML = `
+            <div class="story-card otostory-onboarding-card">
+              <div class="otostory-card-copy">
+                <span>OtoStory</span>
+                <h3>${escapeHTML(story.stepLabel || "OtoStory")}</h3>
+                <p>${escapeHTML(story.desc || "")}</p>
+              </div>
+              <div class="otostory-card-hint">${isFinalSlide ? "Hazırsan ilanını vitrine çıkar." : "Devam etmek için sağ tarafa dokun."}</div>
+              ${isFinalSlide ? `<button type="button" class="story-card-btn otostory-onboarding-btn" id="storyActionBtn">İlanımı Öne Çıkar</button>` : ''}
+            </div>
+          `;
         } else if (story.type === "full-image") {
           cardHTML = `
             <div class="story-card full-image-story" style="position: relative; width: 100%; height: auto; max-height: calc(100% - 20px); overflow: hidden; border-radius: 20px; background: #000; border: none; box-shadow: none;">
@@ -5058,6 +5204,11 @@
         if (fills.length === 0 || !fills[index]) return;
 
         const activeFill = fills[index];
+        if (activeStoriesList[index] && activeStoriesList[index].type === "onboarding-slide") {
+          activeFill.style.width = "100%";
+          return;
+        }
+
         let progress = 0;
         const step = 2; // 2% her 100ms = 5sn
         const intervalTime = 100;
@@ -5255,16 +5406,19 @@
           document.getElementById('previewStoryDesc').textContent = desc;
 
           // Marka Logosunun Çekilmesi (Simple Icons)
-          const brandSlug = brandLogoMap[brand.toLowerCase()] || brand.toLowerCase().replace(/[\s.]+/g, '-');
-          const logoUrl = `https://unpkg.com/simple-icons@v9/icons/${brandSlug}.svg`;
+          const logoUrl = getBrandLogo(brand);
+          const isUnknownBrandLogo = logoUrl.includes(unknownBrandLogoUrl);
           const previewLogoImg = document.getElementById('previewStoryLogo');
           if (previewLogoImg) {
             previewLogoImg.style.opacity = '1'; // Reset opacity
+            previewLogoImg.style.objectFit = 'contain';
+            previewLogoImg.style.background = '#ffffff';
+            previewLogoImg.style.padding = isUnknownBrandLogo ? '3px' : '1px';
             previewLogoImg.src = logoUrl;
           }
           const previewLogoContainer = document.getElementById('previewStoryLogoContainer');
           if (previewLogoContainer) {
-            previewLogoContainer.style.backgroundColor = getBrandColor(brand || "C");
+            previewLogoContainer.style.backgroundColor = isUnknownBrandLogo ? "transparent" : getBrandColor(brand || "C");
           }
           const previewInitial = document.getElementById('previewStoryInitial');
           if (previewInitial) {
@@ -5410,8 +5564,7 @@
           }
 
           // Marka Logosunun SVG'si
-          const brandSlug = brandLogoMap[brand.toLowerCase()] || brand.toLowerCase().replace(/[\s.]+/g, '-');
-          const logoUrl = `https://unpkg.com/simple-icons@v9/icons/${brandSlug}.svg`;
+          const logoUrl = getBrandLogo(brand);
 
           // Marka adı ve model adının ilk kelimesini birleştirerek hikaye çemberi altına yazma (örn: Kia Stonic)
           let modelName = title;
@@ -5575,6 +5728,7 @@
       refreshRightSidebar();
 
       // Initialize Story Showcase Vitrini
+      storySystemReady = true;
       renderStoriesBar();
     });
   </script>
@@ -5633,7 +5787,7 @@
 
   <!-- Story İlan Vitrini Promosyon Modalı (Sihirbaz Akışı) -->
   <div class="custom-modal-overlay" id="storyPromoModal">
-    <div class="custom-modal-content" style="max-width: 440px; padding: 24px 20px;">
+    <div class="custom-modal-content story-promo-content" style="max-width: 440px; padding: 16px 20px;">
       
       <!-- Step Indicator -->
       <div class="story-wizard-steps">
@@ -5736,15 +5890,15 @@
           <label>İlan Linki</label>
           <input type="url" id="storyFormLink" placeholder="Örn: https://sahibinden.com/ilan..." required />
         </div>
-        <div class="form-group">
+        <div class="form-group" style="margin-bottom: 16px;">
           <label>İlan Görseli Yükle (Aracınızın önden çekilmiş vitrin görseli)</label>
           <div class="file-upload-wrapper">
             <input type="file" id="storyFormFile" accept="image/*" style="display: none;" />
-            <div class="file-upload-box" id="storyFileUploadBox">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color: var(--muted); margin-bottom: 6px;">
+            <div class="file-upload-box" id="storyFileUploadBox" style="padding: 10px; flex-direction: row; gap: 8px; justify-content: center; min-height: unset; height: auto;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color: var(--muted); margin: 0;">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
               </svg>
-              <span id="uploadStatusText" style="font-size: 12px; color: var(--muted); font-weight: 500;">Görsel Seçin</span>
+              <span id="uploadStatusText" style="font-size: 12px; color: var(--muted); font-weight: 500; margin: 0;">Görsel Seçin</span>
             </div>
           </div>
         </div>
@@ -5777,7 +5931,7 @@
               <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 2px;">
                 <div id="previewStoryLogoContainer" style="width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #ffffff; font-weight: 800; font-size: 9px; position: relative; overflow: hidden; flex-shrink: 0; box-sizing: border-box; background: #fff;">
                   <span id="previewStoryInitial" style="text-transform: uppercase;"></span>
-                  <img id="previewStoryLogo" src="" onerror="this.style.opacity='0';" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; background: #ffffff; padding: 1px; box-sizing: border-box; transition: opacity 0.2s;" />
+                  <img id="previewStoryLogo" src="" onerror="window.handleBrandLogoError ? window.handleBrandLogoError(this) : this.style.opacity='0';" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; background: #ffffff; padding: 1px; box-sizing: border-box; transition: opacity 0.2s;" />
                 </div>
                 <span style="font-size: 11px; font-weight: 700; color: #fff;" id="previewStoryBrandName">MARKALAN</span>
                 <span class="story-card-badge" style="margin-left: auto; font-size: 8px; padding: 2px 6px; background: #22c55e;">Öne Çıkan İlan</span>
@@ -5893,7 +6047,7 @@
         <div class="story-user-info">
           <div class="story-header-avatar-container" style="width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #ffffff; font-weight: 800; font-size: 13px; position: relative; overflow: hidden; border: 1.5px solid rgba(255,255,255,0.4); flex-shrink: 0; box-sizing: border-box;">
             <span id="storyUserInitial" style="text-transform: uppercase;"></span>
-            <img class="story-user-avatar" id="storyUserAvatar" src="" onerror="this.style.opacity='0';" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; background: #ffffff; padding: 2px; box-sizing: border-box; transition: opacity 0.2s;" alt="" />
+            <img class="story-user-avatar" id="storyUserAvatar" src="" onerror="window.handleBrandLogoError ? window.handleBrandLogoError(this) : this.style.opacity='0';" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; background: #ffffff; padding: 2px; box-sizing: border-box; transition: opacity 0.2s;" alt="" />
           </div>
           <div>
             <span class="story-user-name" id="storyUserName"></span>
