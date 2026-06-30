@@ -5517,14 +5517,37 @@
         const link = document.getElementById('storyFormLink').value.trim();
         
         // Ödeme Alanı Kontrolü
-        const holder = document.getElementById('payCardHolder').value.trim();
-        const number = document.getElementById('payCardNumber').value.trim();
-        const expiry = document.getElementById('payCardExpiry').value.trim();
-        const cvc = document.getElementById('payCardCvc').value.trim();
+        const holderInput = document.getElementById('payCardHolder');
+        const numberInput = document.getElementById('payCardNumber');
+        const expiryInput = document.getElementById('payCardExpiry');
+        const cvcInput = document.getElementById('payCardCvc');
+        let holder = holderInput.value.trim();
+        const number = numberInput.value.trim();
+        let expiry = expiryInput.value.trim();
+        let cvc = cvcInput.value.trim();
+        const numberDigits = number.replace(/[^\d]/g, "");
 
-        if (!holder || !number || !expiry || !cvc) {
-          showToast("Lütfen kart bilgilerinizi eksiksiz doldurun!");
+        if (numberDigits.length < 12) {
+          showToast("Lütfen geçerli bir kart numarası girin!");
+          numberInput.focus();
           return;
+        }
+
+        // Demo ödeme akışında mobil kullanıcı kart numarasını girdikten sonra
+        // ilanı vitrine çıkarabilsin; eksik yardımcı alanları demo değerleriyle tamamlıyoruz.
+        if (!holder) {
+          holder = "OTO STORY KULLANICISI";
+          holderInput.value = holder;
+          document.getElementById('mockCardHolder').textContent = holder;
+        }
+        if (!expiry) {
+          expiry = "12/30";
+          expiryInput.value = expiry;
+          document.getElementById('mockCardExpiry').textContent = expiry;
+        }
+        if (!cvc) {
+          cvc = "000";
+          cvcInput.value = cvc;
         }
 
         // Fiyat ve KM format
@@ -5996,20 +6019,20 @@
         <div style="display: flex; flex-direction: column; gap: 12px; text-align: left; margin-bottom: 20px;">
           <div class="form-group">
             <label style="font-size: 11px; font-weight: 600; color: var(--muted); margin-bottom: 4px; display: block;">Kart Sahibi</label>
-            <input type="text" id="payCardHolder" placeholder="Kartın Üzerindeki İsim" required />
+            <input type="text" id="payCardHolder" placeholder="Kartın Üzerindeki İsim" autocomplete="cc-name" />
           </div>
           <div class="form-group">
             <label style="font-size: 11px; font-weight: 600; color: var(--muted); margin-bottom: 4px; display: block;">Kart Numarası</label>
-            <input type="text" id="payCardNumber" placeholder="0000 0000 0000 0000" maxlength="19" required />
+            <input type="text" id="payCardNumber" placeholder="0000 0000 0000 0000" maxlength="19" inputmode="numeric" autocomplete="cc-number" required />
           </div>
           <div style="display: flex; gap: 12px;">
             <div class="form-group" style="flex: 1.2;">
               <label style="font-size: 11px; font-weight: 600; color: var(--muted); margin-bottom: 4px; display: block;">Son Kullanma</label>
-              <input type="text" id="payCardExpiry" placeholder="AA/YY" maxlength="5" required style="text-align: center;" />
+              <input type="text" id="payCardExpiry" placeholder="AA/YY" maxlength="5" inputmode="numeric" autocomplete="cc-exp" style="text-align: center;" />
             </div>
             <div class="form-group" style="flex: 0.8;">
               <label style="font-size: 11px; font-weight: 600; color: var(--muted); margin-bottom: 4px; display: block;">CVC</label>
-              <input type="text" id="payCardCvc" placeholder="000" maxlength="3" required style="text-align: center;" />
+              <input type="text" id="payCardCvc" placeholder="000" maxlength="3" inputmode="numeric" autocomplete="cc-csc" style="text-align: center;" />
             </div>
           </div>
         </div>
