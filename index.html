@@ -412,8 +412,11 @@
         <!-- Profil Grubu ve Dropdown -->
         <div class="profile-user-container" id="profileUserContainer">
           <div class="profile-user-trigger" id="profileTrigger" role="button" tabindex="0">
-            <img class="profile-avatar-img" src="assets/erkan-profile.png" alt="Erkan" />
-            <strong>Erkan</strong>
+            <img class="profile-avatar-img" id="profileTriggerAvatar" src="assets/erkan-profile.png" alt="Erkan" />
+            <strong id="profileTriggerName">Erkan</strong>
+            <span class="verified-tick-yellow" id="profileTriggerVerified" style="display: none;" aria-label="Doğrulanmış OtoSosyal hesabı">
+              <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </span>
             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="chevron-down-icon">
               <polyline points="6 9 12 15 18 9"></polyline>
             </svg>
@@ -421,9 +424,9 @@
 
           <div class="profile-dropdown" id="profileDropdown">
             <div class="profile-dropdown-header">
-              <img class="profile-dropdown-avatar-img" src="assets/erkan-profile.png" alt="Erkan Ö." />
+              <img class="profile-dropdown-avatar-img" id="profileDropdownAvatar" src="assets/erkan-profile.png" alt="Erkan Ö." />
               <div class="profile-dropdown-user-info">
-                <strong>Erkan Ö.</strong>
+                <strong id="profileDropdownName">Erkan Ö.</strong>
                 <!-- * Entegrasyon Notu: İlanEksper bünyesinde 3 üyelik tipi bulunur:
                      1. Free / Ücretsiz (Günde 1 ücretsiz analiz hakkı)
                      2. Plus (Sınırsız analiz hakkı)
@@ -436,6 +439,23 @@
                   Premium Pro
                 </span>
               </div>
+            </div>
+
+            <div class="profile-account-switcher" id="profileAccountSwitcher" aria-label="Hesap değiştir">
+              <button type="button" class="account-switch-option active" data-account="user">
+                <img src="assets/erkan-profile.png" alt="Erkan Ö." />
+                <span>
+                  <strong>Erkan Ö.</strong>
+                  <small>Kişisel hesap</small>
+                </span>
+              </button>
+              <button type="button" class="account-switch-option" data-account="moderator">
+                <img src="assets/otososyal-logo-header.png" alt="OtoSosyal" />
+                <span>
+                  <strong>OtoSosyal <span class="verified-tick-yellow inline" aria-label="Doğrulanmış OtoSosyal hesabı"><svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span></strong>
+                  <small>Moderatör hesabı</small>
+                </span>
+              </button>
             </div>
             
             <div class="profile-dropdown-menu">
@@ -1618,10 +1638,110 @@
         });
       }
 
+      const accountProfiles = {
+        user: {
+          name: 'Erkan Ö.',
+          shortName: 'Erkan',
+          avatar: 'assets/erkan-profile.png',
+          alt: 'Erkan Ö.',
+          isModerator: false
+        },
+        moderator: {
+          name: 'OtoSosyal',
+          shortName: 'OtoSosyal',
+          avatar: 'assets/otososyal-logo-header.png',
+          alt: 'OtoSosyal',
+          isModerator: true
+        }
+      };
+
+      function getActivePostingAccount() {
+        return localStorage.getItem('otososyalActiveAccount') === 'moderator' ? 'moderator' : 'user';
+      }
+
+      function isModeratorActive() {
+        return localStorage.getItem('isLoggedIn') !== 'false' && getActivePostingAccount() === 'moderator';
+      }
+
+      function getActiveAccountProfile() {
+        return accountProfiles[getActivePostingAccount()] || accountProfiles.user;
+      }
+
+      function setActivePostingAccount(account) {
+        const nextAccount = account === 'moderator' ? 'moderator' : 'user';
+        localStorage.setItem('otososyalActiveAccount', nextAccount);
+        updateActiveAccountUI();
+        rebuildAllPostMenus();
+        showToast(nextAccount === 'moderator' ? 'OtoSosyal moderatör hesabına geçildi.' : 'Erkan hesabına geçildi.');
+      }
+
+      function updateActiveAccountUI() {
+        const isLoggedIn = localStorage.getItem('isLoggedIn') !== 'false';
+        if (!isLoggedIn) {
+          localStorage.setItem('otososyalActiveAccount', 'user');
+        }
+
+        const profile = getActiveAccountProfile();
+        const triggerAvatar = document.getElementById('profileTriggerAvatar');
+        const triggerName = document.getElementById('profileTriggerName');
+        const triggerVerified = document.getElementById('profileTriggerVerified');
+        const dropdownAvatar = document.getElementById('profileDropdownAvatar');
+        const dropdownName = document.getElementById('profileDropdownName');
+        const composerAvatar = document.querySelector('.composer-avatar');
+        const composerTextarea = document.getElementById('textareaSoru');
+        const composerTools = document.querySelector('.composer-tools');
+        const composer = document.querySelector('.share-composer');
+        const activeSelectedShareCard = document.getElementById('selectedShareCard');
+        const activeSelectAnaliz = document.getElementById('selectAnaliz');
+        const activeSelectBegenilen = document.getElementById('selectBegenilen');
+        const activeSelectSoru = document.getElementById('selectSoru');
+        const accountButtons = document.querySelectorAll('.account-switch-option');
+
+        if (triggerAvatar) {
+          triggerAvatar.src = profile.avatar;
+          triggerAvatar.alt = profile.alt;
+        }
+        if (triggerName) triggerName.textContent = profile.shortName;
+        if (triggerVerified) triggerVerified.style.display = profile.isModerator ? 'inline-flex' : 'none';
+        if (dropdownAvatar) {
+          dropdownAvatar.src = profile.avatar;
+          dropdownAvatar.alt = profile.alt;
+        }
+        if (dropdownName) {
+          dropdownName.innerHTML = profile.isModerator
+            ? 'OtoSosyal <span class="verified-tick-yellow inline" aria-label="Doğrulanmış OtoSosyal hesabı"><svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>'
+            : 'Erkan Ö.';
+        }
+        if (composerAvatar) {
+          composerAvatar.src = profile.avatar;
+          composerAvatar.alt = profile.alt;
+        }
+        if (composerTextarea) {
+          composerTextarea.placeholder = profile.isModerator
+            ? 'OtoSosyal moderatör duyurusu yaz...'
+            : 'Hazır soru seçebilir veya kendi sorunu yazabilirsin.';
+        }
+        if (composerTools) {
+          composerTools.style.display = profile.isModerator ? 'none' : 'flex';
+        }
+        if (composer) {
+          composer.classList.toggle('moderator-composer', profile.isModerator);
+        }
+        if (activeSelectedShareCard && profile.isModerator) {
+          activeSelectedShareCard.style.display = 'none';
+        }
+        if (activeSelectAnaliz) activeSelectAnaliz.disabled = profile.isModerator;
+        if (activeSelectBegenilen) activeSelectBegenilen.disabled = profile.isModerator;
+        if (activeSelectSoru) activeSelectSoru.disabled = profile.isModerator;
+        accountButtons.forEach(btn => {
+          btn.classList.toggle('active', btn.getAttribute('data-account') === getActivePostingAccount());
+        });
+      }
+
       // Rol bazlı 3-nokta menüsü oluşturucu
       function getPostMenuHTML(postId, isOwner) {
         const role = localStorage.getItem('userRole') || 'pro';
-        const isAdmin = role === 'admin';
+        const isAdmin = role === 'admin' || isModeratorActive();
         const isLoggedIn = localStorage.getItem('isLoggedIn') !== 'false';
 
         if (!isLoggedIn) {
@@ -1660,13 +1780,9 @@
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="menu-icon"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
               Sil
             </button>
-            <button class="post-menu-item ignore-btn">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="menu-icon"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
-              Görmezden Gel
-            </button>
-            <button class="post-menu-item report-btn">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="menu-icon"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>
-              Şikayet Et
+            <button class="post-menu-item bug-report-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="menu-icon"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              Hata Bildir
             </button>
           `;
         }
@@ -1837,6 +1953,7 @@
             composerAvatar.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2394a3b8'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z'/></svg>";
           }
         }
+        updateActiveAccountUI();
 
         // Update all posts states (likes, bookmarks, votes) based on new login status
         document.querySelectorAll('.post-card').forEach(card => {
@@ -1945,6 +2062,13 @@
         e.stopPropagation();
       });
       profileDropdown.addEventListener('click', (e) => {
+        const accountOption = e.target.closest('.account-switch-option');
+        if (accountOption) {
+          e.preventDefault();
+          e.stopPropagation();
+          setActivePostingAccount(accountOption.getAttribute('data-account'));
+          return;
+        }
         e.stopPropagation();
       });
 
@@ -2374,7 +2498,7 @@
           
           if (menuItem.classList.contains('delete-btn')) {
             const currentRole = localStorage.getItem('userRole') || 'pro';
-            if (isOwner || currentRole === 'admin') {
+            if (isOwner || currentRole === 'admin' || isModeratorActive()) {
               // Delete user's own or any post as admin
               card.style.transition = 'all 0.35s ease';
               card.style.opacity = '0';
@@ -2408,6 +2532,8 @@
           } else if (menuItem.classList.contains('restrict-btn')) {
             // ENTEGRASYON ADIMI: İlgili kullanıcının ID'sini suspansiyon API'sine (POST /api/users/suspend) gönderin
             showCustomModal('success', 'Kullanıcı Kısıtlandı', 'Gönderiyi paylaşan kullanıcının erişimi sınırlandırıldı. Artık yeni gönderi ve yorum paylaşamaz.');
+          } else if (menuItem.classList.contains('bug-report-btn')) {
+            showCustomModal('success', 'Hata Bildirildi', 'Paylaşımındaki bir hata için bildirim alındı. İlanEksper entegrasyonunda bu kayıt destek/moderasyon kuyruğuna düşecek.');
           } else if (menuItem.classList.contains('ignore-btn')) {
             // Smoothly hide ignored card
             card.style.transition = 'all 0.35s ease';
@@ -2646,6 +2772,9 @@
       // Dinamik Gönderi HTML Üretici
       function createPostHTML(post) {
         if (!post) return "";
+        if (post.kind === "moderator") {
+          return createModeratorPostHTML(post);
+        }
         const brand = post.brand || "Araç";
         const model = post.model || "";
         const specs = post.specs || "";
@@ -2856,6 +2985,67 @@
         `;
       }
 
+      function createModeratorPostHTML(post) {
+        const id = post.id || ("post-moderator-" + Date.now());
+        const createdAt = post.createdAt || Date.now();
+        const timeText = formatRelativeTime(createdAt);
+        const text = post.questionText || post.text || "";
+
+        return `
+          <article class="post-card moderator-post-card" id="${id}" data-created-at="${createdAt}" data-time="0" data-owner="moderator" data-brand="OtoSosyal" data-model="Duyuru" data-fuel="" data-price="0" data-km="0">
+            <div class="post-top">
+              <div class="user-line moderator-user-line">
+                <img class="profile-avatar-img moderator-avatar" src="assets/otososyal-logo-header.png" alt="OtoSosyal" style="width:34px; height:34px; margin-right:4px;" />
+                <strong>OtoSosyal</strong>
+                <span class="verified-tick-yellow inline" aria-label="Doğrulanmış OtoSosyal hesabı">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </span>
+                <span class="source-badge moderator-source-badge">Moderatör</span>
+              </div>
+
+              <div class="post-meta-container" style="position: relative;">
+                <span class="post-time">${timeText}</span>
+                <button class="post-menu-trigger" aria-label="Seçenekler">•••</button>
+                <div class="post-menu-dropdown">
+                  ${getPostMenuHTML(id, false)}
+                </div>
+              </div>
+            </div>
+
+            <div class="moderator-post-body">
+              <span class="moderator-post-label">OtoSosyal duyurusu</span>
+              <div class="question-box moderator-question-box">
+                ${escapeHTML(text)}
+              </div>
+            </div>
+
+            <div class="action-row moderator-action-row">
+              <button class="action-btn like-btn"><span class="action-icon like-icon"></span><span class="count-text">0</span><span class="btn-label-text"> Beğeni</span></button>
+              <button class="action-btn comment-btn"><span class="action-icon comment-icon"></span><span class="count-text">0</span><span class="btn-label-text"> Yorum</span></button>
+              <button class="action-btn save-btn"><span class="action-icon save-icon"></span><span class="btn-label-text">Kaydet</span></button>
+              <div class="share-container" style="position: relative;">
+                <button class="action-btn share-btn"><span class="action-icon share-icon"></span><span class="btn-label-text">Paylaş</span></button>
+                <div class="share-popover">
+                  <button class="share-popover-item share-copy" data-url="https://www.ilaneksper.com/otososyal#${id}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="menu-icon"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                    Bağlantıyı Kopyala
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="comments-section" id="comments-${id}">
+              <div class="comments-container"></div>
+              <div class="comment-input-area">
+                <img class="comment-avatar" src="assets/erkan-profile.png" alt="Erkan Ö." />
+                <input type="text" class="comment-input" placeholder="Yorum yazın..." />
+                <button class="comment-submit-btn">Gönder</button>
+              </div>
+            </div>
+          </article>
+        `;
+      }
+
       // Dinamik Yorum HTML Üretici
       function createCommentHTML(comment) {
         const isOwnerAttr = comment.owner ? ' data-owner="true"' : '';
@@ -3016,7 +3206,9 @@
           
           // 1. Kullanıcı paylaşımlarını yükle (Kronolojik sırayla prepend ederek en yeniyi üstte gösterir)
           if (Array.isArray(userPosts)) {
-            userPosts.forEach(post => {
+            const regularPosts = userPosts.filter(post => post && post.kind !== "moderator");
+            const moderatorPosts = userPosts.filter(post => post && post.kind === "moderator");
+            [...regularPosts, ...moderatorPosts].forEach(post => {
               if (feedToolbar && post && typeof post === 'object' && post.id) {
                 feedToolbar.insertAdjacentHTML('afterend', createPostHTML(post));
               }
@@ -4324,6 +4516,55 @@
       // Publish click listener
       composerSubmit.addEventListener('click', () => {
         const questionText = textareaSoru.value.trim();
+
+        if (isModeratorActive()) {
+          if (!questionText) {
+            showCustomModal('warning', 'Duyuru Metni Gerekli', 'OtoSosyal moderatör hesabıyla paylaşmak için bir duyuru metni yazın.');
+            return;
+          }
+
+          const validationError = validateInput(questionText);
+          if (validationError) {
+            showCustomModal('warning', 'Güvenlik Filtresi', validationError);
+            return;
+          }
+
+          const moderatorPostId = "post-moderator-" + Date.now();
+          const moderatorPostData = {
+            id: moderatorPostId,
+            kind: "moderator",
+            brand: "OtoSosyal",
+            model: "Duyuru",
+            questionText: questionText,
+            text: questionText,
+            type: "Moderatör",
+            createdAt: Date.now()
+          };
+
+          postDb[moderatorPostId] = {
+            voted: false,
+            bookmarked: false,
+            liked: false,
+            likesCount: 0,
+            totalVotes: 0,
+            votes: { good: 0, blue: 0, orange: 0, red: 0, muted: 0 }
+          };
+          localStorage.setItem('postDb', JSON.stringify(postDb));
+
+          userPosts.push(moderatorPostData);
+          localStorage.setItem('userPosts', JSON.stringify(userPosts));
+
+          const feedToolbar = document.querySelector('.feed-toolbar');
+          if (feedToolbar) {
+            feedToolbar.insertAdjacentHTML('afterend', createPostHTML(moderatorPostData));
+          }
+
+          textareaSoru.value = "";
+          refreshRightSidebar();
+          applyFeedFilter(getActiveFilter());
+          showToast("OtoSosyal duyurusu paylaşıldı.");
+          return;
+        }
         
         if (!currentSelectedVehicle) {
           showCustomModal('warning', 'Seçim Gerekli', 'Lütfen paylaşmak için bir araç analizi seçin.');
